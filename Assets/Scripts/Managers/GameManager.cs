@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [NonSerialized] public AudioManager AudioManager;
     public static GameManager Instance => _instance;
     private static GameManager _instance;
     
