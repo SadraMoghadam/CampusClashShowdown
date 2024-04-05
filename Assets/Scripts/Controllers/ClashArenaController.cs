@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This Class can be used as a singleton and has the control info and functionalities that will be needed in
+/// the ClashArena scenes 
+/// </summary>
 public class ClashArenaController : MonoBehaviour
 {
     private GameManager _gameManager;

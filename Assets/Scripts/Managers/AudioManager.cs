@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The name of all of the sounds, that are used in the game, is defined in SoundName enumerator 
+/// </summary>
 public enum SoundName
 {
     CampusArea,
@@ -10,6 +13,9 @@ public enum SoundName
     PauseMenu,
 }
 
+/// <summary>
+/// Sound class is used in the inspector to get the info of each sound (music or SFX). 
+/// </summary>
 [System.Serializable]
 public class Sound
 {
@@ -21,6 +27,11 @@ public class Sound
     public AudioSource source;
 }
 
+/// <summary>
+/// This class can be used through GameManager instance and there is every function that can be used to play
+/// or change the volume of a sound. The functions work only by giving the name of the sound that we
+/// want to play, as input.
+/// </summary>
 public class AudioManager : MonoBehaviour
 {
     public Sound[] sounds;

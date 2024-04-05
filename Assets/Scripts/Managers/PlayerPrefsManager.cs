@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// To introduce a variable that can be saved on player device, we should name it in this enumerator
+/// </summary>
 public enum PlayerPrefsKeys
 {
     GameStarted,
@@ -10,6 +13,9 @@ public enum PlayerPrefsKeys
     GameTimer,
 }
 
+/// <summary>
+/// All of the functions that are needed to delete, add, or update data or variable on player device
+/// </summary>
 public class PlayerPrefsManager : MonoBehaviour
 {
     

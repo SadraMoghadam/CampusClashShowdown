@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// All the functions that can help the game development and are general
+/// </summary>
 public class Utilities : MonoBehaviour
 {
     
@@ -19,6 +22,14 @@ public class Utilities : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
+    /// <summary>
+    /// Used to fade in or out an UI element on Canvas using coroutine 
+    /// </summary>
+    /// <param name="objectToFade"></param>
+    /// <param name="fadeIn"></param>
+    /// <param name="duration"></param>
+    /// <param name="finalOpacity"></param>
+    /// <returns></returns>
     public static IEnumerator FadeInAndOutCR(GameObject objectToFade, bool fadeIn, float duration, float finalOpacity = 1)
     {
         var instance = FindObjectOfType<Utilities>();

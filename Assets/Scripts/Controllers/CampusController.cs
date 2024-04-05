@@ -4,6 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This Class can be used as a singleton and has the control info and functionalities that will be needed in
+/// the Campus scene 
+/// </summary>
 public class CampusController : MonoBehaviour
 {
     private GameManager _gameManager;

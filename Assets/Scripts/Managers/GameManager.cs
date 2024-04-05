@@ -6,6 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// GameManager manages everything in the game and is alive between scenes. Also it should not be destroyed after the
+/// change of scene.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     [NonSerialized] public AudioManager AudioManager;
@@ -30,9 +34,14 @@ public class GameManager : MonoBehaviour
             }
         }
         
+        // dont destroy the gameObject, that GameManager is attached to, after scene change 
         DontDestroyOnLoad(this.gameObject);
     }
 
+    /// <summary>
+    /// For each scene change we can call this function
+    /// </summary>
+    /// <param name="sceneName"></param>
     public async void LoadScene(string sceneName)
     {
         var scene = SceneManager.LoadSceneAsync(sceneName);
