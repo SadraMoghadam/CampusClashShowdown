@@ -5,7 +5,8 @@ using UnityEngine;
 
 public enum SoundName
 {
-    Game,
+    CampusArea,
+    ClashArena,
     PauseMenu,
 }
 
