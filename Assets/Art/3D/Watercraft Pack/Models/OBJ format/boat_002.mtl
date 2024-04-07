@@ -1,0 +1,14 @@
+# Created by Kenney (www.kenney.nl)
+
+newmtl wood
+Kd 0.7294118 0.5372549 0.3333333
+
+newmtl metalGreen
+Kd 0.4431373 0.7882353 0.5843138
+
+newmtl metalMedium
+Kd 0.3764706 0.3764706 0.3764706
+
+newmtl metalLight
+Kd 0.7686275 0.7686275 0.7686275
+

@@ -1,0 +1,8 @@
+# Created by Kenney (www.kenney.nl)
+
+newmtl metalRed
+Kd 0.9098039 0.3333333 0.3254902
+
+newmtl metalLight
+Kd 0.7686275 0.7686275 0.7686275
+
