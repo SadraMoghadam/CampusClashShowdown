@@ -10,6 +10,10 @@ using UnityEngine.UI;
 public class Utilities : MonoBehaviour
 {
     
+    private static Matrix4x4 _isoMatrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45, 0));
+    public static Vector3 ToIso(Vector3 input) => _isoMatrix.MultiplyPoint3x4(input);
+    
+    
     public static void HideCursor()
     {
         Cursor.visible = false;
