@@ -13,6 +13,15 @@ public class ClashArenaController : MonoBehaviour
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
 
+    public PlayerController playerController;
+    
+    public enum ObjectType
+    {
+        Interactable, // able to press
+        Pickable, // able to pick up and put down
+        Pushable, // able to push or pull
+    }
+
     private void Awake()
     {
         if (_instance == null)

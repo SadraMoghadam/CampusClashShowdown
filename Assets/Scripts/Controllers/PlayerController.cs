@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
 {
-    [SerializeField] private float speed = 5;
-    [SerializeField] private float runSpeed = 7;
+    [SerializeField] private float speed = 2;
+    [SerializeField] private float runSpeed = 3;
     [SerializeField] private float rotateSpeed = 360;
+    public KeyCode interactKey = KeyCode.F;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
@@ -65,4 +66,6 @@ public class PlayerController : MonoBehaviour
         }
         _rb.MovePosition(transform.position + transform.forward * _input.normalized.magnitude * actualSpeed * Time.deltaTime);
     }
+
+
 }
