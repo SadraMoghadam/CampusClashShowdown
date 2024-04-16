@@ -7,6 +7,8 @@ TagManager:
   - Pushable
   - Interactable
   - Pickable
+  - SpeedPowerUp
+  - StrengthPowerUp
   layers:
   - Default
   - TransparentFX

@@ -15,11 +15,13 @@ public class MovableObject : MonoBehaviour
     [SerializeField] private float moveSpeed = 1f;
     private Vector3 _initPosition;
     private Vector3 _finalPosition;
+    private PlayerController _playerController;
     private bool _isInPosition; // is the object in the first position
 
 
     private void Awake()
     {
+        _playerController = ClashArenaController.Instance.playerController;
         _initPosition = transform.localPosition;
     }
 
@@ -30,7 +32,7 @@ public class MovableObject : MonoBehaviour
     /// <param name="direction">Can be either 1 or -1 depending on the object and the player team</param>
     public void Move(int direction)
     {
-        transform.Translate(ConvertAxisToVector3(axisMovementType) * direction * moveSpeed);
+        transform.Translate(ConvertAxisToVector3(axisMovementType) * direction * moveSpeed * _playerController.strength);
     }
 
     
