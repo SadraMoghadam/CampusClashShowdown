@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour 
+public class PlayerController : NetworkBehaviour 
 {
     [SerializeField] private float rotateSpeed = 360;
     public float speed = 2;
@@ -22,6 +23,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
+        if (!IsOwner) return;
+        
         GatherInput();
         Look();
     }
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour
         {
             actualSpeed = runSpeed;  
         }
-        _rb.MovePosition(transform.position + transform.forward * _input.normalized.magnitude * actualSpeed * Time.deltaTime);
+        _rb.MovePosition(transform.position + transform.forward * (_input.normalized.magnitude * actualSpeed * Time.deltaTime));
     }
 
 

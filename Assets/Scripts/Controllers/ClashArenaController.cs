@@ -30,6 +30,10 @@ public class ClashArenaController : MonoBehaviour
         }
         Time.timeScale = 1;
         _gameManager = GameManager.Instance;
+        if (playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController>();
+        }
     }
 
     private void Start()

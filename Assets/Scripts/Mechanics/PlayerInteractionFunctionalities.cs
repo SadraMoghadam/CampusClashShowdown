@@ -12,13 +12,27 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
     private PlayerController _playerController;
+    private KeyCode _interactKey;
     private Transform _pickedObjectTransform;
     private bool _isObjectPickedUp = false;
     private Animator _animator;
 
     private void Start()
     {
+        if (mainMapTransform == null)
+        {
+            mainMapTransform = GameObject.Find("Main Map").transform;
+        }
         _playerController = ClashArenaController.Instance.playerController;
+        
+        if (_playerController == null)
+        {
+            _interactKey = KeyCode.F;   
+        }
+        else
+        {
+            _interactKey = _playerController.interactKey;
+        }
         _animator = GetComponent<Animator>();
     }
 
@@ -28,6 +42,7 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
     }
 
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void Interact()
     {
         RaycastHit hit;
@@ -36,34 +51,34 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
         {
             // Drop the object
             // _interactionFunctionalities.DropDown(_animator, hit.transform);
-            if (Input.GetKeyDown(_playerController.interactKey))
+            if (Input.GetKeyDown(_interactKey))
             {
                 DropDown();
             }
         }
         else if (Physics.Raycast(transform.position, transform.forward + Vector3.up, out hit, distanceToInteract, layerMaskInteract))
         {
-            Debug.Log(hit.collider.tag);
+            // Debug.Log(hit.collider.tag);
 
             Transform colliderTransform = hit.collider.transform;
             if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pickable.ToString()))
             {
                 // Pick up the object
-                if (Input.GetKeyDown(_playerController.interactKey))
+                if (Input.GetKeyDown(_interactKey))
                 {
                     PickUp(colliderTransform);
                 }
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Interactable.ToString()))
             {
-                if (Input.GetKeyDown(_playerController.interactKey))
+                if (Input.GetKeyDown(_interactKey))
                 {
                     Press();
                 }
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString()))
             {
-                if (Input.GetKey(_playerController.interactKey))
+                if (Input.GetKey(_interactKey))
                 {
                     _animator.SetLayerWeight(_holdingLayer, 1);
                     Push(colliderTransform);
@@ -117,9 +132,9 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
     
     public void DropDown()
     {
+        _pickedObjectTransform.parent = mainMapTransform;
         _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
         _pickedObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
-        _pickedObjectTransform.parent = mainMapTransform;
         _isObjectPickedUp = false;   
     }
 }

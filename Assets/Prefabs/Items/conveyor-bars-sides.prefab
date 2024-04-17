@@ -53,6 +53,10 @@ PrefabInstance:
       value: conveyor-bars-sides
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: eccf9e8759e56d0479b735d9b0174035, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eccf9e8759e56d0479b735d9b0174035, type: 3}
       propertyPath: m_TagString
       value: Pushable
       objectReference: {fileID: 0}
@@ -63,6 +67,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eccf9e8759e56d0479b735d9b0174035, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3056110810864480805}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eccf9e8759e56d0479b735d9b0174035, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7965609674635356888}
   m_SourcePrefab: {fileID: 100100000, guid: eccf9e8759e56d0479b735d9b0174035, type: 3}
 --- !u!1 &6577246711854997157 stripped
 GameObject:
@@ -90,3 +97,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.5, z: 1}
   m_Center: {x: 0, y: 0.25, z: 0}
+--- !u!114 &7965609674635356888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6577246711854997157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96a8b682c526b544b503ff48e2c5b22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  axisMovementType: 1
+  moveSpeed: 0.01
