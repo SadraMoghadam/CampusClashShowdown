@@ -20,6 +20,16 @@ public class PowerUp : MonoBehaviour
     
     void Start()
     {
+        StartCoroutine(WaitForPlayerControllerInitialization());
+    }
+    
+    private IEnumerator WaitForPlayerControllerInitialization()
+    {
+        // Wait until the PlayerController instance is available
+        while (PlayerController.Instance == null)
+        {
+            yield return null;
+        }
         _playerController = PlayerController.Instance;
         _defaultPlayerSpeed = _playerController.speed;
         _defaultPlayerStrength = _playerController.strength;
@@ -29,6 +39,7 @@ public class PowerUp : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         GetComponent<BoxCollider>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
         StartCoroutine(PowerUpCR());
         
     }

@@ -23,6 +23,16 @@ public class MovableObject : NetworkBehaviour
     private void Start()
     {
         _initPosition = transform.localPosition;
+        StartCoroutine(WaitForPlayerControllerInitialization());
+    }
+    
+    private IEnumerator WaitForPlayerControllerInitialization()
+    {
+        // Wait until the PlayerController instance is available
+        while (PlayerController.Instance == null)
+        {
+            yield return null;
+        }
         _playerController = PlayerController.Instance;
     }
 
@@ -31,7 +41,6 @@ public class MovableObject : NetworkBehaviour
     /// player (enemies in the opposite direction of allies)  
     /// </summary>
     /// <param name="direction">Can be either 1 or -1 depending on the object and the player team</param>
-
     public void Move(int direction)
     {
         // if (_playerController == null)
@@ -63,16 +72,8 @@ public class MovableObject : NetworkBehaviour
 
     private void MoveObject(int direction)
     {
-        
-        if (_playerController == null)
-        {
-            _playerController = PlayerController.Instance;
-        }
-        // Calculate the movement vector based on the direction and other parameters
         Vector3 movement = ConvertAxisToVector3(axisMovementType) * direction * moveSpeed * _playerController.strength;
-
-        // Apply the movement to the object's position on the server
-        transform.Translate(movement);
+        transform.Translate(movement * Time.fixedDeltaTime);
     }
 
     

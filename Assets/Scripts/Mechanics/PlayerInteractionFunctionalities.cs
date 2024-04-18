@@ -12,11 +12,16 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [SerializeField] private Transform mainMapTransform;
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
+    private int _holdingPushLayerWeight = 0;
+    private int _holdingPickLayerWeight = 0;
+    private int _pressingLayerWeight = 0;
     private PlayerController _playerController;
     private KeyCode _interactKey;
     private Transform _pickedObjectTransform;
     private bool _isObjectPickedUp = false;
+    private bool _isObjectPushed = false;
     private Animator _animator;
+    private Transform _colliderTransform;
 
     private void Start()
     {
@@ -41,9 +46,28 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _animator = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+        if (IsLocalPlayer)
+        {
+            Interact();
+        }
+    }
+
     private void FixedUpdate()
     {
-        Interact();
+
+        if (IsLocalPlayer)
+        {
+            if (_isObjectPushed)
+            {
+                Push(_colliderTransform);
+            }
+            else if (_holdingPushLayerWeight == 0 && !_isObjectPickedUp)
+            {
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            }
+        }
     }
 
 
@@ -56,6 +80,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         {
             // Drop the object
             // _interactionFunctionalities.DropDown(_animator, hit.transform);
+            
+            _holdingPushLayerWeight = 1;
             if (Input.GetKeyDown(_interactKey))
             {
                 DropDown();
@@ -65,13 +91,13 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         {
             // Debug.Log(hit.collider.tag);
 
-            Transform colliderTransform = hit.collider.transform;
+            _colliderTransform = hit.collider.transform;
             if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pickable.ToString()))
             {
                 // Pick up the object
                 if (Input.GetKeyDown(_interactKey))
                 {
-                    PickUp(colliderTransform);
+                    PickUp(_colliderTransform);
                 }
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Interactable.ToString()))
@@ -83,24 +109,27 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString()))
             {
-                if (Input.GetKeyDown(_interactKey))
-                {
-                    // Start pushing the object
-                    SetLayerWeightServerRpc(_holdingLayer, 1);
-                }
-                else if (Input.GetKeyUp(_interactKey))
-                {
-                    // Stop pushing the object
-                    SetLayerWeightServerRpc(_holdingLayer, 0);
-                }
                 if (Input.GetKey(_interactKey))
                 {
-                    Push(colliderTransform);
+                    // _animator.SetLayerWeight(_holdingLayer, 1);
+                    _holdingPushLayerWeight = 1;
+                    _isObjectPushed = true;
+                    // Push(_colliderTransform);
                 }
+                else
+                {
+                    // _animator.SetLayerWeight(_holdingLayer, 0);
+                    _holdingPushLayerWeight = 0;
+                    _isObjectPushed = false;
+                }
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
             }
         }
-        
-
+        else
+        {
+            _holdingPushLayerWeight = 0;
+            _isObjectPushed = false;
+        }
     }
     
     
@@ -121,7 +150,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         PressServerRpc();
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     private void PressServerRpc()
     {
         StartCoroutine(PressCR());
@@ -130,23 +159,19 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private IEnumerator PressCR()
     {
         // Set the layer weight on the server
-        SetLayerWeightClientRpc(_pressingLayer, 1);
-        PlayAnimationClientRpc(_animator.GetCurrentAnimatorClipInfo(_pressingLayer)[0].clip.name, _pressingLayer, 0f);
+        _pressingLayerWeight = 1;
+        SetLayerWeightServerRpc(_pressingLayer, _pressingLayerWeight);
+        PlayAnimationServerRpc(_animator.GetCurrentAnimatorClipInfo(_pressingLayer)[0].clip.name, _pressingLayer, 0f);
         yield return new WaitForSeconds(.8f);
         // Set the layer weight on the server
-        SetLayerWeightClientRpc(_pressingLayer, 0);
-    }
-
-    [ClientRpc]
-    private void PlayAnimationClientRpc(string animationName, int layerIndex, float normalizedTime)
-    {
-        // Play the animation on all clients
-        _animator.Play(animationName, layerIndex, normalizedTime);
+        _pressingLayerWeight = 0;
+        SetLayerWeightServerRpc(_pressingLayer, _pressingLayerWeight);
     }
 
     public void PickUp(Transform objectTransform)
     {
-        SetLayerWeightServerRpc(_holdingLayer, 1);
+        _holdingPickLayerWeight = 1;
+        SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
         // _animator.SetLayerWeight(_holdingLayer, 1); // Activate the layer
         _pickedObjectTransform = objectTransform;
         objectTransform.parent = transform;
@@ -159,10 +184,25 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     public void DropDown()
     {
         _pickedObjectTransform.parent = mainMapTransform;
-        SetLayerWeightServerRpc(_holdingLayer, 0);
+        _holdingPickLayerWeight = 0;
+        SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
         // _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
         _pickedObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
         _isObjectPickedUp = false;   
+    }
+
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayAnimationServerRpc(string animationName, int layerIndex, float normalizedTime)
+    {
+        PlayAnimationClientRpc(animationName, layerIndex, normalizedTime);
+    }
+
+    [ClientRpc]
+    private void PlayAnimationClientRpc(string animationName, int layerIndex, float normalizedTime)
+    {
+        // Play the animation on all clients
+        _animator.Play(animationName, layerIndex, normalizedTime);
     }
     
     [ServerRpc(RequireOwnership = false)]
