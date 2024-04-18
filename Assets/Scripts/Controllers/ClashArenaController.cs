@@ -12,8 +12,6 @@ public class ClashArenaController : MonoBehaviour
     
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
-
-    public PlayerController playerController;
     
     public enum ObjectType
     {
@@ -30,10 +28,6 @@ public class ClashArenaController : MonoBehaviour
         }
         Time.timeScale = 1;
         _gameManager = GameManager.Instance;
-        if (playerController == null)
-        {
-            playerController = FindObjectOfType<PlayerController>();
-        }
     }
 
     private void Start()

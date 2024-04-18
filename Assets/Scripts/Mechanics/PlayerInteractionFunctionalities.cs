@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerInteractionFunctionalities : MonoBehaviour
+public class PlayerInteractionFunctionalities : NetworkBehaviour
 {
     
     [SerializeField] private float distanceToInteract = 0.2f;
@@ -23,7 +24,11 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
         {
             mainMapTransform = GameObject.Find("Main Map").transform;
         }
-        _playerController = ClashArenaController.Instance.playerController;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        _playerController = PlayerController.Instance;
         
         if (_playerController == null)
         {
@@ -36,7 +41,7 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Interact();
     }
@@ -78,14 +83,19 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString()))
             {
+                if (Input.GetKeyDown(_interactKey))
+                {
+                    // Start pushing the object
+                    SetLayerWeightServerRpc(_holdingLayer, 1);
+                }
+                else if (Input.GetKeyUp(_interactKey))
+                {
+                    // Stop pushing the object
+                    SetLayerWeightServerRpc(_holdingLayer, 0);
+                }
                 if (Input.GetKey(_interactKey))
                 {
-                    _animator.SetLayerWeight(_holdingLayer, 1);
                     Push(colliderTransform);
-                }
-                else
-                {
-                    _animator.SetLayerWeight(_holdingLayer, 0);
                 }
             }
         }
@@ -108,20 +118,36 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
 
     public void Press()
     {
+        PressServerRpc();
+    }
+
+    [ServerRpc]
+    private void PressServerRpc()
+    {
         StartCoroutine(PressCR());
     }
 
     private IEnumerator PressCR()
     {
-        _animator.SetLayerWeight(_pressingLayer, 1);
-        _animator.Play(_animator.GetCurrentAnimatorClipInfo(_pressingLayer)[0].clip.name, _pressingLayer, 0f);
+        // Set the layer weight on the server
+        SetLayerWeightClientRpc(_pressingLayer, 1);
+        PlayAnimationClientRpc(_animator.GetCurrentAnimatorClipInfo(_pressingLayer)[0].clip.name, _pressingLayer, 0f);
         yield return new WaitForSeconds(.8f);
-        _animator.SetLayerWeight(_pressingLayer, 0);
+        // Set the layer weight on the server
+        SetLayerWeightClientRpc(_pressingLayer, 0);
     }
-    
+
+    [ClientRpc]
+    private void PlayAnimationClientRpc(string animationName, int layerIndex, float normalizedTime)
+    {
+        // Play the animation on all clients
+        _animator.Play(animationName, layerIndex, normalizedTime);
+    }
+
     public void PickUp(Transform objectTransform)
     {
-        _animator.SetLayerWeight(_holdingLayer, 1); // Activate the layer
+        SetLayerWeightServerRpc(_holdingLayer, 1);
+        // _animator.SetLayerWeight(_holdingLayer, 1); // Activate the layer
         _pickedObjectTransform = objectTransform;
         objectTransform.parent = transform;
         objectTransform.GetComponent<Rigidbody>().isKinematic = true;
@@ -133,8 +159,21 @@ public class PlayerInteractionFunctionalities : MonoBehaviour
     public void DropDown()
     {
         _pickedObjectTransform.parent = mainMapTransform;
-        _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
+        SetLayerWeightServerRpc(_holdingLayer, 0);
+        // _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
         _pickedObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
         _isObjectPickedUp = false;   
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetLayerWeightServerRpc(int layer, float value)
+    {
+        SetLayerWeightClientRpc(layer, value);
+    }
+
+    [ClientRpc]
+    private void SetLayerWeightClientRpc(int layer, float value)
+    {
+        _animator.SetLayerWeight(layer, value);
     }
 }

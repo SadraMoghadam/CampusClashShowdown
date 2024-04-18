@@ -20,7 +20,7 @@ public class PowerUp : MonoBehaviour
     
     void Start()
     {
-        _playerController = ClashArenaController.Instance.playerController;
+        _playerController = PlayerController.Instance;
         _defaultPlayerSpeed = _playerController.speed;
         _defaultPlayerStrength = _playerController.strength;
     }

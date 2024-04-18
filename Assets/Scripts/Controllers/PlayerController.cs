@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerController : NetworkBehaviour 
 {
     [SerializeField] private float rotateSpeed = 360;
+    public ulong playerId;
     public float speed = 2;
     public float runSpeed = 3;
     public float strength = 1;
@@ -15,11 +16,37 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
+    
+    
+    private static PlayerController _instance;
+    public static PlayerController Instance => _instance;
 
-    private void Awake()
+    // private void Awake()
+    // {
+    //     if (_instance == null)
+    //     {
+    //         _instance = this;
+    //     }
+    //     _rb = GetComponent<Rigidbody>();
+    //     _animator = GetComponent<Animator>();
+    // }
+
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        if (_instance == null)
+        {
+            _instance = this;
+        }
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        AssignPlayerId(GetComponent<NetworkObject>().OwnerClientId);
+    }
+
+    private void AssignPlayerId(ulong clientId)
+    {
+        playerId = clientId; 
+        Debug.Log("Player with Client ID " + clientId + " assigned ID: " + playerId);
     }
 
     private void Update() {
@@ -35,6 +62,11 @@ public class PlayerController : NetworkBehaviour
 
     private void GatherInput() {
         _input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        SetAnimations();
+    }
+
+    private void SetAnimations()
+    {
         // ANIMATIONS
         // idle
         if (_input == Vector3.zero)
