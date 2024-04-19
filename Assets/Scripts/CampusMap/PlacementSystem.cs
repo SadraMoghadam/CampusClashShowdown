@@ -60,7 +60,7 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
         GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
-        newObject.transform.position = grid.CellToWorld(gridPosition);
+        newObject.transform.position = grid.GetCellCenterWorld(gridPosition) - new Vector3(0, 0.5f, 0);
     }
 
     private void StopPlacement()
