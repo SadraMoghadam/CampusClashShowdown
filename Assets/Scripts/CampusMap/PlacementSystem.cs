@@ -18,6 +18,12 @@ public class PlacementSystem : MonoBehaviour
 
     [SerializeField] Grid grid;
 
+    private GridData floorData, buildingsData;
+
+    private Renderer previewRenderer;
+
+    private List<GameObject> placedGameObject = new();
+
     private void Update()
     {
         if(selectedObjectIndex<0)
@@ -26,13 +32,21 @@ public class PlacementSystem : MonoBehaviour
         }
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        previewRenderer.material.color = placementValidity ? Color.green : Color.red;
+
+
         mouseIndicator.transform.position = mousePosition;
         cellIndicator.transform.position = grid.CellToWorld(gridPosition);
     }
 
     private void Start()
     {
-        gridVisualization.SetActive(false);
+        StopPlacement();
+        floorData = new();
+        buildingsData = new();
+        previewRenderer = cellIndicator.GetComponentInChildren<Renderer>();
         
     }
 
@@ -59,8 +73,34 @@ public class PlacementSystem : MonoBehaviour
         }
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        if (placementValidity == false)
+            return; 
+
         GameObject newObject = Instantiate(database.objectsData[selectedObjectIndex].Prefab);
-        newObject.transform.position = grid.GetCellCenterWorld(gridPosition) - new Vector3(0, 0.5f, 0);
+        if(database.objectsData[selectedObjectIndex].Size.x == 1)
+        {
+            newObject.transform.position = grid.GetCellCenterWorld(gridPosition) - new Vector3(0, 0.5f, 0);
+        }
+        else
+        {
+            newObject.transform.position = grid.GetCellCenterWorld(gridPosition) - new Vector3(-0.5f, 0.5f, 0);
+        }
+        
+        
+
+        placedGameObject.Add(newObject);
+
+        GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData : buildingsData;
+        selectedData.AddObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size, database.objectsData[selectedObjectIndex].ID, placedGameObject.Count - 1);
+
+    }
+
+    private bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
+    {
+        GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData : buildingsData;
+        return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size);
     }
 
     private void StopPlacement()
