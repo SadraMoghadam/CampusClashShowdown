@@ -14,7 +14,8 @@ public class MovableObject : NetworkBehaviour
 {
     [SerializeField] private AxisMovementType axisMovementType;
     [SerializeField] private float moveSpeed = 1f;
-    private Vector3 _initPosition;
+    [SerializeField] private Vector3 initPosition;
+    [SerializeField] private Transform childTransform;
     private Vector3 _finalPosition;
     private PlayerController _playerController;
     private bool _isInPosition; // is the object in the first position
@@ -22,7 +23,7 @@ public class MovableObject : NetworkBehaviour
 
     private void Start()
     {
-        _initPosition = transform.localPosition;
+        childTransform.localPosition = initPosition;
         StartCoroutine(WaitForPlayerControllerInitialization());
     }
     
@@ -52,7 +53,21 @@ public class MovableObject : NetworkBehaviour
         //
         // // Apply the movement to the object's position
         // transform.Translate(movement);
-        MoveServerRpc(direction);
+        // MoveServerRpc(direction);
+        float localPosValue = axisMovementType == AxisMovementType.Z ? childTransform.localPosition.z : childTransform.localPosition.x;
+        if ((localPosValue >= 0.9 && direction == 1) ||
+            (localPosValue <= -0.9 && direction == -1))
+        {
+            return;
+        }
+        StartCoroutine(MoveCR(direction));
+    }
+
+    private IEnumerator MoveCR(int direction)
+    {
+        yield return new WaitForSeconds(1);
+        MoveServerRpc(direction);   
+        StopAllCoroutines();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -60,20 +75,20 @@ public class MovableObject : NetworkBehaviour
     {
         MoveObject(direction);
         // Synchronize the movement with all clients
-        SetTransformClientRpc(transform.position);
+        SetTransformClientRpc(childTransform.localPosition);
     }
 
     [ClientRpc]
     private void SetTransformClientRpc(Vector3 newPosition)
     {
         // Update the object's position on all clients
-        transform.position = newPosition;
+        childTransform.localPosition = newPosition;
     }
 
     private void MoveObject(int direction)
     {
         Vector3 movement = ConvertAxisToVector3(axisMovementType) * direction * moveSpeed * _playerController.strength;
-        transform.Translate(movement * Time.fixedDeltaTime);
+        transform.localPosition += movement;
     }
 
     

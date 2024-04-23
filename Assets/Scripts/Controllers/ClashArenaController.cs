@@ -26,7 +26,6 @@ public class ClashArenaController : MonoBehaviour
         {
             _instance = this;
         }
-        Time.timeScale = 1;
         _gameManager = GameManager.Instance;
     }
 

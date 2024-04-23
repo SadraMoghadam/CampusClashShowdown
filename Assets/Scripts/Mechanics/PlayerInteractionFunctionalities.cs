@@ -17,9 +17,12 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private int _pressingLayerWeight = 0;
     private PlayerController _playerController;
     private KeyCode _interactKey;
+    private KeyCode _pushKey;
+    private KeyCode _pullKey;
     private Transform _pickedObjectTransform;
     private bool _isObjectPickedUp = false;
     private bool _isObjectPushed = false;
+    private bool _isObjectPulled = false;
     private Animator _animator;
     private Transform _colliderTransform;
 
@@ -42,6 +45,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         else
         {
             _interactKey = _playerController.interactKey;
+            _pushKey = _playerController.pushKey;
+            _pullKey = _playerController.pullKey;
         }
         _animator = GetComponent<Animator>();
     }
@@ -62,6 +67,10 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             if (_isObjectPushed)
             {
                 Push(_colliderTransform);
+            }
+            else if (_isObjectPulled)
+            {
+                Pull(_colliderTransform);
             }
             else if (_holdingPushLayerWeight == 0 && !_isObjectPickedUp)
             {
@@ -109,18 +118,24 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString()))
             {
-                if (Input.GetKey(_interactKey))
+                if (Input.GetKey(_pushKey))
                 {
                     // _animator.SetLayerWeight(_holdingLayer, 1);
                     _holdingPushLayerWeight = 1;
                     _isObjectPushed = true;
                     // Push(_colliderTransform);
                 }
+                else if (Input.GetKey(_pullKey))
+                {
+                    _holdingPushLayerWeight = 1;
+                    _isObjectPulled = true;
+                }
                 else
                 {
                     // _animator.SetLayerWeight(_holdingLayer, 0);
                     _holdingPushLayerWeight = 0;
                     _isObjectPushed = false;
+                    _isObjectPulled = false;
                 }
                 SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
             }
@@ -142,7 +157,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     public void Pull(Transform objectTransform)
     {
-        
+        MovableObject movableObject = objectTransform.GetComponent<MovableObject>();
+        movableObject.Move(-1);
     }
 
     public void Press()

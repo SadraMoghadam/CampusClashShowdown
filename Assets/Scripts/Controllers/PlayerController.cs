@@ -12,10 +12,13 @@ public class PlayerController : NetworkBehaviour
     public float runSpeed = 3;
     public float strength = 1;
     public KeyCode interactKey = KeyCode.F;
+    public KeyCode pushKey = KeyCode.J;
+    public KeyCode pullKey = KeyCode.K;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
+    
     
     
     private static PlayerController _instance;
