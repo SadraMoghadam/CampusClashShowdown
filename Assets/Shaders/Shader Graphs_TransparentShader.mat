@@ -21,8 +21,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Shader Graphs_TransparentShader
-  m_Shader: {fileID: -6465566751694194690, guid: 9177149b839a229479c13f0d44b80000, type: 3}
-  m_Parent: {fileID: 0}
+  m_Shader: {fileID: -6465566751694194690, guid: 2eb8229f729493e409c3d56b72b43328, type: 3}
+  m_Parent: {fileID: -876546973899608171, guid: 2eb8229f729493e409c3d56b72b43328, type: 3}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -37,9 +37,6 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats:
-    - _BUILTIN_QueueControl: 0
-    - _BUILTIN_QueueOffset: 0
-    m_Colors:
-    - _Color: {r: 0.9811321, g: 0.95799214, b: 0.95799214, a: 0.3921569}
+    m_Floats: []
+    m_Colors: []
   m_BuildTextureStacks: []
