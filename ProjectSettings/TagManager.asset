@@ -4,11 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Pushable
   - Interactable
   - Pickable
   - SpeedPowerUp
   - StrengthPowerUp
+  - PushablePositiveEdge
+  - PushableNegativeEdge
   layers:
   - Default
   - TransparentFX

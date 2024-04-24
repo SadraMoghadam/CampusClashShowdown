@@ -13,16 +13,26 @@ public enum AxisMovementType
 public class MovableObject : NetworkBehaviour
 {
     [SerializeField] private AxisMovementType axisMovementType;
-    [SerializeField] private float moveSpeed = 1f;
-    private Vector3 _initPosition;
-    private Vector3 _finalPosition;
+    // [SerializeField] private float moveSpeed = 1f;
+    // [SerializeField] private Vector3 initPosition;
+    [SerializeField] private int initPosition; // Either 0, 1, or -1
+    [SerializeField] private Transform childTransform;
+    private int _objectCurrentPosition;
     private PlayerController _playerController;
     private bool _isInPosition; // is the object in the first position
+    private Animator _animator;
+    private static readonly int InitializePosition = Animator.StringToHash("InitializePosition");
+    private static readonly int MovePositive = Animator.StringToHash("MovePositive");
+    private static readonly int MoveNegative = Animator.StringToHash("MoveNegative");
 
 
     private void Start()
     {
-        _initPosition = transform.localPosition;
+        // childTransform = transform;
+        // childTransform.localPosition = initPosition;
+        _animator = GetComponent<Animator>();
+        _objectCurrentPosition = initPosition;
+        InitializeAnimation();
         StartCoroutine(WaitForPlayerControllerInitialization());
     }
     
@@ -52,7 +62,15 @@ public class MovableObject : NetworkBehaviour
         //
         // // Apply the movement to the object's position
         // transform.Translate(movement);
-        MoveServerRpc(direction);
+        // MoveServerRpc(direction);
+        StartCoroutine(MoveCR(direction));
+    }
+
+    private IEnumerator MoveCR(int direction)
+    {
+        yield return new WaitForSeconds(0.2f);
+        MoveServerRpc(direction);   
+        StopAllCoroutines();
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -60,21 +78,40 @@ public class MovableObject : NetworkBehaviour
     {
         MoveObject(direction);
         // Synchronize the movement with all clients
-        SetTransformClientRpc(transform.position);
+        SetTransformClientRpc(childTransform.localPosition);
     }
 
     [ClientRpc]
     private void SetTransformClientRpc(Vector3 newPosition)
     {
         // Update the object's position on all clients
-        transform.position = newPosition;
+        childTransform.localPosition = newPosition;
     }
 
     private void MoveObject(int direction)
     {
-        Vector3 movement = ConvertAxisToVector3(axisMovementType) * direction * moveSpeed * _playerController.strength;
-        transform.Translate(movement * Time.fixedDeltaTime);
+        if ((_objectCurrentPosition == -1 && direction == -1) || 
+            (_objectCurrentPosition == 1 && direction == 1))
+        {
+            return;
+        }
+
+        _objectCurrentPosition += direction;
+        TriggerAnimation(direction);
+
     }
+
+    // private void MoveObject(int direction)
+    // {
+    //     Vector3 movement = ConvertAxisToVector3(axisMovementType) * direction * moveSpeed * _playerController.strength;
+    //     float localPosValue = (axisMovementType == AxisMovementType.Z ? childTransform.localPosition.z : childTransform.localPosition.x);
+    //     if ((localPosValue >= 0.9 && direction == 1) ||
+    //         (localPosValue <= -0.9 && direction == -1))
+    //     {
+    //         return;
+    //     }
+    //     childTransform.localPosition += movement;
+    // }
 
     
     private Vector3 ConvertAxisToVector3(AxisMovementType type)
@@ -90,6 +127,15 @@ public class MovableObject : NetworkBehaviour
 
         return Vector3.right;
     }
-    
+
+    private void InitializeAnimation()
+    {
+        _animator.SetInteger(InitializePosition, (int)initPosition);
+    }
+
+    private void TriggerAnimation(int direction)
+    {
+        _animator.SetTrigger(direction == 1 ? MovePositive : MoveNegative);
+    }
     
 }
