@@ -295,10 +295,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 360
+  playerId: 0
   speed: 2
   runSpeed: 3
   strength: 1
   interactKey: 102
+  pushKey: 106
+  pullKey: 107
 --- !u!54 &3261163179820978340
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -382,7 +385,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1847789d0516d2a4b8f99e00c5e5f3dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToInteract: 0.7
+  distanceToInteract: 0.4
+  timeToMoveObjects: 1
   layerMaskInteract:
     serializedVersion: 2
     m_Bits: 8
