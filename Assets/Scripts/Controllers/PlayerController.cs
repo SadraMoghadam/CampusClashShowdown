@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
+    private ClashArenaController _clashArenaController;
     
     
     
@@ -36,6 +37,8 @@ public class PlayerController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
+        
         base.OnNetworkSpawn();
         if (_instance == null)
         {
@@ -44,6 +47,9 @@ public class PlayerController : NetworkBehaviour
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         AssignPlayerId(GetComponent<NetworkObject>().OwnerClientId);
+        _clashArenaController = ClashArenaController.Instance;
+        transform.position = _clashArenaController.spawnLocations[0].position;
+
     }
 
     private void AssignPlayerId(ulong clientId)

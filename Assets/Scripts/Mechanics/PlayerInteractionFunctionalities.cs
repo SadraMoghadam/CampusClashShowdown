@@ -96,7 +96,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             _holdingPushLayerWeight = 1;
             if (Input.GetKeyDown(_interactKey))
             {
-                DropDown();
+                // DropDown();
             }
         }
         else if (Physics.Raycast(transform.position, transform.forward + Vector3.up, out hit, distanceToInteract,
@@ -104,7 +104,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         {
             // Debug.Log(hit.collider.tag);
 
-            _colliderTransform = hit.collider.transform.parent.parent;
+            _colliderTransform = hit.collider.transform;
             if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pickable.ToString()))
             {
                 // Pick up the object
@@ -193,10 +193,18 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     
     
-    public void PushAndPull(Transform objectTransform)
+    private void PushAndPull(Transform objectTransform)
     {
         MovableObject movableObject = objectTransform.GetComponent<MovableObject>();
         movableObject.Move(_moveObjectDirection);
+        
+    }
+    
+    
+    private void PickUp(Transform objectGeneratorTransform)
+    {
+        PickableObjectGenerator pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
+        pickableObject.Pick();
         
     }
     
@@ -229,28 +237,28 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         SetLayerWeightServerRpc(_pressingLayer, _pressingLayerWeight);
     }
 
-    public void PickUp(Transform objectTransform)
-    {
-        _holdingPickLayerWeight = 1;
-        SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
-        // _animator.SetLayerWeight(_holdingLayer, 1); // Activate the layer
-        _pickedObjectTransform = objectTransform;
-        objectTransform.parent = transform;
-        objectTransform.GetComponent<Rigidbody>().isKinematic = true;
-        objectTransform.localPosition = new Vector3(0, 0.28f, 0.55f);
-        objectTransform.localRotation = Quaternion.identity;
-        _isObjectPickedUp = true;
-    }
-    
-    public void DropDown()
-    {
-        _pickedObjectTransform.parent = mainMapTransform;
-        _holdingPickLayerWeight = 0;
-        SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
-        // _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
-        _pickedObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
-        _isObjectPickedUp = false;   
-    }
+    // public void PickUp(Transform objectTransform)
+    // {
+    //     _holdingPickLayerWeight = 1;
+    //     SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
+    //     // _animator.SetLayerWeight(_holdingLayer, 1); // Activate the layer
+    //     _pickedObjectTransform = objectTransform;
+    //     objectTransform.parent = transform;
+    //     objectTransform.GetComponent<Rigidbody>().isKinematic = true;
+    //     objectTransform.localPosition = new Vector3(0, 0.28f, 0.55f);
+    //     objectTransform.localRotation = Quaternion.identity;
+    //     _isObjectPickedUp = true;
+    // }
+    //
+    // public void DropDown()
+    // {
+    //     _pickedObjectTransform.parent = mainMapTransform;
+    //     _holdingPickLayerWeight = 0;
+    //     SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
+    //     // _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
+    //     _pickedObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
+    //     _isObjectPickedUp = false;   
+    // }
 
     
     [ServerRpc(RequireOwnership = false)]

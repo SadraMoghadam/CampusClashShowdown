@@ -251,7 +251,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7.63
+  orthographic size: 13.83
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -497,6 +497,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1167478297610941563, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 4152518826
+      objectReference: {fileID: 0}
     - target: {fileID: 1453805227426433653, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 58065538
@@ -659,7 +663,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8409719380661747836, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5135996
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8409719380661747836, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: m_LocalPosition.z
@@ -714,6 +718,26 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+--- !u!4 &771136635 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 436571022596065955, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+  m_PrefabInstance: {fileID: 771136634}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &771136636 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5737872515197156983, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+  m_PrefabInstance: {fileID: 771136634}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &771136637 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8197881231249050943, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+  m_PrefabInstance: {fileID: 771136634}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &771136638 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6905260659812183642, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+  m_PrefabInstance: {fileID: 771136634}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &822981186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -936,6 +960,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8bec754e04da942a257ae953cbd59f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnLocations:
+  - {fileID: 771136638}
+  - {fileID: 771136637}
+  - {fileID: 771136636}
+  - {fileID: 771136635}
 --- !u!1001 &912771523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1100,7 +1129,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 0
+  LogLevel: 1
 --- !u!4 &1042229344
 Transform:
   m_ObjectHideFlags: 0

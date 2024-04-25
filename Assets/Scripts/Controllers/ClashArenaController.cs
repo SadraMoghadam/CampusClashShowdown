@@ -8,11 +8,13 @@ using UnityEngine;
 /// </summary>
 public class ClashArenaController : MonoBehaviour
 {
+    public Transform[] spawnLocations;
+    
     private GameManager _gameManager;
     
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
-    
+
     public enum ObjectType
     {
         Interactable, // able to press
