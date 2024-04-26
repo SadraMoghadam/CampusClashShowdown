@@ -10,9 +10,9 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [SerializeField] private float distanceToInteract = 0.2f;
     [SerializeField] private float timeToMoveObjects = 1f;
     [SerializeField] private LayerMask layerMaskInteract;
-    [SerializeField] private Transform mainMapTransform;
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
+    private int _pickingLayer = 3;
     private int _holdingPushLayerWeight = 0;
     private int _holdingPickLayerWeight = 0;
     private int _pressingLayerWeight = 0;
@@ -29,13 +29,6 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private int _moveObjectDirection = 1; // 1 is in positive direction and -1 is in negative direction
     private float _timePressed = 0f;
 
-    private void Start()
-    {
-        if (mainMapTransform == null)
-        {
-            mainMapTransform = GameObject.Find("Main Map").transform;
-        }
-    }
 
     public override void OnNetworkSpawn()
     {
@@ -199,14 +192,18 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     {
         MovableObject movableObject = objectTransform.GetComponent<MovableObject>();
         movableObject.Move(_moveObjectDirection);
-        
     }
     
     
     private void PickUp(Transform objectGeneratorTransform)
     {
+        if(_isObjectPickedUp)
+            return;
+        _isObjectPickedUp = true;
         PickableObjectGenerator pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
         pickableObject.Pick();
+        _holdingPickLayerWeight = 1;
+        SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
         
     }
     

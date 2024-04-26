@@ -14,14 +14,15 @@ public class PlayerController : NetworkBehaviour
     public KeyCode interactKey = KeyCode.F;
     public KeyCode pushKey = KeyCode.J;
     public KeyCode pullKey = KeyCode.K;
+    [SerializeField] private Transform holdingPoint;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
     private ClashArenaController _clashArenaController;
-    
-    
-    
+
+
+
     private static PlayerController _instance;
     public static PlayerController Instance => _instance;
 
@@ -67,6 +68,11 @@ public class PlayerController : NetworkBehaviour
 
     private void FixedUpdate() {
         Move();
+    }
+
+    public Transform GetHoldingPointTransform()
+    {
+        return holdingPoint;
     }
 
     private void GatherInput() {
