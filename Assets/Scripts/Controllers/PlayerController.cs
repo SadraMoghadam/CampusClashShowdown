@@ -103,6 +103,7 @@ public class PlayerController : NetworkBehaviour
 
     private void Move()
     {
+        if (_input == Vector3.zero) return;
         float actualSpeed = speed;
         // run
         if (Input.GetKey(KeyCode.LeftShift))

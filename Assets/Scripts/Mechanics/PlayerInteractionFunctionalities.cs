@@ -104,9 +104,9 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         {
             // Debug.Log(hit.collider.tag);
 
-            _colliderTransform = hit.collider.transform;
             if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pickable.ToString()))
             {
+                _colliderTransform = hit.collider.transform;
                 // Pick up the object
                 if (Input.GetKeyDown(_interactKey))
                 {
@@ -122,6 +122,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "PositiveEdge"))
             {
+                _colliderTransform = hit.collider.transform.parent.parent;
                 if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
                 {
                     _timePressed = Time.time;
@@ -141,6 +142,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "NegativeEdge"))
             {
+                _colliderTransform = hit.collider.transform.parent.parent;
                 if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
                 {
                     _timePressed = Time.time;
