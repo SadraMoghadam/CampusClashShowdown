@@ -11,6 +11,8 @@ TagManager:
   - PushableNegativeEdge
   - Pushable
   - Pressable
+  - Interactable
+  - ObjectDestroyingArea
   layers:
   - Default
   - TransparentFX

@@ -17,7 +17,7 @@ public class MovableObject : NetworkBehaviour
     // [SerializeField] private Vector3 initPosition;
     [SerializeField] private int initPosition; // Either 0, 1, or -1
     [SerializeField] private Transform childTransform;
-    [SerializeField] private Transform movingPointTransform;
+    [SerializeField] private List<Collider> destroyingAreaColliders;
     private int _objectCurrentPosition;
     private PlayerController _playerController;
     private FollowTransform _followTransform;
@@ -32,6 +32,7 @@ public class MovableObject : NetworkBehaviour
     {
         // childTransform = transform;
         // childTransform.localPosition = initPosition;
+        SetDestroyingArea(false);
         _followTransform = GetComponent<FollowTransform>();
         _animator = GetComponent<Animator>();
         _objectCurrentPosition = initPosition;
@@ -47,11 +48,6 @@ public class MovableObject : NetworkBehaviour
             yield return null;
         }
         _playerController = PlayerController.Instance;
-    }
-
-    public Transform GetMovingPointTransform()
-    {
-        return movingPointTransform;
     }
 
     /// <summary>
@@ -105,8 +101,24 @@ public class MovableObject : NetworkBehaviour
         }
 
         _objectCurrentPosition += direction;
+        if (_objectCurrentPosition != 0)
+        {
+            SetDestroyingArea(true);
+        }
+        else
+        {
+            SetDestroyingArea(false);
+        }
         TriggerAnimation(direction);
 
+    }
+
+    private void SetDestroyingArea(bool flag)
+    {
+        for (int i = 0; i < destroyingAreaColliders.Count; i++)
+        {
+            destroyingAreaColliders[i].enabled = flag;
+        }
     }
 
     // private void MoveObject(int direction)
