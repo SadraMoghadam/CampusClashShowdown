@@ -10,6 +10,11 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [SerializeField] private float distanceToInteract = 0.2f;
     [SerializeField] private float timeToMoveObjects = 1f;
     [SerializeField] private LayerMask layerMaskInteract;
+    [SerializeField] private float pushCooldownTime = 2f;
+    private bool _isInPickableArea = false;
+    private bool _isInPushablePositiveArea = false;
+    private bool _isInPushableNegativeArea = false;
+    private bool _isInPressableArea = false;
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
     private int _pickingLayer = 3;
@@ -17,17 +22,18 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private int _holdingPickLayerWeight = 0;
     private int _pressingLayerWeight = 0;
     private PlayerController _playerController;
+    private FollowTransform _followTransform;
     private KeyCode _interactKey;
     private KeyCode _pushKey;
     private KeyCode _pullKey;
     private Transform _pickedObjectTransform;
     private bool _isObjectPickedUp = false;
-    private bool _isObjectPushed = false;
-    private bool _isObjectPulled = false;
+    private bool _isObjectPushedorPulled = false;
     private Animator _animator;
     private Transform _colliderTransform;
+    private Transform _objectMovingPointTransform;
     private int _moveObjectDirection = 1; // 1 is in positive direction and -1 is in negative direction
-    private float _timePressed = 0f;
+    private float _timePushed = 0f;
 
 
     public override void OnNetworkSpawn()
@@ -45,6 +51,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             _pullKey = _playerController.pullKey;
         }
         _animator = GetComponent<Animator>();
+        _followTransform = GetComponent<FollowTransform>();
     }
 
     private void Update()
@@ -52,11 +59,11 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         if (IsLocalPlayer)
         {
             Interact();
-            if (_isObjectPushed || _isObjectPulled)
+            if (_isObjectPushedorPulled)
             {
                 PushAndPull(_colliderTransform);
-                _isObjectPulled = false;
-                _isObjectPushed = false;
+                _isObjectPushedorPulled = false;
+                _timePushed = Time.time + pushCooldownTime;
             }
         }
     }
@@ -76,23 +83,22 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     // }
 
 
-    // ReSharper disable Unity.PerformanceAnalysis
-    private void Interact()
+    private void InteractWithRaycast()
     {
         RaycastHit hit;
         Debug.DrawLine(transform.position + Vector3.up, transform.position + transform.forward * distanceToInteract + Vector3.up);
-        if (_isObjectPickedUp)
-        {
-            // Drop the object
-            // _interactionFunctionalities.DropDown(_animator, hit.transform);
-            
-            _holdingPushLayerWeight = 1;
-            if (Input.GetKeyDown(_interactKey))
-            {
-                // DropDown();
-            }
-        }
-        else if (Physics.Raycast(transform.position, transform.forward + Vector3.up, out hit, distanceToInteract,
+        // if (_isObjectPickedUp)
+        // {
+        //     // Drop the object
+        //     // _interactionFunctionalities.DropDown(_animator, hit.transform);
+        //     
+        //     _holdingPushLayerWeight = 1;
+        //     if (Input.GetKeyDown(_interactKey))
+        //     {
+        //         // DropDown();
+        //     }
+        // }
+        if (Physics.Raycast(transform.position, transform.forward + Vector3.up, out hit, distanceToInteract,
                      layerMaskInteract))
         {
             // Debug.Log(hit.collider.tag);
@@ -106,7 +112,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     PickUp(_colliderTransform);
                 }
             }
-            else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Interactable.ToString()))
+            else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pressable.ToString()))
             {
                 if (Input.GetKeyDown(_interactKey))
                 {
@@ -116,19 +122,30 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "PositiveEdge"))
             {
                 _colliderTransform = hit.collider.transform.parent.parent;
+                _objectMovingPointTransform = hit.collider.transform;
                 if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
                 {
-                    _timePressed = Time.time;
+                    _isObjectPushedorPulled = true;
+                    SetMovableObjectAsParent(_colliderTransform.transform);
+                    _timePushed = Time.time;
                     _holdingPushLayerWeight = 1;
                     SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
                 }
+                // if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
+                // {
+                //     _isObjectPushedorPulled = false;
+                //     _timePushed = Time.time;
+                //     _holdingPushLayerWeight = 0;
+                //     SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                //     SetMovableObjectAsParent(null);
+                // }
 
-                float deltaTime = Time.time - _timePressed;
+                float deltaTime = Time.time - _timePushed;
                 if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
                 {
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
-                        _timePressed = Time.time;
+                        _timePushed = Time.time;
                         PushAndPullBehavior("Positive");
                     }
                 }
@@ -136,19 +153,29 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "NegativeEdge"))
             {
                 _colliderTransform = hit.collider.transform.parent.parent;
+                _objectMovingPointTransform = hit.collider.transform.GetChild(0);
                 if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
                 {
-                    _timePressed = Time.time;
+                    SetMovableObjectAsParent(_colliderTransform.transform);
+                    _timePushed = Time.time;
                     _holdingPushLayerWeight = 1;
                     SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
                 }
+                // if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
+                // {
+                //     _isObjectPushedorPulled = false;
+                //     _timePushed = Time.time;
+                //     _holdingPushLayerWeight = 0;
+                //     SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                //     _followTransform.SetIsFollowing(false);
+                // }
 
-                float deltaTime = Time.time - _timePressed;
+                float deltaTime = Time.time - _timePushed;
                 if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
                 {
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
-                        _timePressed = Time.time;
+                        _timePushed = Time.time;
                         PushAndPullBehavior("Negative");
                     }
                 }
@@ -156,34 +183,158 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         }
         else
         {
-            _timePressed = 0;
-            _isObjectPushed = false;
-            _holdingPushLayerWeight = 0;
-            SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            if (_isObjectPushedorPulled)
+            {
+                _isObjectPushedorPulled = false;
+                _followTransform.SetIsFollowing(false);
+                _holdingPushLayerWeight = 0;
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);   
+                _timePushed = 0;
+            }
         }
+    }
+
+    private void Interact()
+    {
+        if (_isInPickableArea)
+        {
+            // Pick up the object
+            if (Input.GetKeyDown(_interactKey))
+            {
+                PickUp(_colliderTransform);
+            }
+        }
+        
+        else if (_isInPressableArea)
+        {
+            if (Input.GetKeyDown(_interactKey))
+            {
+                Press();
+            }
+        }
+        
+        else if (_isInPushablePositiveArea)
+        {
+            if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
+            {
+                SetMovableObjectAsParent(_colliderTransform.transform);
+                _timePushed = Time.time;
+                _holdingPushLayerWeight = 1;
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            }
+            if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
+            {
+                RemovePlayerParentServerRpc();
+                _isObjectPushedorPulled = false;
+                _timePushed = Time.time;
+                _holdingPushLayerWeight = 0;
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            }
+
+            float deltaTime = Time.time - _timePushed;
+            if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
+            {
+                if (deltaTime >= timeToMoveObjects / _playerController.strength)
+                {
+                    // _timePushed = Time.time + pushCooldownTime;
+                    PushAndPullBehavior("Positive");
+                }
+            }
+        }
+        
+        else if (_isInPushableNegativeArea)
+        {
+            if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
+            {
+                SetMovableObjectAsParent(_colliderTransform.transform);
+                _timePushed = Time.time;
+                _holdingPushLayerWeight = 1;
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            }
+            if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
+            {
+                RemovePlayerParentServerRpc();
+                _isObjectPushedorPulled = false;
+                _timePushed = Time.time;
+                _holdingPushLayerWeight = 0;
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            }
+
+            float deltaTime = Time.time - _timePushed;
+            if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
+            {
+                if (deltaTime >= timeToMoveObjects / _playerController.strength)
+                {
+                    // _timePushed = Time.time + pushCooldownTime;
+                    PushAndPullBehavior("Negative");
+                }
+            }
+        }
+        else
+        {
+            if (_isObjectPushedorPulled)
+            {
+                _isObjectPushedorPulled = false;
+                RemovePlayerParentServerRpc();
+                _holdingPushLayerWeight = 0;
+                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag(ClashArenaController.ObjectType.Pickable.ToString()))
+        {
+            _colliderTransform = other.transform;
+            SetFunctionalityAreaAvailability(true, false, false, false);
+        }
+        else if (other.CompareTag(ClashArenaController.ObjectType.Pressable.ToString()))
+        {
+            SetFunctionalityAreaAvailability(false, true, false, false);
+        }
+        else if (other.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "PositiveEdge"))
+        {
+            _colliderTransform = other.transform.parent.parent;
+            _objectMovingPointTransform = other.transform.GetChild(0);
+            SetFunctionalityAreaAvailability(false, false, true, false);
+        }
+        else if (other.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "NegativeEdge"))
+        {
+            _colliderTransform = other.transform.parent.parent;
+            _objectMovingPointTransform = other.transform.GetChild(0);
+            SetFunctionalityAreaAvailability(false, false, false, true);
+        }
+    }
+    
+    private void OnTriggerExit(Collider other)
+    {
+        SetFunctionalityAreaAvailability(false, false, false, false);
+    }
+
+    private void SetFunctionalityAreaAvailability(bool isInPickableArea, bool isInPressableArea, bool isInPushablePositiveArea, bool isInPushableNegativeArea)
+    {
+        _isInPickableArea = isInPickableArea;
+        _isInPressableArea = isInPressableArea;
+        _isInPushablePositiveArea = isInPushablePositiveArea;
+        _isInPushableNegativeArea = isInPushableNegativeArea;
     }
 
     private void PushAndPullBehavior(String edgeSide)
     {
         if (Input.GetKey(_pushKey))
         {
-            _isObjectPushed = true;
+            _isObjectPushedorPulled = true;
             _moveObjectDirection = edgeSide == "Positive" ? -1 : 1;
         }
-        else if (Input.GetKey(_pullKey))
+        if (Input.GetKey(_pullKey))
         {
             _moveObjectDirection = edgeSide == "Positive" ? 1 : -1;
-            _isObjectPulled = true;
+            _isObjectPushedorPulled = true;
         }
-
-        // yield return new WaitForSeconds(1 / _playerController.strength);
-        // _animator.SetLayerWeight(_holdingLayer, 0);
-        _holdingPushLayerWeight = 0;
-        // _isObjectPushed = false;
-        // _isObjectPulled = false;
-        SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
-        
-        StopAllCoroutines();
+        // _holdingPushLayerWeight = 0;
+        // SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+        // StopAllCoroutines();
     }
     
     
@@ -192,6 +343,32 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     {
         MovableObject movableObject = objectTransform.GetComponent<MovableObject>();
         movableObject.Move(_moveObjectDirection);
+    }
+
+    public void SetMovableObjectAsParent(Transform movableObjectParent) {
+        SetMovableObjectAsParentServerRpc(movableObjectParent.GetComponent<NetworkObject>());
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetMovableObjectAsParentServerRpc(NetworkObjectReference movableObjectParentNetworkObjectReference) {
+        SetMovableObjectAsParentClientRpc(movableObjectParentNetworkObjectReference);
+    }
+    
+    [ClientRpc]
+    private void SetMovableObjectAsParentClientRpc(NetworkObjectReference movableObjectParentNetworkObjectReference) {
+        movableObjectParentNetworkObjectReference.TryGet(out NetworkObject movableObjectParentNetworkObject);
+    
+        _followTransform.SetTargetTransform(_objectMovingPointTransform);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void RemovePlayerParentServerRpc() {
+        RemovePlayerParentClientRpc();
+    }
+    
+    [ClientRpc]
+    private void RemovePlayerParentClientRpc() {
+        _followTransform.SetIsFollowing(false);
     }
     
     
