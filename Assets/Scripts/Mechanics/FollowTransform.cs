@@ -5,20 +5,28 @@ using UnityEngine;
 public class FollowTransform : MonoBehaviour {
 
 
-    private Transform targetTransform;
+    private Transform _targetTransform;
+    private bool _isFollowing;
 
 
     public void SetTargetTransform(Transform targetTransform) {
-        this.targetTransform = targetTransform;
+        this._targetTransform = targetTransform;
+        _isFollowing = true;
+    }
+    
+    
+    public void SetIsFollowing(bool isFollowing)
+    {
+        _isFollowing = isFollowing;
     }
 
     private void LateUpdate() {
-        if (targetTransform == null) {
+        if (_targetTransform == null || !_isFollowing) {
             return;
         }
 
-        transform.position = targetTransform.position;
-        transform.rotation = targetTransform.rotation;
+        transform.position = _targetTransform.position;
+        transform.rotation = _targetTransform.rotation;
     }
 
 }

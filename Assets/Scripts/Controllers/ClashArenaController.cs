@@ -16,11 +16,13 @@ public class ClashArenaController : NetworkBehaviour
     [SerializeField] private List<Transform> powerUpSpawnLocations;
     [SerializeField] private float minTimeToSpawnPrefab = 55;
     [SerializeField] private float maxTimeToSpawnPrefab = 65;
+    [SerializeField] private int maxNumOfPowerUps = 3;
     private float _timer = 0;
     private float _timeToSpawnPrefab = 60;
     private List<Transform> _powerUpSpawnLocationsTemp;
     private Transform _powerUpSpawnLocation;
     private bool _isNetworkSpawned = false;
+    private int _numOfPowerUps = 0;
     
     private GameManager _gameManager;
     
@@ -29,7 +31,7 @@ public class ClashArenaController : NetworkBehaviour
 
     public enum ObjectType
     {
-        Interactable, // able to press
+        Pressable, // able to press
         Pickable, // able to pick up and put down
         Pushable, // able to push or pull
     }
@@ -49,6 +51,7 @@ public class ClashArenaController : NetworkBehaviour
         base.OnNetworkSpawn();
 
         _isNetworkSpawned = true;
+        _numOfPowerUps = 0;
         GenerateRandomSpawnTimeAndResetTimerServerRpc();
     }
 
@@ -58,7 +61,7 @@ public class ClashArenaController : NetworkBehaviour
         {
             return;
         }
-        if (_powerUpSpawnLocationsTemp.Count <= 0)
+        if (_powerUpSpawnLocationsTemp.Count <= 0 || maxNumOfPowerUps == _numOfPowerUps)
         {
             return;
         }
@@ -67,6 +70,8 @@ public class ClashArenaController : NetworkBehaviour
         {
             SpawnPowerUpServerRpc();
             GenerateRandomSpawnTimeAndResetTimerServerRpc();
+            _timer = 0;
+            _numOfPowerUps++;
         }
     }
 
@@ -95,7 +100,6 @@ public class ClashArenaController : NetworkBehaviour
         {
             _powerUpSpawnLocation = _powerUpSpawnLocationsTemp[powerUpSpawnLocationIndex];
             _powerUpSpawnLocationsTemp.RemoveAt(powerUpSpawnLocationIndex);
-            _timer = 0;
         }
     }
 }

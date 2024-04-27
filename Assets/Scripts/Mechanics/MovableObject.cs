@@ -17,25 +17,28 @@ public class MovableObject : NetworkBehaviour
     // [SerializeField] private Vector3 initPosition;
     [SerializeField] private int initPosition; // Either 0, 1, or -1
     [SerializeField] private Transform childTransform;
+    [SerializeField] private Transform movingPointTransform;
     private int _objectCurrentPosition;
     private PlayerController _playerController;
+    private FollowTransform _followTransform;
     private bool _isInPosition; // is the object in the first position
     private Animator _animator;
     private static readonly int InitializePosition = Animator.StringToHash("InitializePosition");
     private static readonly int MovePositive = Animator.StringToHash("MovePositive");
     private static readonly int MoveNegative = Animator.StringToHash("MoveNegative");
+    
 
-
-    private void Start()
+    private void Awake()
     {
         // childTransform = transform;
         // childTransform.localPosition = initPosition;
+        _followTransform = GetComponent<FollowTransform>();
         _animator = GetComponent<Animator>();
         _objectCurrentPosition = initPosition;
         InitializeAnimation();
         StartCoroutine(WaitForPlayerControllerInitialization());
     }
-    
+
     private IEnumerator WaitForPlayerControllerInitialization()
     {
         // Wait until the PlayerController instance is available
@@ -44,6 +47,11 @@ public class MovableObject : NetworkBehaviour
             yield return null;
         }
         _playerController = PlayerController.Instance;
+    }
+
+    public Transform GetMovingPointTransform()
+    {
+        return movingPointTransform;
     }
 
     /// <summary>
@@ -131,11 +139,33 @@ public class MovableObject : NetworkBehaviour
     private void InitializeAnimation()
     {
         _animator.SetInteger(InitializePosition, (int)initPosition);
+        // SetAnimationServerRpc(true, false, InitializePosition, (int)initPosition);
     }
 
     private void TriggerAnimation(int direction)
     {
-        _animator.SetTrigger(direction == 1 ? MovePositive : MoveNegative);
+        // _animator.SetTrigger(direction == 1 ? MovePositive : MoveNegative);
+        SetAnimationServerRpc(false, true, direction == 1 ? MovePositive : MoveNegative);
     }
     
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetAnimationServerRpc(bool isInteger, bool isTrigger, int id, int value = 0)
+    {
+        SetAnimationClientRpc(isInteger, isTrigger, id, value);
+    }
+
+    [ClientRpc]
+    private void SetAnimationClientRpc(bool isInteger, bool isTrigger, int id, int value = 0)
+    {
+        if (isInteger)
+        {
+            _animator.SetInteger(id, value);
+        }
+        else if (isTrigger)
+        {
+            _animator.SetTrigger(id);
+        }
+    }
+
 }
