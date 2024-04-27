@@ -12,6 +12,8 @@ using Random = UnityEngine.Random;
 public class ClashArenaController : NetworkBehaviour
 {
     public List<Transform> spawnLocations;
+    public Transform[] resourcePathPoints;
+    public Transform resourceBoxPrefab;
     [SerializeField] private List<Transform> powerUpsPrefab;
     [SerializeField] private List<Transform> powerUpSpawnLocations;
     [SerializeField] private float minTimeToSpawnPrefab = 55;

@@ -15,6 +15,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private bool _isInPushablePositiveArea = false;
     private bool _isInPushableNegativeArea = false;
     private bool _isInPressableArea = false;
+    private bool _isInDeliveryArea = false;
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
     private int _pickingLayer = 3;
@@ -34,6 +35,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private Transform _objectMovingPointTransform;
     private int _moveObjectDirection = 1; // 1 is in positive direction and -1 is in negative direction
     private float _timePushed = 0f;
+    private PickableObjectGenerator _pickableObject;
+    private ClashArenaController _clashArenaController;
 
 
     public override void OnNetworkSpawn()
@@ -52,6 +55,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         }
         _animator = GetComponent<Animator>();
         _followTransform = GetComponent<FollowTransform>();
+        _clashArenaController = ClashArenaController.Instance;
     }
 
     private void Update()
@@ -196,89 +200,103 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
 
     private void Interact()
     {
-        if (_isInPickableArea)
+        if (_isObjectPickedUp)
         {
-            // Pick up the object
-            if (Input.GetKeyDown(_interactKey))
+            if (_isInDeliveryArea)
             {
-                PickUp(_colliderTransform);
-            }
-        }
-        
-        else if (_isInPressableArea)
-        {
-            if (Input.GetKeyDown(_interactKey))
-            {
-                Press();
-            }
-        }
-        
-        else if (_isInPushablePositiveArea)
-        {
-            if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
-            {
-                SetMovableObjectAsParent(_colliderTransform.transform);
-                _timePushed = Time.time;
-                _holdingPushLayerWeight = 1;
-                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
-            }
-            if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
-            {
-                RemovePlayerParentServerRpc();
-                _isObjectPushedorPulled = false;
-                _timePushed = Time.time;
-                _holdingPushLayerWeight = 0;
-                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
-            }
-
-            float deltaTime = Time.time - _timePushed;
-            if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
-            {
-                if (deltaTime >= timeToMoveObjects / _playerController.strength)
+                // Drop the object
+                if (Input.GetKeyDown(_interactKey))
                 {
-                    // _timePushed = Time.time + pushCooldownTime;
-                    PushAndPullBehavior("Positive");
-                }
-            }
-        }
-        
-        else if (_isInPushableNegativeArea)
-        {
-            if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
-            {
-                SetMovableObjectAsParent(_colliderTransform.transform);
-                _timePushed = Time.time;
-                _holdingPushLayerWeight = 1;
-                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
-            }
-            if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
-            {
-                RemovePlayerParentServerRpc();
-                _isObjectPushedorPulled = false;
-                _timePushed = Time.time;
-                _holdingPushLayerWeight = 0;
-                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
-            }
-
-            float deltaTime = Time.time - _timePushed;
-            if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
-            {
-                if (deltaTime >= timeToMoveObjects / _playerController.strength)
-                {
-                    // _timePushed = Time.time + pushCooldownTime;
-                    PushAndPullBehavior("Negative");
+                    DropDown();
                 }
             }
         }
         else
         {
-            if (_isObjectPushedorPulled)
+            if (_isInPickableArea)
             {
-                _isObjectPushedorPulled = false;
-                RemovePlayerParentServerRpc();
-                _holdingPushLayerWeight = 0;
-                SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                // Pick up the object
+                if (Input.GetKeyDown(_interactKey))
+                {
+                    PickUp(_colliderTransform);
+                }
             }
+            
+            else if (_isInPressableArea)
+            {
+                if (Input.GetKeyDown(_interactKey))
+                {
+                    Press();
+                }
+            }
+            
+            else if (_isInPushablePositiveArea)
+            {
+                if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
+                {
+                    SetMovableObjectAsParent(_colliderTransform.transform);
+                    _timePushed = Time.time;
+                    _holdingPushLayerWeight = 1;
+                    SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                }
+                if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
+                {
+                    RemovePlayerParentServerRpc();
+                    _isObjectPushedorPulled = false;
+                    _timePushed = Time.time;
+                    _holdingPushLayerWeight = 0;
+                    SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                }
+    
+                float deltaTime = Time.time - _timePushed;
+                if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
+                {
+                    if (deltaTime >= timeToMoveObjects / _playerController.strength)
+                    {
+                        // _timePushed = Time.time + pushCooldownTime;
+                        PushAndPullBehavior("Positive");
+                    }
+                }
+            }
+            
+            else if (_isInPushableNegativeArea)
+            {
+                if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
+                {
+                    SetMovableObjectAsParent(_colliderTransform.transform);
+                    _timePushed = Time.time;
+                    _holdingPushLayerWeight = 1;
+                    SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                }
+                if (Input.GetKeyUp(_pushKey) || Input.GetKeyUp(_pullKey))
+                {
+                    RemovePlayerParentServerRpc();
+                    _isObjectPushedorPulled = false;
+                    _timePushed = Time.time;
+                    _holdingPushLayerWeight = 0;
+                    SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                }
+    
+                float deltaTime = Time.time - _timePushed;
+                if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
+                {
+                    if (deltaTime >= timeToMoveObjects / _playerController.strength)
+                    {
+                        // _timePushed = Time.time + pushCooldownTime;
+                        PushAndPullBehavior("Negative");
+                    }
+                }
+            }
+            else
+            {
+                if (_isObjectPushedorPulled)
+                {
+                    _isObjectPushedorPulled = false;
+                    RemovePlayerParentServerRpc();
+                    _holdingPushLayerWeight = 0;
+                    SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                }
+            }   
         }
     }
 
@@ -304,6 +322,10 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             _colliderTransform = other.transform.parent.parent;
             _objectMovingPointTransform = other.transform.GetChild(0);
             SetFunctionalityAreaAvailability(false, false, false, true);
+        }
+        if (other.CompareTag("ObjectDeliveryArea"))
+        {
+            _isInDeliveryArea = true;
         }
     }
     
@@ -377,18 +399,34 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         if(_isObjectPickedUp)
             return;
         _isObjectPickedUp = true;
-        PickableObjectGenerator pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
-        pickableObject.Pick();
+        _pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
+        _pickableObject.Pick();
         _holdingPickLayerWeight = 1;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
         
     }
     
-    // public void Pull(Transform objectTransform)
-    // {
-    //     MovableObject movableObject = objectTransform.GetComponent<MovableObject>();
-    //     movableObject.Move(_moveObjectDirection);
-    // }
+    public void DropDown()
+    {
+        _isObjectPickedUp = false;
+        _pickableObject.Drop();
+        _holdingPickLayerWeight = 0;
+        SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
+        SpawnResourceBoxOnDeliveryPathServerRpc();
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnResourceBoxOnDeliveryPathServerRpc()
+    {
+        SpawnResourceBoxOnDeliveryPathClientRpc();
+    }
+
+    [ClientRpc]
+    private void SpawnResourceBoxOnDeliveryPathClientRpc()
+    {
+        Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
+        // _box = resourceBoxTransform.GetComponent<ObjectDelivery>(); 
+    }
 
     public void Press()
     {
@@ -412,29 +450,6 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _pressingLayerWeight = 0;
         SetLayerWeightServerRpc(_pressingLayer, _pressingLayerWeight);
     }
-
-    // public void PickUp(Transform objectTransform)
-    // {
-    //     _holdingPickLayerWeight = 1;
-    //     SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
-    //     // _animator.SetLayerWeight(_holdingLayer, 1); // Activate the layer
-    //     _pickedObjectTransform = objectTransform;
-    //     objectTransform.parent = transform;
-    //     objectTransform.GetComponent<Rigidbody>().isKinematic = true;
-    //     objectTransform.localPosition = new Vector3(0, 0.28f, 0.55f);
-    //     objectTransform.localRotation = Quaternion.identity;
-    //     _isObjectPickedUp = true;
-    // }
-    //
-    // public void DropDown()
-    // {
-    //     _pickedObjectTransform.parent = mainMapTransform;
-    //     _holdingPickLayerWeight = 0;
-    //     SetLayerWeightServerRpc(_holdingLayer, _holdingPickLayerWeight);
-    //     // _animator.SetLayerWeight(_holdingLayer, 0); // Deactivate the layer
-    //     _pickedObjectTransform.GetComponent<Rigidbody>().isKinematic = false;
-    //     _isObjectPickedUp = false;   
-    // }
 
     
     [ServerRpc(RequireOwnership = false)]

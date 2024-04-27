@@ -47,6 +47,28 @@ public class PickableObjectGenerator : NetworkBehaviour
         // boxNetworkObject.Spawn(true);
     }
     
+    
+    public void Drop()
+    {
+        DestroyObjectServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyObjectServerRpc()
+    {
+        DestroyObjectClientRpc();
+    }
+
+    [ClientRpc]
+    private void DestroyObjectClientRpc()
+    {
+        if (_box != null)
+        {
+            // Destroy the object for all clients
+            _box.Destroy();
+        }
+    }
+    
     public void SetPickableObjectParent(Transform pickableObjectParent) {
         SetPickableObjectParentServerRpc(pickableObjectParent.GetComponent<NetworkObject>());
     }

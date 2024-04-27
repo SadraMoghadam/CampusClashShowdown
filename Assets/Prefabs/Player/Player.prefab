@@ -298,8 +298,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateSpeed: 360
   playerId: 0
-  speed: 2
-  runSpeed: 3
+  speed: 5
+  runSpeed: 8
   strength: 1
   interactKey: 102
   pushKey: 106
@@ -393,6 +393,7 @@ MonoBehaviour:
   layerMaskInteract:
     serializedVersion: 2
     m_Bits: 8
+  pushCooldownTime: 2
 --- !u!114 &7214735355283522198
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ TagManager:
   - Pressable
   - Interactable
   - ObjectDestroyingArea
+  - ObjectDeliveryArea
   layers:
   - Default
   - TransparentFX

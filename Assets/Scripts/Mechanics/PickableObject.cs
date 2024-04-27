@@ -19,4 +19,12 @@ public class PickableObject : MonoBehaviour
         _networkObject = GetComponent<NetworkObject>();
         return _networkObject;
     }
+    
+    public void Destroy()
+    {
+        // Perform any necessary cleanup
+        // Destroy the object
+        Destroy(gameObject);
+    }
+    
 }
