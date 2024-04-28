@@ -35,7 +35,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private Transform _objectMovingPointTransform;
     private int _moveObjectDirection = 1; // 1 is in positive direction and -1 is in negative direction
     private float _timePushed = 0f;
-    private PickableObjectGenerator _pickableObject;
+    private MultiplayerController _pickableObject;
     private ClashArenaController _clashArenaController;
 
 
@@ -415,28 +415,9 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         PickableObject.DestroyObject(_playerController.GetChild());
         _holdingPickLayerWeight = 0;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
-        SpawnResourceBoxOnDeliveryPathServerRpc();
+        PickableObject.SpawnResourceBoxOnDeliveryPath();
     }
     
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnResourceBoxOnDeliveryPathServerRpc()
-    {
-        // SpawnResourceBoxOnDeliveryPathClientRpc();
-        
-        Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
-        ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
-        NetworkObject boxNetworkObject = _box.GetNetworkObject();
-        boxNetworkObject.Spawn(true);
-    }
-
-    // [ClientRpc]
-    // private void SpawnResourceBoxOnDeliveryPathClientRpc()
-    // {
-    //     Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
-    //     ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
-    //     NetworkObject boxNetworkObject = _box.GetNetworkObject();
-    //     boxNetworkObject.Spawn(true);
-    // }
 
     public void Press()
     {

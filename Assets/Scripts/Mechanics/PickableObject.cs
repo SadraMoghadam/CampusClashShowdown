@@ -57,11 +57,18 @@ public class PickableObject : NetworkBehaviour
     
     
     public static void SpawnObject(IParent<PickableObject> objectParent) {
-        PickableObjectGenerator.Instance.SpawnObject(objectParent);
+        MultiplayerController.Instance.SpawnObject(objectParent);
     }
 
     public static void DestroyObject(PickableObject pickableObject) {
-        PickableObjectGenerator.Instance.DestroyObject(pickableObject);
+        MultiplayerController.Instance.DestroyObject(pickableObject);
     }
+
+    public static void SpawnResourceBoxOnDeliveryPath()
+    {
+        MultiplayerController.Instance.SpawnResourceBoxOnDeliveryPath();
+    } 
+    
+    
     
 }
