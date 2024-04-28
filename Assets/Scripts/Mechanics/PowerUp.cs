@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 
@@ -9,7 +10,7 @@ public enum PowerUpType
     Speed,
     Strength,
 }
-public class PowerUp : MonoBehaviour
+public class PowerUp : NetworkBehaviour
 {
     [SerializeField] private PowerUpType powerUpType;
     [SerializeField] private float powerUpTime;
@@ -20,24 +21,25 @@ public class PowerUp : MonoBehaviour
     
     void Start()
     {
-        StartCoroutine(WaitForPlayerControllerInitialization());
+        // StartCoroutine(WaitForPlayerControllerInitialization());
     }
     
-    private IEnumerator WaitForPlayerControllerInitialization()
-    {
-        // Wait until the PlayerController instance is available
-        while (PlayerController.Instance == null)
-        {
-            yield return null;
-        }
-        _playerController = PlayerController.Instance;
-        _defaultPlayerSpeed = _playerController.speed;
-        _defaultPlayerStrength = _playerController.strength;
-    }
+    // private IEnumerator WaitForPlayerControllerInitialization()
+    // {
+    //     // Wait until the PlayerController instance is available
+    //     while (PlayerController.Instance == null)
+    //     {
+    //         yield return null;
+    //     }
+    //     _defaultPlayerSpeed = _playerController.speed;
+    //     _defaultPlayerStrength = _playerController.strength;
+    // }
 
 
     private void OnTriggerEnter(Collider other)
     {
+        _playerController = other.GetComponent<PlayerController>();
+        SetDefaultPlayerAttributes();
         GetComponent<BoxCollider>().enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
         StartCoroutine(PowerUpCR());
@@ -46,14 +48,22 @@ public class PowerUp : MonoBehaviour
 
     private IEnumerator PowerUpCR()
     {
-        setPowerValue(powerUpMultiplierCoefficient);
+        SetPowerValue(powerUpMultiplierCoefficient);
         yield return new WaitForSeconds(powerUpTime);
-        setPowerValue(1);
+        SetPowerValue(1);
         StopAllCoroutines();
+        DestroyPowerUpServerRpc();
+    }
+    
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyPowerUpServerRpc() 
+    {
+        GetComponent<NetworkObject>().Despawn();
         Destroy(gameObject);
     }
 
-    private void setPowerValue(float coefficient)
+    private void SetPowerValue(float coefficient)
     {
         switch (powerUpType)
         {
@@ -68,5 +78,11 @@ public class PowerUp : MonoBehaviour
                 _playerController.strength = _defaultPlayerStrength;
                 break;
         }
+    }
+
+    private void SetDefaultPlayerAttributes()
+    {
+        _defaultPlayerSpeed = _playerController.speed;
+        _defaultPlayerStrength = _playerController.strength;
     }
 }

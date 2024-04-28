@@ -51,7 +51,7 @@ public class PickableObject : NetworkBehaviour
         Destroy(gameObject);
     }
 
-    public void ClearKitchenObjectOnParent() {
+    public void ClearObjectOnParent() {
         _objectParent.ClearChild();
     }
     

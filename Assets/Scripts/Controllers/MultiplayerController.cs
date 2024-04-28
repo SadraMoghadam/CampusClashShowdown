@@ -54,17 +54,17 @@ public class MultiplayerController : NetworkBehaviour
 
         PickableObject pickableObject = pickableObjectNetworkObject.GetComponent<PickableObject>();
 
-        ClearKitchenObjectOnParentClientRpc(pickableObjectNetworkObjectReference);
+        ClearObjectOnParentClientRpc(pickableObjectNetworkObjectReference);
 
         pickableObject.DestroySelf();
     }
 
     [ClientRpc]
-    private void ClearKitchenObjectOnParentClientRpc(NetworkObjectReference pickableObjectNetworkObjectReference) {
+    private void ClearObjectOnParentClientRpc(NetworkObjectReference pickableObjectNetworkObjectReference) {
         pickableObjectNetworkObjectReference.TryGet(out NetworkObject pickableObjectNetworkObject);
         PickableObject pickableObject = pickableObjectNetworkObject.GetComponent<PickableObject>();
 
-        pickableObject.ClearKitchenObjectOnParent();
+        pickableObject.ClearObjectOnParent();
     }
 
     public void SpawnResourceBoxOnDeliveryPath()
@@ -75,17 +75,22 @@ public class MultiplayerController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnResourceBoxOnDeliveryPathServerRpc()
     {
-        SpawnResourceBoxOnDeliveryPathClientRpc();
-    }
-
-    [ClientRpc]
-    private void SpawnResourceBoxOnDeliveryPathClientRpc()
-    {
+        // SpawnResourceBoxOnDeliveryPathClientRpc();
+        
         Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
         ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
         NetworkObject boxNetworkObject = _box.GetNetworkObject();
         boxNetworkObject.Spawn(true);
     }
+
+    // [ClientRpc]
+    // private void SpawnResourceBoxOnDeliveryPathClientRpc()
+    // {
+    //     Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
+    //     ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
+    //     NetworkObject boxNetworkObject = _box.GetNetworkObject();
+    //     boxNetworkObject.Spawn(true);
+    // }
     
     
 }
