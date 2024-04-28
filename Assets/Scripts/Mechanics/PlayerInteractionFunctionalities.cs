@@ -41,7 +41,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        _playerController = PlayerController.Instance;
+        _playerController = GetComponent<PlayerController>();
         
         if (_playerController == null)
         {
@@ -396,11 +396,12 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     private void PickUp(Transform objectGeneratorTransform)
     {
-        if(_isObjectPickedUp)
+        if(_isObjectPickedUp || !IsLocalPlayer)
             return;
         _isObjectPickedUp = true;
-        _pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
-        _pickableObject.Pick();
+        // _pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
+        // _pickableObject.Pick();
+        PickableObject.SpawnObject(_playerController);
         _holdingPickLayerWeight = 1;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
         
@@ -408,8 +409,10 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     public void DropDown()
     {
+        if(!IsLocalPlayer)
+            return;
         _isObjectPickedUp = false;
-        _pickableObject.Drop();
+        PickableObject.DestroyObject(_playerController.GetChild());
         _holdingPickLayerWeight = 0;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
         SpawnResourceBoxOnDeliveryPathServerRpc();
@@ -418,15 +421,22 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnResourceBoxOnDeliveryPathServerRpc()
     {
-        SpawnResourceBoxOnDeliveryPathClientRpc();
+        // SpawnResourceBoxOnDeliveryPathClientRpc();
+        
+        Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
+        ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
+        NetworkObject boxNetworkObject = _box.GetNetworkObject();
+        boxNetworkObject.Spawn(true);
     }
 
-    [ClientRpc]
-    private void SpawnResourceBoxOnDeliveryPathClientRpc()
-    {
-        Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
-        // _box = resourceBoxTransform.GetComponent<ObjectDelivery>(); 
-    }
+    // [ClientRpc]
+    // private void SpawnResourceBoxOnDeliveryPathClientRpc()
+    // {
+    //     Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
+    //     ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
+    //     NetworkObject boxNetworkObject = _box.GetNetworkObject();
+    //     boxNetworkObject.Spawn(true);
+    // }
 
     public void Press()
     {

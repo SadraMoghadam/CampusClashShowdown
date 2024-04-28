@@ -32,7 +32,10 @@ public class MovableObject : NetworkBehaviour
     {
         // childTransform = transform;
         // childTransform.localPosition = initPosition;
-        SetDestroyingArea(false);
+        if (initPosition == 0)
+        {
+            SetDestroyingArea(false);
+        }
         _followTransform = GetComponent<FollowTransform>();
         _animator = GetComponent<Animator>();
         _objectCurrentPosition = initPosition;

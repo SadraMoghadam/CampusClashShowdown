@@ -12,10 +12,12 @@ public class ObjectDelivery : NetworkBehaviour
     private Rigidbody _rb;
     private bool _isInObjectDestroyingArea = false;
     private ClashArenaController _clashArenaController;
-    public Transform[] _pathPoints; 
+    private Transform[] _pathPoints;
+    private NetworkObject _networkObject;
 
-    void Start()
+    void Awake()
     {
+        SetNetworkObject();
         _clashArenaController = ClashArenaController.Instance;
         _pathPoints = _clashArenaController.resourcePathPoints;
             
@@ -64,6 +66,17 @@ public class ObjectDelivery : NetworkBehaviour
         yield return new WaitForSeconds(1);
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+        _networkObject.Despawn();
+    }
+
+
+    public void SetNetworkObject()
+    {
+        _networkObject = GetComponent<NetworkObject>();
+    }
+    
+    public NetworkObject GetNetworkObject()
+    {
+        return _networkObject;
     }
 }

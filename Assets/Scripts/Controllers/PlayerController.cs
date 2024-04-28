@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour 
+public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 {
     [SerializeField] private float rotateSpeed = 360;
     public ulong playerId;
@@ -20,6 +20,7 @@ public class PlayerController : NetworkBehaviour
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
     private ClashArenaController _clashArenaController;
+    private PickableObject _pickableObject;
 
 
 
@@ -120,4 +121,33 @@ public class PlayerController : NetworkBehaviour
     }
 
 
+    public Transform GetChildFollowTransform()
+    {
+        return holdingPoint;
+    }
+
+    public void SetChild(PickableObject child)
+    {
+        _pickableObject = child;
+    }
+
+    public PickableObject GetChild()
+    {
+        return _pickableObject;
+    }
+
+    public void ClearChild()
+    {
+        _pickableObject = null;
+    }
+
+    public bool HasChild()
+    {
+        return _pickableObject != null;
+    }
+
+    public NetworkObject GetNetworkObject()
+    {
+        return GetComponent<NetworkObject>();
+    }
 }

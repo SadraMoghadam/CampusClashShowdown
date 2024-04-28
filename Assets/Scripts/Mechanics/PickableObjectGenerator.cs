@@ -10,8 +10,11 @@ public class PickableObjectGenerator : NetworkBehaviour
     private PlayerController _playerController;
     private PickableObject _box;
 
+    
+    public static PickableObjectGenerator Instance { get; private set; }
 
     private void Awake() {
+        Instance = this;
         StartCoroutine(WaitForPlayerControllerInitialization());
     }
     
@@ -26,63 +29,102 @@ public class PickableObjectGenerator : NetworkBehaviour
         _playerController = PlayerController.Instance;
     }
 
-    public void Pick()
+    // public void Pick()
+    // {
+    //     SpawnObject();
+    // }
+
+    public void SpawnObject(IParent<PickableObject> objectParent)
     {
-        SpawnObjectServerRpc();
-        SetPickableObjectParent(_playerController.transform);
+        SpawnObjectServerRpc(objectParent.GetNetworkObject());
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnObjectServerRpc()
+    private void SpawnObjectServerRpc(NetworkObjectReference pickableObjectParentNetworkObjectReference)
     {
-        SpawnObjectClientRpc();
-    }
-
-    [ClientRpc]
-    private void SpawnObjectClientRpc()
-    {
-        Transform boxTransform = Instantiate(boxPrefab);
-        _box = boxTransform.GetComponent<PickableObject>(); 
-        // NetworkObject boxNetworkObject = _box.GetNetworkObject();
-        // boxNetworkObject.Spawn(true);
-    }
-    
-    
-    public void Drop()
-    {
-        DestroyObjectServerRpc();
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void DestroyObjectServerRpc()
-    {
-        DestroyObjectClientRpc();
-    }
-
-    [ClientRpc]
-    private void DestroyObjectClientRpc()
-    {
-        if (_box != null)
-        {
-            // Destroy the object for all clients
-            _box.Destroy();
-        }
-    }
-    
-    public void SetPickableObjectParent(Transform pickableObjectParent) {
-        SetPickableObjectParentServerRpc(pickableObjectParent.GetComponent<NetworkObject>());
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SetPickableObjectParentServerRpc(NetworkObjectReference pickableObjectParentNetworkObjectReference) {
-        SetPickableObjectParentClientRpc(pickableObjectParentNetworkObjectReference);
-    }
-
-    [ClientRpc]
-    private void SetPickableObjectParentClientRpc(NetworkObjectReference pickableObjectParentNetworkObjectReference) {
         pickableObjectParentNetworkObjectReference.TryGet(out NetworkObject pickableObjectParentNetworkObject);
+        IParent<PickableObject> objectParent = pickableObjectParentNetworkObject.GetComponent<IParent<PickableObject>>();
+        if (objectParent.HasChild())
+        {
+            return;
+        }
+        
+        Transform boxTransform = Instantiate(boxPrefab);
+        NetworkObject boxNetworkObject = boxTransform.GetComponent<NetworkObject>();
+        boxNetworkObject.Spawn(true);
 
-        _box.GetFollowTransform().SetTargetTransform(pickableObjectParentNetworkObject.GetComponent<PlayerController>().GetHoldingPointTransform());
-        // _followTransform.SetTargetTransform(pickableObjectParentNetworkObject.transform);
+        PickableObject box = boxTransform.GetComponent<PickableObject>();
+        box.SetPickableObjectParent(objectParent);
     }
+    
+    // [ClientRpc]
+    // private void SpawnObjectClientRpc(NetworkObjectReference pickableObjectParentNetworkObjectReference)
+    // {
+    //     pickableObjectParentNetworkObjectReference.TryGet(out NetworkObject pickableObjectParentNetworkObject);
+    //     IParent<PickableObject> objectParent = pickableObjectParentNetworkObject.GetComponent<IParent<PickableObject>>();
+    //     pickableObjectNetworkObjectReference.TryGet(out NetworkObject pickableObjectNetworkObject);
+    //     PickableObject box = pickableObjectNetworkObject.GetComponent<PickableObject>();
+    //     box.SetPickableObjectParent(objectParent);
+    //     // Transform boxTransform = Instantiate(boxPrefab);
+    //     // _box = boxTransform.GetComponent<PickableObject>(); 
+    //     // NetworkObject boxNetworkObject = _box.GetNetworkObject();
+    //     // boxNetworkObject.Spawn(true);
+    // }
+    
+    
+    // public void Drop()
+    // {
+    //     DestroyObjectServerRpc();
+    //     _box.Destroy();
+    // }
+
+    public void DestroyObject(PickableObject pickableObject)
+    {
+        DestroyObjectServerRpc(pickableObject.NetworkObject);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyObjectServerRpc(NetworkObjectReference pickableObjectNetworkObjectReference) {
+        pickableObjectNetworkObjectReference.TryGet(out NetworkObject pickableObjectNetworkObject);
+
+        if (pickableObjectNetworkObject == null) {
+            return;
+        }
+
+        PickableObject pickableObject = pickableObjectNetworkObject.GetComponent<PickableObject>();
+
+        ClearKitchenObjectOnParentClientRpc(pickableObjectNetworkObjectReference);
+
+        pickableObject.DestroySelf();
+    }
+
+    [ClientRpc]
+    private void ClearKitchenObjectOnParentClientRpc(NetworkObjectReference pickableObjectNetworkObjectReference) {
+        pickableObjectNetworkObjectReference.TryGet(out NetworkObject pickableObjectNetworkObject);
+        PickableObject pickableObject = pickableObjectNetworkObject.GetComponent<PickableObject>();
+
+        pickableObject.ClearKitchenObjectOnParent();
+    }
+
+    // [ServerRpc(RequireOwnership = false)]
+    // private void DestroyObjectServerRpc()
+    // {
+    //     DestroyObjectClientRpc();
+    // }
+    //
+    // [ClientRpc]
+    // private void DestroyObjectClientRpc()
+    // {
+    //     if (_box != null)
+    //     {
+    //         // Destroy the object for all clients
+    //         Destroy(_box.gameObject);
+    //     }
+    // }
+    
+    // public void ClearPickableObjectParent(Transform pickableObjectParent) {
+    //     ClearPickableObjectParentServerRpc(pickableObjectParent.GetComponent<NetworkObject>());
+    // }
+    
+    
 }
