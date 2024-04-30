@@ -56,6 +56,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _animator = GetComponent<Animator>();
         _followTransform = GetComponent<FollowTransform>();
         _clashArenaController = ClashArenaController.Instance;
+        _isObjectPickedUp = false;
     }
 
     private void Update()
@@ -113,7 +114,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                 // Pick up the object
                 if (Input.GetKeyDown(_interactKey))
                 {
-                    PickUp(_colliderTransform);
+                    PickUp();
                 }
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pressable.ToString()))
@@ -218,7 +219,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                 // Pick up the object
                 if (Input.GetKeyDown(_interactKey))
                 {
-                    PickUp(_colliderTransform);
+                    PickUp();
                 }
             }
             
@@ -394,7 +395,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     }
     
     
-    private void PickUp(Transform objectGeneratorTransform)
+    private void PickUp()
     {
         if(_isObjectPickedUp || !IsLocalPlayer)
             return;

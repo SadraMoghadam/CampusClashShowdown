@@ -50,7 +50,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         _animator = GetComponent<Animator>();
         AssignPlayerId(GetComponent<NetworkObject>().OwnerClientId);
         _clashArenaController = ClashArenaController.Instance;
-        transform.position = _clashArenaController.spawnLocations[0].position;
+        transform.position = _clashArenaController.spawnLocations[(int)OwnerClientId].position;
 
     }
 

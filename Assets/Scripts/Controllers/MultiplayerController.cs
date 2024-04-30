@@ -2,19 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MultiplayerController : NetworkBehaviour
 {
     public Transform boxPrefab;
+    public List<Transform> resourceDeliveryPathPoints;
+    public Transform resourceBoxPrefab;
+    
+    private GameManager _gameManager;
     private ClashArenaController _clashArenaController;
 
     
-    public static MultiplayerController Instance { get; private set; }
+
+    private static MultiplayerController _instance;
+    public static MultiplayerController Instance => _instance;
 
     private void Awake() {
-        Instance = this;
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+        print(resourceDeliveryPathPoints.Count);
         _clashArenaController = ClashArenaController.Instance;
+        _gameManager = GameManager.Instance;
     }
+    
 
     public void SpawnObject(IParent<PickableObject> objectParent)
     {
@@ -75,22 +88,21 @@ public class MultiplayerController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnResourceBoxOnDeliveryPathServerRpc()
     {
-        // SpawnResourceBoxOnDeliveryPathClientRpc();
-        
-        Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
-        ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
-        NetworkObject boxNetworkObject = _box.GetNetworkObject();
+        Transform resourceBoxTransform = Instantiate(resourceBoxPrefab, resourceDeliveryPathPoints[0].position, Quaternion.identity);
+        ObjectDelivery box = resourceBoxTransform.GetComponent<ObjectDelivery>();
+        NetworkObject boxNetworkObject = box.GetNetworkObject();
         boxNetworkObject.Spawn(true);
+        // SpawnResourceBoxOnDeliveryPathClientRpc();
     }
 
     // [ClientRpc]
     // private void SpawnResourceBoxOnDeliveryPathClientRpc()
     // {
-    //     Transform resourceBoxTransform = Instantiate(_clashArenaController.resourceBoxPrefab, _clashArenaController.resourcePathPoints[0].position, Quaternion.identity);
-    //     ObjectDelivery _box = resourceBoxTransform.GetComponent<ObjectDelivery>();
-    //     NetworkObject boxNetworkObject = _box.GetNetworkObject();
+    //     Transform resourceBoxTransform = Instantiate(resourceBoxPrefab, resourceDeliveryPathPoints[0].position, Quaternion.identity);
+    //     ObjectDelivery box = resourceBoxTransform.GetComponent<ObjectDelivery>();
+    //     NetworkObject boxNetworkObject = box.GetNetworkObject();
     //     boxNetworkObject.Spawn(true);
     // }
-    
+
     
 }

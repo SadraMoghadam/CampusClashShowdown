@@ -19,7 +19,7 @@ public class MovableObject : NetworkBehaviour
     [SerializeField] private Transform childTransform;
     [SerializeField] private List<Collider> destroyingAreaColliders;
     private int _objectCurrentPosition;
-    private PlayerController _playerController;
+    // private PlayerController _playerController;
     private FollowTransform _followTransform;
     private bool _isInPosition; // is the object in the first position
     private Animator _animator;
@@ -40,18 +40,18 @@ public class MovableObject : NetworkBehaviour
         _animator = GetComponent<Animator>();
         _objectCurrentPosition = initPosition;
         InitializeAnimation();
-        StartCoroutine(WaitForPlayerControllerInitialization());
+        // StartCoroutine(WaitForPlayerControllerInitialization());
     }
 
-    private IEnumerator WaitForPlayerControllerInitialization()
-    {
-        // Wait until the PlayerController instance is available
-        while (PlayerController.Instance == null)
-        {
-            yield return null;
-        }
-        _playerController = PlayerController.Instance;
-    }
+    // private IEnumerator WaitForPlayerControllerInitialization()
+    // {
+    //     // Wait until the PlayerController instance is available
+    //     while (PlayerController.Instance == null)
+    //     {
+    //         yield return null;
+    //     }
+    //     _playerController = PlayerController.Instance;
+    // }
 
     /// <summary>
     /// Move function that is attached to each movable object and controls the movement of the object depending on the
