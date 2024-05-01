@@ -324,7 +324,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             _objectMovingPointTransform = other.transform.GetChild(0);
             SetFunctionalityAreaAvailability(false, false, false, true);
         }
-        if (other.CompareTag("ObjectDeliveryArea"))
+        if (other.CompareTag("ObjectEntryArea"))
         {
             _isInDeliveryArea = true;
         }

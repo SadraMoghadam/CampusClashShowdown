@@ -10,6 +10,8 @@ public class MultiplayerController : NetworkBehaviour
     public Transform boxPrefab;
     public List<Transform> resourceDeliveryPathPoints;
     public Transform resourceBoxPrefab;
+    private int _team1Score;
+    private int _team2Score;
     
     private GameManager _gameManager;
     private ClashArenaController _clashArenaController;
@@ -27,6 +29,36 @@ public class MultiplayerController : NetworkBehaviour
         print(resourceDeliveryPathPoints.Count);
         _clashArenaController = ClashArenaController.Instance;
         _gameManager = GameManager.Instance;
+        _team1Score = 0;
+        _team2Score = 0;
+    }
+
+    // id should be either 1 for team1 or 2 for team2
+    public void IncreaseTeamScore(int teamId) 
+    {
+        if (teamId == 1)
+        {
+            _team1Score++;
+        }
+        else if (teamId == 2)
+        {
+            _team2Score++;
+        }
+        Debug.Log("Team1: " + _team1Score + " - Team2: " + _team2Score);
+    }
+    
+    public int GetTeamScore(int teamId) 
+    {
+        if (teamId == 1)
+        {
+            return _team1Score;
+        }
+        else if (teamId == 2)
+        {
+            return _team2Score;
+        }
+
+        return 0;
     }
     
 

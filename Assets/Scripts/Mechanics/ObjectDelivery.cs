@@ -13,9 +13,12 @@ public class ObjectDelivery : NetworkBehaviour
     private int _currentPointIndex = 0; 
     private Rigidbody _rb;
     private bool _isInObjectDestroyingArea = false;
+    private bool _isObjectDelivered;
     private MultiplayerController _multiplayerController;
     private List<Transform> _pathPoints;
     private float _timer = 0;
+
+    private TeamCharacteristicsScriptableObject _teamCharacteristics;
     // private Vector3 _currentPosition; 
     // private Vector3 _previousPosition; 
 
@@ -23,6 +26,7 @@ public class ObjectDelivery : NetworkBehaviour
     {
         _multiplayerController = MultiplayerController.Instance;
         _pathPoints = _multiplayerController.resourceDeliveryPathPoints;
+        _isObjectDelivered = false;
         // if (!networkObject.IsSpawned)
         // {
         //     networkObject.Spawn(true);
@@ -89,6 +93,12 @@ public class ObjectDelivery : NetworkBehaviour
             DestroyObjectServerRpc();
             // StartCoroutine(DestroyObjectProcess());
         }
+        
+        if (other.CompareTag("ObjectDeliveryArea"))
+        {
+            ResourceObjectDelivered();
+            // StartCoroutine(DestroyObjectProcess());
+        }
     }
 
     
@@ -126,6 +136,7 @@ public class ObjectDelivery : NetworkBehaviour
 
     public void SetResourceObjectAttributes(TeamCharacteristicsScriptableObject teamCharacteristics)
     {
+        _teamCharacteristics = teamCharacteristics;
         Color teamColor = teamCharacteristics.color;
         float r = teamColor.r;
         float g = teamColor.g;
@@ -146,54 +157,37 @@ public class ObjectDelivery : NetworkBehaviour
 
     }
 
-    // private IEnumerator DestroyObjectProcess()
-    // {
-    //     SetObjectRigidBodyServerRpc();
-    //     yield return new WaitForSeconds(1);
-    //     DisableObjectColliderServerRpc();
-    //     yield return new WaitForSeconds(1);
-    //     DestroyObjectServerRpc();
-    // }
-    //
-    // [ServerRpc(RequireOwnership = false)]
-    // private void SetObjectRigidBodyServerRpc()
-    // {
-    //     SetObjectRigidBodyClientRpc();
-    // }
-    //
-    // [ClientRpc]
-    // private void SetObjectRigidBodyClientRpc()
-    // {
-    //     _rb.useGravity = true;
-    //     _rb.freezeRotation = false;
-    // }
-    //
-    // [ServerRpc(RequireOwnership = false)]
-    // private void DisableObjectColliderServerRpc()
-    // {
-    //     DisableObjectColliderClientRpc();
-    // }
-    //
-    // [ClientRpc]
-    // private void DisableObjectColliderClientRpc() 
-    // {
-    //     GetComponent<Collider>().enabled = false;
-    // }
-    //
-    // [ServerRpc(RequireOwnership = false)]
-    // private void DestroyObjectServerRpc()
-    // {
-    //     networkObject.Despawn();
-    //     DestroyObjectClientRpc();
-    // }
-    //
-    // [ClientRpc]
-    // private void DestroyObjectClientRpc() 
-    // {
-    //     Destroy(gameObject);
-    // }
-
+    private void ResourceObjectDelivered()
+    {
+        DeliverObjectServerRpc();
+    }
     
+    [ServerRpc(RequireOwnership = false)]
+    private void DeliverObjectServerRpc()
+    {
+        int teamId = _teamCharacteristics.id;
+        DeliverObjectClientRpc(teamId);
+    }
+    
+    [ClientRpc]
+    private void DeliverObjectClientRpc(int teamId) 
+    {
+        StartCoroutine(DeliverObjectProcess(teamId));
+    }
+
+    private IEnumerator DeliverObjectProcess(int teamId)
+    {
+        if (!_isObjectDelivered)
+        {
+            _multiplayerController.IncreaseTeamScore(teamId);
+            _isObjectDelivered = true;
+            yield return new WaitForSeconds(1);
+            networkObject.Despawn();
+            Destroy(gameObject);
+            
+        }
+    }
+
     public NetworkObject GetNetworkObject()
     {
         return networkObject;

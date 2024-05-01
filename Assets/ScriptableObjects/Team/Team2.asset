@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fc8b77f2eb229e4596e1725aa85a6c9, type: 3}
   m_Name: Team2
   m_EditorClassIdentifier: 
+  id: 2
   name: Golgi
   color: {r: 0, g: 1, b: 0.75576925, a: 0}
   maxPlayers: 2

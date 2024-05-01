@@ -15,6 +15,7 @@ TagManager:
   - ObjectDestroyingArea
   - ObjectDeliveryArea
   - ResourceBox
+  - ObjectEntryArea
   layers:
   - Default
   - TransparentFX
