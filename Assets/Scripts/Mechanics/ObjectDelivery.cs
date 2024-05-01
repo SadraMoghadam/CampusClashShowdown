@@ -23,6 +23,10 @@ public class ObjectDelivery : NetworkBehaviour
     {
         _multiplayerController = MultiplayerController.Instance;
         _pathPoints = _multiplayerController.resourceDeliveryPathPoints;
+        // if (!networkObject.IsSpawned)
+        // {
+        //     networkObject.Spawn(true);
+        // }
             
         if (_pathPoints.Count == 0)
         {
@@ -112,6 +116,34 @@ public class ObjectDelivery : NetworkBehaviour
         yield return new WaitForSeconds(1);
         networkObject.Despawn();
         Destroy(gameObject);
+    }
+    
+    
+    public static void SpawnResourceBoxOnDeliveryPath(IParent<PickableObject> objectParent)
+    {
+        MultiplayerController.Instance.SpawnResourceBoxOnDeliveryPath(objectParent);
+    }
+
+    public void SetResourceObjectAttributes(TeamCharacteristicsScriptableObject teamCharacteristics)
+    {
+        Color teamColor = teamCharacteristics.color;
+        float r = teamColor.r;
+        float g = teamColor.g;
+        float b = teamColor.b;
+        SetResourceObjectAttributesServerRpc(r, g, b);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetResourceObjectAttributesServerRpc(float r, float g, float b)
+    {
+        SetResourceObjectAttributesClientRpc(r, g, b);
+    }
+
+    [ClientRpc]
+    private void SetResourceObjectAttributesClientRpc(float r, float g, float b)
+    {
+        GetComponent<Renderer>().material.color = new Color(r, g, b); // Set the color of boxes with respect to their team
+
     }
 
     // private IEnumerator DestroyObjectProcess()

@@ -16,4 +16,8 @@ public interface IParent<T>
     public bool HasChild();
 
     public NetworkObject GetNetworkObject();
+
+    public Color GetTeamColor();
+    
+    public TeamCharacteristicsScriptableObject GetTeamCharacteristics();
 }

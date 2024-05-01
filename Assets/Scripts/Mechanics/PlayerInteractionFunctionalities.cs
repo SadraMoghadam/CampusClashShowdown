@@ -369,17 +369,16 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     }
 
     public void SetMovableObjectAsParent(Transform movableObjectParent) {
-        SetMovableObjectAsParentServerRpc(movableObjectParent.GetComponent<NetworkObject>());
+        SetMovableObjectAsParentServerRpc();
     }
     
     [ServerRpc(RequireOwnership = false)]
-    private void SetMovableObjectAsParentServerRpc(NetworkObjectReference movableObjectParentNetworkObjectReference) {
-        SetMovableObjectAsParentClientRpc(movableObjectParentNetworkObjectReference);
+    private void SetMovableObjectAsParentServerRpc() {
+        SetMovableObjectAsParentClientRpc();
     }
     
     [ClientRpc]
-    private void SetMovableObjectAsParentClientRpc(NetworkObjectReference movableObjectParentNetworkObjectReference) {
-        movableObjectParentNetworkObjectReference.TryGet(out NetworkObject movableObjectParentNetworkObject);
+    private void SetMovableObjectAsParentClientRpc() {
     
         _followTransform.SetTargetTransform(_objectMovingPointTransform);
     }
@@ -416,7 +415,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         PickableObject.DestroyObject(_playerController.GetChild());
         _holdingPickLayerWeight = 0;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
-        PickableObject.SpawnResourceBoxOnDeliveryPath();
+        ObjectDelivery.SpawnResourceBoxOnDeliveryPath(_playerController);
     }
     
 

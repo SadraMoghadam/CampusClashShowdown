@@ -15,30 +15,27 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     public KeyCode pushKey = KeyCode.J;
     public KeyCode pullKey = KeyCode.K;
     [SerializeField] private Transform holdingPoint;
+    [SerializeField] private GameObject playerArrow;
+    [SerializeField] private GameObject playerTeamIndicator;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
     private ClashArenaController _clashArenaController;
     private PickableObject _pickableObject;
+    private string _teamName;
+    private Color _teamColor;
+    private TeamCharacteristicsScriptableObject _teamCharacteristics;
 
 
 
     private static PlayerController _instance;
     public static PlayerController Instance => _instance;
 
-    // private void Awake()
-    // {
-    //     if (_instance == null)
-    //     {
-    //         _instance = this;
-    //     }
-    //     _rb = GetComponent<Rigidbody>();
-    //     _animator = GetComponent<Animator>();
-    // }
 
     public override void OnNetworkSpawn()
     {
+        SetTeam();
         if (!IsOwner) return;
         
         base.OnNetworkSpawn();
@@ -46,12 +43,21 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         {
             _instance = this;
         }
+        _clashArenaController = ClashArenaController.Instance;
         _rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         AssignPlayerId(GetComponent<NetworkObject>().OwnerClientId);
-        _clashArenaController = ClashArenaController.Instance;
+        playerArrow.SetActive(true);
         transform.position = _clashArenaController.spawnLocations[(int)OwnerClientId].position;
+        if (IsServer) {
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        }
+    }
 
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
+        if (clientId == OwnerClientId && HasChild()) {
+            PickableObject.DestroyObject(GetChild());
+        }
     }
 
     private void AssignPlayerId(ulong clientId)
@@ -120,6 +126,25 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         _rb.MovePosition(transform.position + transform.forward * (_input.normalized.magnitude * actualSpeed * Time.deltaTime));
     }
 
+    private void SetTeam()
+    {
+        if(_clashArenaController == null)
+            _clashArenaController = ClashArenaController.Instance;
+        if (OwnerClientId % 2 == 0)
+        {
+            _teamColor = _clashArenaController.team1.color;
+            _teamName = _clashArenaController.team1.name;
+            _teamCharacteristics = _clashArenaController.team1;
+        }
+        else
+        {
+            _teamColor = _clashArenaController.team2.color;
+            _teamName = _clashArenaController.team2.name;
+            _teamCharacteristics = _clashArenaController.team2;
+        }
+        playerTeamIndicator.GetComponent<Renderer>().material.color = _teamColor; // Set the color of boxes with respect to their team
+    }
+
 
     public Transform GetChildFollowTransform()
     {
@@ -149,5 +174,15 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     public NetworkObject GetNetworkObject()
     {
         return GetComponent<NetworkObject>();
+    }
+
+    public Color GetTeamColor()
+    {
+        return _teamColor;
+    }
+
+    public TeamCharacteristicsScriptableObject GetTeamCharacteristics()
+    {
+        return _teamCharacteristics;
     }
 }

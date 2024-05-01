@@ -18,6 +18,9 @@ public class ClashArenaController : NetworkBehaviour
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
 
+    public TeamCharacteristicsScriptableObject team1;
+    public TeamCharacteristicsScriptableObject team2;
+
     public enum ObjectType
     {
         Pressable, // able to press

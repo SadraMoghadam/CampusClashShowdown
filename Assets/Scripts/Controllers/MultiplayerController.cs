@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -45,12 +46,26 @@ public class MultiplayerController : NetworkBehaviour
         }
         
         Transform boxTransform = Instantiate(boxPrefab);
+        boxTransform.GetComponent<Renderer>().material.color = objectParent.GetTeamColor(); // Set the color of boxes with respect to their team
         NetworkObject boxNetworkObject = boxTransform.GetComponent<NetworkObject>();
         boxNetworkObject.Spawn(true);
 
         PickableObject box = boxTransform.GetComponent<PickableObject>();
         box.SetPickableObjectParent(objectParent);
+        SpawnObjectClientRpc(boxNetworkObject, pickableObjectParentNetworkObjectReference);
     }
+
+    [ClientRpc]
+    private void SpawnObjectClientRpc(NetworkObjectReference boxNetworkObjectReference, NetworkObjectReference pickableObjectParentNetworkObjectReference)
+    {
+        
+        pickableObjectParentNetworkObjectReference.TryGet(out NetworkObject pickableObjectParentNetworkObject);
+        boxNetworkObjectReference.TryGet(out NetworkObject boxNetworkObject);
+        IParent<PickableObject> objectParent = pickableObjectParentNetworkObject.GetComponent<IParent<PickableObject>>();
+        boxNetworkObject.GetComponent<Renderer>().material.color = objectParent.GetTeamColor(); // Set the color of boxes with respect to their team
+        
+    }
+    
 
     public void DestroyObject(PickableObject pickableObject)
     {
@@ -80,20 +95,50 @@ public class MultiplayerController : NetworkBehaviour
         pickableObject.ClearObjectOnParent();
     }
 
-    public void SpawnResourceBoxOnDeliveryPath()
-    {
-        SpawnResourceBoxOnDeliveryPathServerRpc();
-    }
     
-    [ServerRpc(RequireOwnership = false)]
-    private void SpawnResourceBoxOnDeliveryPathServerRpc()
+    public void SpawnResourceBoxOnDeliveryPath(IParent<PickableObject> objectParent)
     {
+        SpawnResourceBoxOnDeliveryPathServerRpc(objectParent.GetNetworkObject());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnResourceBoxOnDeliveryPathServerRpc(NetworkObjectReference pickableObjectParentNetworkObjectReference)
+    {
+        if (!pickableObjectParentNetworkObjectReference.TryGet(out NetworkObject pickableObjectParentNetworkObject))
+        {
+            Debug.LogError("Failed to get pickableObjectParentNetworkObject from reference.");
+            return;
+        }
+
+        IParent<PickableObject> objectParent = pickableObjectParentNetworkObject.GetComponent<IParent<PickableObject>>();
         Transform resourceBoxTransform = Instantiate(resourceBoxPrefab, resourceDeliveryPathPoints[0].position, Quaternion.identity);
         ObjectDelivery box = resourceBoxTransform.GetComponent<ObjectDelivery>();
         NetworkObject boxNetworkObject = box.GetNetworkObject();
         boxNetworkObject.Spawn(true);
-        // SpawnResourceBoxOnDeliveryPathClientRpc();
+        box.SetResourceObjectAttributes(objectParent.GetTeamCharacteristics());
     }
+    
+    // [ClientRpc]
+    // private void SpawnResourceBoxOnDeliveryPathClientRpc(NetworkObjectReference a, NetworkObjectReference pickableObjectParentNetworkObjectReference)
+    // {
+    //     
+    //     pickableObjectParentNetworkObjectReference.TryGet(out NetworkObject pickableObjectParentNetworkObject);
+    //     a.TryGet(out NetworkObject box);
+    //     // Transform resourceBoxTransform = Instantiate(resourceBoxPrefab, resourceDeliveryPathPoints[0].position, Quaternion.identity);
+    //     // resourceBoxTransform.GetComponent<Renderer>().material.color = objectParent.GetTeamColor(); // Set the color of boxes with respect to their team
+    //     // ObjectDelivery box = resourceBoxTransform.GetComponent<ObjectDelivery>();
+    //     // NetworkObject boxNetworkObject = box.GetNetworkObject();
+    //     // boxNetworkObject.Spawn(true);
+    //     IParent<PickableObject> objectParent = pickableObjectParentNetworkObject.GetComponent<IParent<PickableObject>>();
+    //     try
+    //     {
+    //         box.GetComponent<Renderer>().material.color = objectParent.GetTeamColor(); // Set the color of boxes with respect to their team
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //     }   
+    // }
 
     // [ClientRpc]
     // private void SpawnResourceBoxOnDeliveryPathClientRpc()

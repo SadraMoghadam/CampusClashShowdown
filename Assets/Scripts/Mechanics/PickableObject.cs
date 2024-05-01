@@ -64,10 +64,6 @@ public class PickableObject : NetworkBehaviour
         MultiplayerController.Instance.DestroyObject(pickableObject);
     }
 
-    public static void SpawnResourceBoxOnDeliveryPath()
-    {
-        MultiplayerController.Instance.SpawnResourceBoxOnDeliveryPath();
-    } 
     
     
     
