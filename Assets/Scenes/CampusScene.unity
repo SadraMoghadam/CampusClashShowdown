@@ -2021,23 +2021,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1201731182101517717, guid: 988748c9347e86141b71ebc2721eb78d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1201731182101517717, guid: 988748c9347e86141b71ebc2721eb78d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1201731182101517717, guid: 988748c9347e86141b71ebc2721eb78d, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2230989080024580074, guid: 988748c9347e86141b71ebc2721eb78d, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2230989080024580074, guid: 988748c9347e86141b71ebc2721eb78d, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5744157726736314869, guid: 988748c9347e86141b71ebc2721eb78d, type: 3}
       propertyPath: m_Pivot.x
