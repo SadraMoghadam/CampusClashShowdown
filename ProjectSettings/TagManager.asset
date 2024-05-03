@@ -16,6 +16,7 @@ TagManager:
   - ObjectDeliveryArea
   - ResourceBox
   - ObjectEntryArea
+  - BlockButton
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class PlayerInteractionFunctionalities : NetworkBehaviour
 {
-    
     [SerializeField] private float distanceToInteract = 0.2f;
     [SerializeField] private float timeToMoveObjects = 1f;
     [SerializeField] private LayerMask layerMaskInteract;
@@ -14,7 +13,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private bool _isInPickableArea = false;
     private bool _isInPushablePositiveArea = false;
     private bool _isInPushableNegativeArea = false;
-    private bool _isInPressableArea = false;
+    private bool _isInPressableBlockArea = false;
     private bool _isInDeliveryArea = false;
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
@@ -117,11 +116,13 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     PickUp();
                 }
             }
-            else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pressable.ToString()))
+            else if (hit.collider.CompareTag(ClashArenaController.ObjectType.BlockButton.ToString()))
             {
+                _colliderTransform = hit.collider.transform.parent;
                 if (Input.GetKeyDown(_interactKey))
                 {
                     Press();
+                    _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
                 }
             }
             else if (hit.collider.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "PositiveEdge"))
@@ -223,12 +224,13 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                 }
             }
             
-            else if (_isInPressableArea)
+            else if (_isInPressableBlockArea)
             {
-                if (Input.GetKeyDown(_interactKey))
-                {
-                    Press();
-                }
+                    if (Input.GetKeyDown(_interactKey))
+                    {
+                        Press();
+                        _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
+                    }
             }
             
             else if (_isInPushablePositiveArea)
@@ -308,8 +310,9 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             _colliderTransform = other.transform;
             SetFunctionalityAreaAvailability(true, false, false, false);
         }
-        else if (other.CompareTag(ClashArenaController.ObjectType.Pressable.ToString()))
+        else if (other.CompareTag(ClashArenaController.ObjectType.BlockButton.ToString()))
         {
+            _colliderTransform = other.transform.parent;
             SetFunctionalityAreaAvailability(false, true, false, false);
         }
         else if (other.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "PositiveEdge"))
@@ -335,10 +338,10 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         SetFunctionalityAreaAvailability(false, false, false, false);
     }
 
-    private void SetFunctionalityAreaAvailability(bool isInPickableArea, bool isInPressableArea, bool isInPushablePositiveArea, bool isInPushableNegativeArea)
+    private void SetFunctionalityAreaAvailability(bool isInPickableArea, bool isInPressableBlockArea, bool isInPushablePositiveArea, bool isInPushableNegativeArea)
     {
         _isInPickableArea = isInPickableArea;
-        _isInPressableArea = isInPressableArea;
+        _isInPressableBlockArea = isInPressableBlockArea;
         _isInPushablePositiveArea = isInPushablePositiveArea;
         _isInPushableNegativeArea = isInPushableNegativeArea;
     }
