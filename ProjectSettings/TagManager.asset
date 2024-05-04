@@ -17,6 +17,7 @@ TagManager:
   - ResourceBox
   - ObjectEntryArea
   - BlockButton
+  - ConveyorButton
   layers:
   - Default
   - TransparentFX

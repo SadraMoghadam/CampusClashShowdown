@@ -17,6 +17,7 @@ public class ObjectDelivery : NetworkBehaviour
     private MultiplayerController _multiplayerController;
     private List<Transform> _pathPoints;
     private float _timer = 0;
+    private NetworkVariable<bool> _isStopped;
 
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
     // private Vector3 _currentPosition; 
@@ -27,6 +28,7 @@ public class ObjectDelivery : NetworkBehaviour
         _multiplayerController = MultiplayerController.Instance;
         _pathPoints = _multiplayerController.resourceDeliveryPathPoints;
         _isObjectDelivered = false;
+        _isStopped = new NetworkVariable<bool>(_multiplayerController.GetIsConveyorBeltStopped());
         // if (!networkObject.IsSpawned)
         // {
         //     networkObject.Spawn(true);
@@ -63,7 +65,11 @@ public class ObjectDelivery : NetworkBehaviour
 
     private void MoveObject()
     {
-        if (_currentPointIndex < _pathPoints.Count && !_isInObjectDestroyingArea)
+        if (_isStopped.Value)
+        {
+            _rb.velocity = Vector3.zero;
+        }
+        else if (_currentPointIndex < _pathPoints.Count && !_isInObjectDestroyingArea)
         {
             Vector3 targetPosition = _pathPoints[_currentPointIndex].position;
             Vector3 moveDirection = (targetPosition - transform.position).normalized;
@@ -192,4 +198,17 @@ public class ObjectDelivery : NetworkBehaviour
     {
         return networkObject;
     }
+
+    public void SetMovement()
+    {
+        SetMovementServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetMovementServerRpc()
+    {
+        _isStopped.Value = !_isStopped.Value;
+        _multiplayerController.SetIsConveyorBeltStopped(_isStopped.Value);
+    }
+    
 }

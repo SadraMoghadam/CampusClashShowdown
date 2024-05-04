@@ -10,10 +10,12 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [SerializeField] private float timeToMoveObjects = 1f;
     [SerializeField] private LayerMask layerMaskInteract;
     [SerializeField] private float pushCooldownTime = 2f;
+    [SerializeField] private float conveyorBeltStopButtonCoolDown = 5;
     private bool _isInPickableArea = false;
     private bool _isInPushablePositiveArea = false;
     private bool _isInPushableNegativeArea = false;
-    private bool _isInPressableBlockArea = false;
+    private bool _isInBlockButtonArea = false;
+    private bool _isInConveyorButtonArea = false;
     private bool _isInDeliveryArea = false;
     private int _holdingLayer = 1;
     private int _pressingLayer = 2;
@@ -36,6 +38,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private float _timePushed = 0f;
     private MultiplayerController _pickableObject;
     private ClashArenaController _clashArenaController;
+    private float _conveyorButtonCooldownTimer;
 
 
     public override void OnNetworkSpawn()
@@ -202,6 +205,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
 
     private void Interact()
     {
+        _conveyorButtonCooldownTimer += Time.deltaTime;
         if (_isObjectPickedUp)
         {
             if (_isInDeliveryArea)
@@ -210,6 +214,14 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                 if (Input.GetKeyDown(_interactKey))
                 {
                     DropDown();
+                }
+            }
+            else
+            {
+                // Drop and destroy the object
+                if (Input.GetKeyDown(_interactKey))
+                {
+                    DropDownAndDestroy();
                 }
             }
         }
@@ -224,13 +236,26 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                 }
             }
             
-            else if (_isInPressableBlockArea)
+            else if (_isInBlockButtonArea)
             {
                     if (Input.GetKeyDown(_interactKey))
                     {
                         Press();
                         _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
                     }
+            }
+            
+            else if (_isInConveyorButtonArea)
+            {
+                if (_conveyorButtonCooldownTimer > conveyorBeltStopButtonCoolDown)
+                {
+                    if (Input.GetKeyDown(_interactKey))
+                    {
+                        _conveyorButtonCooldownTimer = 0;
+                        Press();
+                        _colliderTransform.GetComponent<ConveyorButton>().ConveyorButtonBehavior();
+                    }   
+                }
             }
             
             else if (_isInPushablePositiveArea)
@@ -308,24 +333,29 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         if (other.CompareTag(ClashArenaController.ObjectType.Pickable.ToString()))
         {
             _colliderTransform = other.transform;
-            SetFunctionalityAreaAvailability(true, false, false, false);
+            SetFunctionalityAreaAvailability(true, false, false, false, false);
         }
         else if (other.CompareTag(ClashArenaController.ObjectType.BlockButton.ToString()))
         {
             _colliderTransform = other.transform.parent;
-            SetFunctionalityAreaAvailability(false, true, false, false);
+            SetFunctionalityAreaAvailability(false, true, false, false, false);
+        }
+        else if (other.CompareTag(ClashArenaController.ObjectType.ConveyorButton.ToString()))
+        {
+            _colliderTransform = other.transform.parent;
+            SetFunctionalityAreaAvailability(false, false, false, false, true);
         }
         else if (other.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "PositiveEdge"))
         {
             _colliderTransform = other.transform.parent.parent;
             _objectMovingPointTransform = other.transform.GetChild(0);
-            SetFunctionalityAreaAvailability(false, false, true, false);
+            SetFunctionalityAreaAvailability(false, false, true, false, false);
         }
         else if (other.CompareTag(ClashArenaController.ObjectType.Pushable.ToString() + "NegativeEdge"))
         {
             _colliderTransform = other.transform.parent.parent;
             _objectMovingPointTransform = other.transform.GetChild(0);
-            SetFunctionalityAreaAvailability(false, false, false, true);
+            SetFunctionalityAreaAvailability(false, false, false, true, false);
         }
         if (other.CompareTag("ObjectEntryArea"))
         {
@@ -335,15 +365,16 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     private void OnTriggerExit(Collider other)
     {
-        SetFunctionalityAreaAvailability(false, false, false, false);
+        SetFunctionalityAreaAvailability(false, false, false, false, false);
     }
 
-    private void SetFunctionalityAreaAvailability(bool isInPickableArea, bool isInPressableBlockArea, bool isInPushablePositiveArea, bool isInPushableNegativeArea)
+    private void SetFunctionalityAreaAvailability(bool isInPickableArea, bool isInBlockButtonArea, bool isInPushablePositiveArea, bool isInPushableNegativeArea, bool isInConveyorButtonArea)
     {
         _isInPickableArea = isInPickableArea;
-        _isInPressableBlockArea = isInPressableBlockArea;
+        _isInBlockButtonArea = isInBlockButtonArea;
         _isInPushablePositiveArea = isInPushablePositiveArea;
         _isInPushableNegativeArea = isInPushableNegativeArea;
+        _isInConveyorButtonArea = isInConveyorButtonArea;
     }
 
     private void PushAndPullBehavior(String edgeSide)
@@ -419,6 +450,17 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _holdingPickLayerWeight = 0;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
         ObjectDelivery.SpawnResourceBoxOnDeliveryPath(_playerController);
+    }
+    
+    
+    public void DropDownAndDestroy()
+    {
+        if(!IsLocalPlayer)
+            return;
+        _isObjectPickedUp = false;
+        PickableObject.DestroyObject(_playerController.GetChild());
+        _holdingPickLayerWeight = 0;
+        SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
     }
     
 

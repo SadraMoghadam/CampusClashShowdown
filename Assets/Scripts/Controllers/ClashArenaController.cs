@@ -27,6 +27,7 @@ public class ClashArenaController : NetworkBehaviour
         Pickable, // able to pick up and put down
         Pushable, // able to push or pull
         BlockButton,
+        ConveyorButton,
     }
     
     // private enum State {

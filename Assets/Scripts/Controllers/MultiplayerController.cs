@@ -10,13 +10,19 @@ public class MultiplayerController : NetworkBehaviour
     public Transform boxPrefab;
     public List<Transform> resourceDeliveryPathPoints;
     public Transform resourceBoxPrefab;
+    private bool _isConveyorBeltStopped = false;
     private int _team1Score;
     private int _team2Score;
     
     private GameManager _gameManager;
     private ClashArenaController _clashArenaController;
 
-    
+    public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
+
+    public void SetIsConveyorBeltStopped(bool isConveyorBeltStopped)
+    {
+        _isConveyorBeltStopped = isConveyorBeltStopped;
+    }
 
     private static MultiplayerController _instance;
     public static MultiplayerController Instance => _instance;
@@ -31,6 +37,7 @@ public class MultiplayerController : NetworkBehaviour
         _gameManager = GameManager.Instance;
         _team1Score = 0;
         _team2Score = 0;
+        _isConveyorBeltStopped = false;
     }
 
     // id should be either 1 for team1 or 2 for team2

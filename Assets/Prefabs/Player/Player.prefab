@@ -300,8 +300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotateSpeed: 360
   playerId: 0
-  speed: 3
-  runSpeed: 4
+  speed: 8
+  runSpeed: 10
   strength: 1
   interactKey: 102
   pushKey: 106
