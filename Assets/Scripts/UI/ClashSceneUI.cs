@@ -23,6 +23,7 @@ public class ClashSceneUI : MonoBehaviour
     private Coroutine _conveyorStopCooldownCR;
     private Coroutine _speedPowerUpCR;
     private Coroutine _strengthPowerUpCR;
+    [HideInInspector] public bool isAbleToPress;
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class ClashSceneUI : MonoBehaviour
         conveyorStopCooldown.gameObject.SetActive(false);
         speedPowerUp.gameObject.SetActive(false);
         strengthPowerUp.gameObject.SetActive(false);
+        isAbleToPress = true;
         
     }
 
@@ -73,6 +75,7 @@ public class ClashSceneUI : MonoBehaviour
         slider.gameObject.SetActive(true);
         float timer = 0f;
 
+        isAbleToPress = false;
         while (timer < fillTime)
         {
             timer += Time.deltaTime;
@@ -86,9 +89,12 @@ public class ClashSceneUI : MonoBehaviour
         slider.value = 1;
         
         slider.gameObject.SetActive(false);
-        
-        if(slider.name == conveyorStopCooldown.name)
-            StopCoroutine(_conveyorStopCooldownCR);
+
+        if (slider.name == conveyorStopCooldown.name)
+        {
+            isAbleToPress = true;
+            StopCoroutine(_conveyorStopCooldownCR);   
+        }
         else if(slider.name == speedPowerUp.name)
             StopCoroutine(_speedPowerUpCR);
         else if(slider.name == strengthPowerUp.name)

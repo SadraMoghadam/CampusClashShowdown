@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerInteractionFunctionalities : NetworkBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [SerializeField] private LayerMask layerMaskInteract;
     [SerializeField] private float pushCooldownTime = 2f;
     [SerializeField] private float conveyorBeltStopButtonCoolDown = 5;
+    [SerializeField ]private PlayerUI playerUI;
     private bool _isInPickableArea = false;
     private bool _isInPushablePositiveArea = false;
     private bool _isInPushableNegativeArea = false;
@@ -36,15 +38,16 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private Transform _objectMovingPointTransform;
     private int _moveObjectDirection = 1; // 1 is in positive direction and -1 is in negative direction
     private float _timePushed = 0f;
-    private MultiplayerController _pickableObject;
+    private MultiplayerController _multiplayerController;
     private ClashArenaController _clashArenaController;
     private ClashSceneUI _clashSceneUI;
-    private float _conveyorButtonCooldownTimer;
+    // private NetworkVariable<float> _conveyorButtonCooldownTimer = new NetworkVariable<float>(0f);
 
 
     public override void OnNetworkSpawn()
     {
         _playerController = GetComponent<PlayerController>();
+        // _conveyorButtonCooldownTimer = new NetworkVariable<float>(0f);
         
         if (_playerController == null)
         {
@@ -61,6 +64,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _clashArenaController = ClashArenaController.Instance;
         _clashSceneUI = ClashSceneUI.Instance;
         _isObjectPickedUp = false;
+        _multiplayerController = MultiplayerController.Instance;
     }
 
     private void Update()
@@ -157,6 +161,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
                         _timePushed = Time.time;
+                        
                         PushAndPullBehavior("Positive");
                     }
                 }
@@ -207,8 +212,6 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
 
     private void Interact()
     {
-        _conveyorButtonCooldownTimer += Time.deltaTime;
-        
         if (_isObjectPickedUp)
         {
             if (_isInDeliveryArea)
@@ -250,14 +253,14 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             
             else if (_isInConveyorButtonArea)
             {
-                if (_conveyorButtonCooldownTimer > conveyorBeltStopButtonCoolDown)
+                if (_clashSceneUI.isAbleToPress)
                 {
                     if (Input.GetKeyDown(_interactKey))
                     {
-                        _conveyorButtonCooldownTimer = 0;
                         Press();
-                        _clashSceneUI.SetConveyorStopCooldownSliderValue(conveyorBeltStopButtonCoolDown);
                         _colliderTransform.GetComponent<ConveyorButton>().ConveyorButtonBehavior();
+                        _multiplayerController.conveyorButtonCooldownTimer = 0;
+                        SetConveyorStopCooldownServerRpc(conveyorBeltStopButtonCoolDown);
                     }   
                 }
             }
@@ -283,6 +286,10 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                 float deltaTime = Time.time - _timePushed;
                 if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
                 {
+                    if(deltaTime <= 0.01f)
+                        playerUI.DisablePushOrPullTimerSlider();
+                    else
+                        playerUI.SetPushOrPullTimer(deltaTime / timeToMoveObjects);
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
                         // _timePushed = Time.time + pushCooldownTime;
@@ -307,11 +314,16 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     _timePushed = Time.time;
                     _holdingPushLayerWeight = 0;
                     SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
+                    playerUI.DisablePushOrPullTimerSlider();
                 }
     
                 float deltaTime = Time.time - _timePushed;
                 if (Input.GetKey(_pushKey) || Input.GetKey(_pullKey))
                 {
+                    if(deltaTime <= 0.01f)
+                        playerUI.DisablePushOrPullTimerSlider();
+                    else
+                        playerUI.SetPushOrPullTimer(deltaTime / timeToMoveObjects);
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
                         // _timePushed = Time.time + pushCooldownTime;
@@ -398,8 +410,34 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         // StopAllCoroutines();
     }
     
+    [ServerRpc(RequireOwnership = false)]
+    private void SetConveyorStopCooldownServerRpc(float cooldown)
+    {
+        SetConveyorStopCooldownClientRpc(cooldown);
+    }
+
+    [ClientRpc]
+    private void SetConveyorStopCooldownClientRpc(float cooldown)
+    {
+        // Execute this on all clients except the local one
+        _clashSceneUI.SetConveyorStopCooldownSliderValue(cooldown);
+    }
     
-    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetConveyorStopCooldownTimerServerRpc(float value)
+    {
+        _multiplayerController.conveyorButtonCooldownTimer = value;
+        SetConveyorStopCooldownTimerClientRpc(value);
+    }
+
+    [ClientRpc]
+    private void SetConveyorStopCooldownTimerClientRpc(float value)
+    {
+        _multiplayerController.conveyorButtonCooldownTimer = value;
+    }
+
+
+
     private void PushAndPull(Transform objectTransform)
     {
         MovableObject movableObject = objectTransform.GetComponent<MovableObject>();

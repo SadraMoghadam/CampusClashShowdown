@@ -17,6 +17,7 @@ public class MultiplayerController : NetworkBehaviour
     private GameManager _gameManager;
     private ClashArenaController _clashArenaController;
     private ClashSceneUI _clashSceneUI;
+    [HideInInspector] public float conveyorButtonCooldownTimer = 0;
 
     public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
 

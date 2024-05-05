@@ -40,8 +40,8 @@ public class PowerUp : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        SetUI();
         _playerController = other.GetComponent<PlayerController>();
+        SetUI();
         SetDefaultPlayerAttributes();
         GetComponent<BoxCollider>().enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
@@ -91,6 +91,8 @@ public class PowerUp : NetworkBehaviour
 
     private void SetUI()
     {
+        if (!_playerController.IsLocalPlayer)
+            return;
         switch (powerUpType)
         {
             case PowerUpType.Speed:
