@@ -18,10 +18,12 @@ public class PowerUp : NetworkBehaviour
     private PlayerController _playerController;
     private float _defaultPlayerSpeed;
     private float _defaultPlayerStrength;
+    private ClashSceneUI _clashSceneUI;
     
     void Start()
     {
         // StartCoroutine(WaitForPlayerControllerInitialization());
+        _clashSceneUI = ClashSceneUI.Instance;
     }
     
     // private IEnumerator WaitForPlayerControllerInitialization()
@@ -38,12 +40,13 @@ public class PowerUp : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        SetUI();
         _playerController = other.GetComponent<PlayerController>();
         SetDefaultPlayerAttributes();
         GetComponent<BoxCollider>().enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
         StartCoroutine(PowerUpCR());
-        
+
     }
 
     private IEnumerator PowerUpCR()
@@ -84,5 +87,20 @@ public class PowerUp : NetworkBehaviour
     {
         _defaultPlayerSpeed = _playerController.speed;
         _defaultPlayerStrength = _playerController.strength;
+    }
+
+    private void SetUI()
+    {
+        switch (powerUpType)
+        {
+            case PowerUpType.Speed:
+                _clashSceneUI.SetSpeedPowerUpSliderValue(powerUpTime);
+                break;
+            case PowerUpType.Strength:
+                _clashSceneUI.SetStrengthPowerUpSliderValue(powerUpTime);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -38,6 +38,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private float _timePushed = 0f;
     private MultiplayerController _pickableObject;
     private ClashArenaController _clashArenaController;
+    private ClashSceneUI _clashSceneUI;
     private float _conveyorButtonCooldownTimer;
 
 
@@ -58,6 +59,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _animator = GetComponent<Animator>();
         _followTransform = GetComponent<FollowTransform>();
         _clashArenaController = ClashArenaController.Instance;
+        _clashSceneUI = ClashSceneUI.Instance;
         _isObjectPickedUp = false;
     }
 
@@ -206,6 +208,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private void Interact()
     {
         _conveyorButtonCooldownTimer += Time.deltaTime;
+        
         if (_isObjectPickedUp)
         {
             if (_isInDeliveryArea)
@@ -253,6 +256,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     {
                         _conveyorButtonCooldownTimer = 0;
                         Press();
+                        _clashSceneUI.SetConveyorStopCooldownSliderValue(conveyorBeltStopButtonCoolDown);
                         _colliderTransform.GetComponent<ConveyorButton>().ConveyorButtonBehavior();
                     }   
                 }

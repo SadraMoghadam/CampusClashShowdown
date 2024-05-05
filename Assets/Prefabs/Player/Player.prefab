@@ -398,6 +398,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   pushCooldownTime: 2
+  conveyorBeltStopButtonCoolDown: 5
 --- !u!114 &7214735355283522198
 MonoBehaviour:
   m_ObjectHideFlags: 0

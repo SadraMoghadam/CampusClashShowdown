@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   name: Mangiagalli
-  color: {r: 1, g: 0.52771735, b: 0.0141509175, a: 0}
+  color: {r: 1, g: 0.75294125, b: 0.22352943, a: 1}
   maxPlayers: 2

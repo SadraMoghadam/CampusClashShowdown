@@ -16,6 +16,7 @@ public class MultiplayerController : NetworkBehaviour
     
     private GameManager _gameManager;
     private ClashArenaController _clashArenaController;
+    private ClashSceneUI _clashSceneUI;
 
     public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
 
@@ -35,6 +36,7 @@ public class MultiplayerController : NetworkBehaviour
         print(resourceDeliveryPathPoints.Count);
         _clashArenaController = ClashArenaController.Instance;
         _gameManager = GameManager.Instance;
+        _clashSceneUI = ClashSceneUI.Instance;
         _team1Score = 0;
         _team2Score = 0;
         _isConveyorBeltStopped = false;
@@ -46,10 +48,12 @@ public class MultiplayerController : NetworkBehaviour
         if (teamId == 1)
         {
             _team1Score++;
+            _clashSceneUI.SetScore(1, _team1Score);
         }
         else if (teamId == 2)
         {
             _team2Score++;
+            _clashSceneUI.SetScore(2, _team2Score);
         }
         Debug.Log("Team1: " + _team1Score + " - Team2: " + _team2Score);
     }
