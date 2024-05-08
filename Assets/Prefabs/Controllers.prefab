@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1618727218628503494
+--- !u!1 &2342400749703614215
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7592452849374513516}
-  - component: {fileID: 8391934933730855043}
-  - component: {fileID: 1774413926980178886}
-  - component: {fileID: 9167450991977178991}
-  - component: {fileID: 3068926378105612104}
+  - component: {fileID: 5632068396533697408}
+  - component: {fileID: 8160144433527003255}
+  - component: {fileID: 4895099891010168028}
+  - component: {fileID: 6578976899347251740}
+  - component: {fileID: 4312554151245633157}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Untagged
@@ -20,13 +20,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7592452849374513516
+--- !u!4 &5632068396533697408
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618727218628503494}
+  m_GameObject: {fileID: 2342400749703614215}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -35,20 +35,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8391934933730855043
+--- !u!114 &8160144433527003255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618727218628503494}
+  m_GameObject: {fileID: 2342400749703614215}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3626482135
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 1526054278
+  InScenePlacedSourceGlobalObjectIdHash: 397332346
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -56,13 +56,13 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &1774413926980178886
+--- !u!114 &4895099891010168028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618727218628503494}
+  m_GameObject: {fileID: 2342400749703614215}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e8bec754e04da942a257ae953cbd59f, type: 3}
@@ -73,13 +73,15 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
---- !u!114 &9167450991977178991
+  team1: {fileID: 11400000, guid: 99467d78ed61c3f40b5b99c818f1b7db, type: 2}
+  team2: {fileID: 11400000, guid: daf6b46a3b6931a48853187ce29176f7, type: 2}
+--- !u!114 &6578976899347251740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618727218628503494}
+  m_GameObject: {fileID: 2342400749703614215}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09cc844ddcd87934e952e0ebec7f2dc8, type: 3}
@@ -94,21 +96,31 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   resourceBoxPrefab: {fileID: 3022491450595669099, guid: dcb18db9342a6c143ac4672c2f2d8fcd, type: 3}
---- !u!114 &3068926378105612104
+  conveyorButtonCooldownTimer: 0
+--- !u!114 &4312554151245633157
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1618727218628503494}
+  m_GameObject: {fileID: 2342400749703614215}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8e946c66ae961a4aa7f6a0995694c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpsPrefab: []
-  powerUpSpawnLocations: []
-  minTimeToSpawnPrefab: 55
-  maxTimeToSpawnPrefab: 65
+  powerUpsPrefab:
+  - {fileID: 6903910135239292272, guid: ad772bdf60de1d642947667d32274b82, type: 3}
+  - {fileID: 6903910135239292272, guid: f34518af51d0a9c4b9365fe0e792e270, type: 3}
+  powerUpSpawnLocations:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  minTimeToSpawnPrefab: 1
+  maxTimeToSpawnPrefab: 3
   maxNumOfPowerUps: 3

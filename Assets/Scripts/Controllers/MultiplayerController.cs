@@ -34,7 +34,7 @@ public class MultiplayerController : NetworkBehaviour
         {
             _instance = this;
         }
-        print(resourceDeliveryPathPoints.Count);
+        // print(resourceDeliveryPathPoints.Count);
         _clashArenaController = ClashArenaController.Instance;
         _gameManager = GameManager.Instance;
         _clashSceneUI = ClashSceneUI.Instance;
@@ -42,6 +42,24 @@ public class MultiplayerController : NetworkBehaviour
         _team2Score = 0;
         _isConveyorBeltStopped = false;
     }
+    
+    
+    
+    private void Start() {
+        // StartHost();
+    }
+    
+    public void StartHost() {
+        if (NetworkManager.Singleton.IsClient)
+        {
+            NetworkManager.Singleton.StartHost();
+        }
+        else
+        {
+            NetworkManager.Singleton.StartClient();
+        }
+    }
+
 
     // id should be either 1 for team1 or 2 for team2
     public void IncreaseTeamScore(int teamId) 
