@@ -306,8 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bce43184d4bc1c74f943814e278f9365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hostButton: {fileID: 6176344263065029147}
-  clientButton: {fileID: 8046231420851895374}
+  readyButton: {fileID: 8046231420851895374}
 --- !u!1 &7057950570163825575
 GameObject:
   m_ObjectHideFlags: 0

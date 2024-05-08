@@ -14,6 +14,11 @@ public class ClashSceneUI : MonoBehaviour
     [SerializeField] private Slider strengthPowerUp;
     [SerializeField] private Image team1Background;
     [SerializeField] private Image team2Background;
+    [SerializeField] private Image timerImage;
+    [SerializeField] private TMP_Text timerText;
+
+
+    
 
     private ClashArenaController _clashArenaController;
 
@@ -43,6 +48,11 @@ public class ClashSceneUI : MonoBehaviour
         
     }
 
+    private void Update() {
+        timerImage.fillAmount = ClashArenaController.Instance.GetGamePlayingTimerNormalized();
+        timerText.text = ClashArenaController.Instance.GetRemainingTime().ToString();
+    }
+    
     public void SetScore(int teamId, int score)
     {
         if (teamId == 1)

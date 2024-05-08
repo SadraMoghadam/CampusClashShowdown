@@ -10,22 +10,26 @@ using Unity.Netcode;
 public class LobbyUI : MonoBehaviour 
 {
     
-    public Button hostButton;
-
-    public Button clientButton;
+    public Button readyButton;
     
     private void Start() {
         ClashArenaController.Instance.OnLocalPlayerReadyChanged += KitchenGameManager_OnLocalPlayerReadyChanged;
-        hostButton.onClick.AddListener(() =>
+        readyButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartHost();
             ClashArenaController.Instance.OnReadyButtonClicked();
         });
-        clientButton.onClick.AddListener(() =>
-        {
-            NetworkManager.Singleton.StartClient();
-            ClashArenaController.Instance.OnReadyButtonClicked();
-        });
+
+        // hostButton.onClick.AddListener(() =>
+        // {
+        //     NetworkManager.Singleton.StartHost();
+        //     ClashArenaController.Instance.OnReadyButtonClicked();
+        // });
+        // clientButton.onClick.AddListener(() =>
+        // {
+        //     NetworkManager.Singleton.StartClient();
+        //     ClashArenaController.Instance.OnReadyButtonClicked();
+        // });
 
         Show();
     }
