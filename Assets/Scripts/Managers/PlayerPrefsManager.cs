@@ -11,6 +11,7 @@ public enum PlayerPrefsKeys
     GameStarted,
     Level,
     GameTimer,
+    PlayerCustomization,
 }
 
 /// <summary>
@@ -154,5 +155,38 @@ public class PlayerPrefsManager : MonoBehaviour
         value.transform.position = GetVector3(position);
         value.transform.eulerAngles = GetVector3(eulerAngles);
         // SetVector3(scale, value.localScale);
+    }
+    
+    public static void SaveAvatar(BodyPartData bodyPartData){
+        List<BodyPartTypeIndex> bodyPartTypeIndexList = new List<BodyPartTypeIndex>();  
+    
+        foreach (BodyPartType bodyPartType in Enum.GetValues(typeof(BodyPartType))) {
+            int meshIndex = Array.IndexOf(bodyPartData.meshArray,bodyPartData.skinnedMeshRenderer.sharedMesh);
+
+            bodyPartTypeIndexList.Add(new BodyPartTypeIndex {
+                bodyPartType = bodyPartType,
+                index = meshIndex,
+            });
+        }
+
+        SaveObject saveObject = new SaveObject {
+            bodyPartTypeIndexList = bodyPartTypeIndexList,
+        };
+
+        string json = JsonUtility.ToJson(saveObject);
+        Debug.Log(json);
+        PlayerPrefs.SetString(PlayerPrefsKeys.PlayerCustomization.ToString(), json);
+    
+    }
+    
+    public static void LoadAvatar()
+    {
+        string json = PlayerPrefs.GetString(PlayerPrefsKeys.PlayerCustomization.ToString());
+        SaveObject saveObject = JsonUtility.FromJson<SaveObject>(json); 
+
+        foreach (BodyPartTypeIndex bodyPartTypeIndex in saveObject.bodyPartTypeIndexList){
+            BodyPartData bodyPartData = PlayerCustomization.GetBodyPartData(bodyPartTypeIndex.bodyPartType, GameManager.Instance.avatarBodyPartDataArray);   
+            bodyPartData.skinnedMeshRenderer.sharedMesh = bodyPartData.meshArray[bodyPartTypeIndex.index];
+        }
     }
 }
