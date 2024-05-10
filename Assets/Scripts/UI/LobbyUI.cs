@@ -13,7 +13,7 @@ public class LobbyUI : MonoBehaviour
     public Button readyButton;
     
     private void Start() {
-        ClashArenaController.Instance.OnLocalPlayerReadyChanged += KitchenGameManager_OnLocalPlayerReadyChanged;
+        ClashArenaController.Instance.OnLocalPlayerReadyChanged += ClashArenaController_OnLocalPlayerReadyChanged;
         readyButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartHost();
@@ -34,7 +34,7 @@ public class LobbyUI : MonoBehaviour
         Show();
     }
 
-    private void KitchenGameManager_OnLocalPlayerReadyChanged(object sender, System.EventArgs e) {
+    private void ClashArenaController_OnLocalPlayerReadyChanged(object sender, System.EventArgs e) {
         if (ClashArenaController.Instance.IsLocalPlayerReady()) {
             Hide();
         }

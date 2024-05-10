@@ -3,21 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class MultiplayerController : NetworkBehaviour
 {
-    public Transform boxPrefab;
-    public List<Transform> resourceDeliveryPathPoints;
-    public Transform resourceBoxPrefab;
+    private const int MAX_PLAYER_AMOUNT = 4;
     private bool _isConveyorBeltStopped = false;
     private int _team1Score;
     private int _team2Score;
     
-    private GameManager _gameManager;
-    private ClashArenaController _clashArenaController;
-    private ClashSceneUI _clashSceneUI;
+    // private GameManager _gameManager;
+    // private ClashArenaController _clashArenaController;
+    // private ClashSceneUI _clashSceneUI;
     [HideInInspector] public float conveyorButtonCooldownTimer = 0;
+    
+    public event EventHandler OnTryingToJoinGame;
+    public event EventHandler OnFailedToJoinGame;
 
     public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
 
@@ -34,10 +36,11 @@ public class MultiplayerController : NetworkBehaviour
         {
             _instance = this;
         }
+        DontDestroyOnLoad(gameObject);
         // print(resourceDeliveryPathPoints.Count);
-        _clashArenaController = ClashArenaController.Instance;
-        _gameManager = GameManager.Instance;
-        _clashSceneUI = ClashSceneUI.Instance;
+        // _clashArenaController = ClashArenaController.Instance;
+        // _gameManager = GameManager.Instance;
+        // _clashSceneUI = ClashSceneUI.Instance;
         _team1Score = 0;
         _team2Score = 0;
         _isConveyorBeltStopped = false;
@@ -49,15 +52,38 @@ public class MultiplayerController : NetworkBehaviour
         // StartHost();
     }
     
-    public void StartHost() {
-        if (NetworkManager.Singleton.IsClient)
-        {
-            NetworkManager.Singleton.StartHost();
+
+      public void StartHost() {
+        NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.StartHost();
+    }
+
+    private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse) {
+        if (SceneManager.GetActiveScene().name != GameManager.Scene.CharactersLobbyScene.ToString()) {
+            connectionApprovalResponse.Approved = false;
+            connectionApprovalResponse.Reason = "Game has already started";
+            return;
         }
-        else
-        {
-            NetworkManager.Singleton.StartClient();
+
+        if (NetworkManager.Singleton.ConnectedClientsIds.Count >= MAX_PLAYER_AMOUNT) {
+            connectionApprovalResponse.Approved = false;
+            connectionApprovalResponse.Reason = "Game is full";
+            return;
         }
+
+        connectionApprovalResponse.Approved = true;
+    }
+
+    public void StartClient() {
+        OnTryingToJoinGame?.Invoke(this, EventArgs.Empty);
+
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
+        // NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
+        NetworkManager.Singleton.StartClient();
+    }
+
+    private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId) {
+        OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -67,12 +93,12 @@ public class MultiplayerController : NetworkBehaviour
         if (teamId == 1)
         {
             _team1Score++;
-            _clashSceneUI.SetScore(1, _team1Score);
+            ClashSceneUI.Instance.SetScore(1, _team1Score);
         }
         else if (teamId == 2)
         {
             _team2Score++;
-            _clashSceneUI.SetScore(2, _team2Score);
+            ClashSceneUI.Instance.SetScore(2, _team2Score);
         }
         Debug.Log("Team1: " + _team1Score + " - Team2: " + _team2Score);
     }
@@ -107,7 +133,7 @@ public class MultiplayerController : NetworkBehaviour
             return;
         }
         
-        Transform boxTransform = Instantiate(boxPrefab);
+        Transform boxTransform = Instantiate(ClashArenaController.Instance.boxPrefab);
         boxTransform.GetComponent<Renderer>().material.color = objectParent.GetTeamColor(); // Set the color of boxes with respect to their team
         NetworkObject boxNetworkObject = boxTransform.GetComponent<NetworkObject>();
         boxNetworkObject.Spawn(true);
@@ -173,7 +199,7 @@ public class MultiplayerController : NetworkBehaviour
         }
 
         IParent<PickableObject> objectParent = pickableObjectParentNetworkObject.GetComponent<IParent<PickableObject>>();
-        Transform resourceBoxTransform = Instantiate(resourceBoxPrefab, resourceDeliveryPathPoints[0].position, Quaternion.identity);
+        Transform resourceBoxTransform = Instantiate(ClashArenaController.Instance.resourceBoxPrefab, ClashArenaController.Instance.resourceDeliveryPathPoints[0].position, Quaternion.identity);
         ObjectDelivery box = resourceBoxTransform.GetComponent<ObjectDelivery>();
         NetworkObject boxNetworkObject = box.GetNetworkObject();
         boxNetworkObject.Spawn(true);

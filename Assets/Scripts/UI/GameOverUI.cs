@@ -19,12 +19,12 @@ public class GameOverUI : MonoBehaviour {
     }
 
     private void Start() {
-        ClashArenaController.Instance.OnStateChanged += KitchenGameManager_OnStateChanged;
+        ClashArenaController.Instance.OnStateChanged += ClashArenaController_OnStateChanged;
 
         Hide();
     }
 
-    private void KitchenGameManager_OnStateChanged(object sender, System.EventArgs e) {
+    private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e) {
         if (ClashArenaController.Instance.IsGameOver()) {
             Show();
         } else {

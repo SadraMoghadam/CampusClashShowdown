@@ -14,11 +14,18 @@ public class ClashArenaController : NetworkBehaviour
 {
     public List<Transform> spawnLocations;
     
+    
+    public Transform boxPrefab;
+    public List<Transform> resourceDeliveryPathPoints;
+    public Transform resourceBoxPrefab;
+    
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
 
     public TeamCharacteristicsScriptableObject team1;
     public TeamCharacteristicsScriptableObject team2;
+
+    [SerializeField] private Transform playerPrefab;
     
     
     public event EventHandler OnStateChanged;
@@ -69,6 +76,18 @@ public class ClashArenaController : NetworkBehaviour
     
     public override void OnNetworkSpawn() {
         state.OnValueChanged += State_OnValueChanged;
+        
+        
+        if (IsServer) {
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
+        }
+    }
+    
+    private void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds) {
+            Transform playerTransform = Instantiate(playerPrefab);
+            playerTransform.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        }
     }
     
     private void Update() {

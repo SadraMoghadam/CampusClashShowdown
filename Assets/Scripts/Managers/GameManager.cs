@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,9 +13,19 @@ using UnityEngine.UI;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    
+    public enum Scene {
+        CampusScene,
+        ClashScene1,
+        CharactersLobbyScene,
+        NetworkLobbyScene,
+        LoadingScene,
+    }
+
     [NonSerialized] public AudioManager AudioManager;
     public static GameManager Instance => _instance;
     private static GameManager _instance;
+    private static Scene _targetScene;
     
     private void Awake()
     {
@@ -42,21 +53,45 @@ public class GameManager : MonoBehaviour
     /// For each scene change we can call this function
     /// </summary>
     /// <param name="sceneName"></param>
-    public async void LoadScene(string sceneName)
+    public static async void LoadScene(Scene sceneName)
     {
-        var scene = SceneManager.LoadSceneAsync(sceneName);
-        SceneManager.LoadScene($"Loading");
+        var scene = SceneManager.LoadSceneAsync(sceneName.ToString());
+        SceneManager.LoadScene(Scene.LoadingScene.ToString());
         scene.allowSceneActivation = false;
-        await Task.Delay(400);
+        await Task.Delay(200);
         var slider = FindObjectOfType<Slider>();
+        slider.value = 0;
         do
         {
-            await Task.Delay(500);
+            await Task.Delay(300);
             slider.value = scene.progress;
         } while (scene.progress < 0.9f);
 
-        await Task.Delay(1000);
+        await Task.Delay(500);
         scene.allowSceneActivation = true;
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(sceneName.ToString());
     }
+    
+    public static async void LoadSceneNetwork(Scene sceneName)
+    {
+        // var scene = SceneManager.LoadSceneAsync(sceneName.ToString());
+        
+        var scene = NetworkManager.Singleton.SceneManager.LoadScene(Scene.LoadingScene.ToString(), LoadSceneMode.Single);
+        if (scene == SceneEventProgressStatus.Started)
+        {
+            await Task.Delay(100);
+            var slider = FindObjectOfType<Slider>();
+            slider.value = 0;
+            do
+            {
+                await Task.Delay(100);
+                slider.value += 0.1f;
+            } while (slider.value <= 0.9f);
+            slider.value += 0.1f; 
+            await Task.Delay(300);
+            NetworkManager.Singleton.SceneManager.LoadScene(sceneName.ToString(), LoadSceneMode.Single);    
+        }
+    }
+    
+    
 }

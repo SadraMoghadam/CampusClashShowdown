@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/NetworkLobbyScene.unity
+    guid: 02ce530f9fe54fd4bbe05932dff963f6
+  - enabled: 1
     path: Assets/Scenes/ClashScene1.unity
     guid: dcddbb4957060694aaf20ad906f3f276
+  - enabled: 1
+    path: Assets/Scenes/CampusScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/CharactersLobbyScene.unity
+    guid: f44b260ea1435b849999df282417412c
+  - enabled: 1
+    path: Assets/Scenes/LoadingScene.unity
+    guid: 49570b09efdf41f4e936010d89d4f3b6
   m_configObjects: {}

@@ -9,19 +9,19 @@ public class WaitingForOtherPlayersUI : MonoBehaviour
     private void Start()
     {
         _clashArenaController = ClashArenaController.Instance;
-        _clashArenaController.OnLocalPlayerReadyChanged += KitchenGameManager_OnLocalPlayerReadyChanged;
-        _clashArenaController.OnStateChanged += KitchenGameManager_OnStateChanged;
+        _clashArenaController.OnLocalPlayerReadyChanged += ClashArenaController_OnLocalPlayerReadyChanged;
+        _clashArenaController.OnStateChanged += ClashArenaController_OnStateChanged;
 
         Hide();
     }
 
-    private void KitchenGameManager_OnStateChanged(object sender, System.EventArgs e) {
+    private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e) {
         if (_clashArenaController.IsCountdownToStartActive()) {
             Hide();
         }
     }
 
-    private void KitchenGameManager_OnLocalPlayerReadyChanged(object sender, System.EventArgs e) {
+    private void ClashArenaController_OnLocalPlayerReadyChanged(object sender, System.EventArgs e) {
         if (_clashArenaController.IsLocalPlayerReady()) {
             Show();
         }

@@ -26,7 +26,7 @@ public class ObjectDelivery : NetworkBehaviour
     void Awake()
     {
         _multiplayerController = MultiplayerController.Instance;
-        _pathPoints = _multiplayerController.resourceDeliveryPathPoints;
+        _pathPoints = ClashArenaController.Instance.resourceDeliveryPathPoints;
         _isObjectDelivered = false;
         _isStopped = new NetworkVariable<bool>(_multiplayerController.GetIsConveyorBeltStopped());
         // if (!networkObject.IsSpawned)

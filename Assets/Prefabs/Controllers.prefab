@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5632068396533697408}
   - component: {fileID: 8160144433527003255}
   - component: {fileID: 4895099891010168028}
-  - component: {fileID: 6578976899347251740}
   - component: {fileID: 4312554151245633157}
   m_Layer: 0
   m_Name: Controllers
@@ -47,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1526054278
+  GlobalObjectIdHash: 4042370366
   InScenePlacedSourceGlobalObjectIdHash: 397332346
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -73,34 +72,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  boxPrefab: {fileID: 0}
+  resourceDeliveryPathPoints: []
+  resourceBoxPrefab: {fileID: 0}
   team1: {fileID: 11400000, guid: 99467d78ed61c3f40b5b99c818f1b7db, type: 2}
   team2: {fileID: 11400000, guid: daf6b46a3b6931a48853187ce29176f7, type: 2}
---- !u!114 &6578976899347251740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2342400749703614215}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09cc844ddcd87934e952e0ebec7f2dc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boxPrefab: {fileID: 3597765975269904719, guid: 3137af21f094cef438b1bae941999fb2, type: 3}
-  resourceDeliveryPathPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  resourceBoxPrefab: {fileID: 3022491450595669099, guid: dcb18db9342a6c143ac4672c2f2d8fcd, type: 3}
-  conveyorButtonCooldownTimer: 0
 --- !u!114 &4312554151245633157
 MonoBehaviour:
   m_ObjectHideFlags: 0
