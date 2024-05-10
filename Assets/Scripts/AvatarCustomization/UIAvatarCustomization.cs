@@ -16,25 +16,25 @@ public class UIAvatarCustomization : MonoBehaviour
         bodyPlusButton.onClick.AddListener(() =>
         {
             Debug.Log("pressed Button");
-        playerCustomization.ChangeBodyPart(PlayerCustomization.BodyPartType.Body, true);
+        playerCustomization.ChangeBodyPart(BodyPartType.Body, true);
         });  
         
         bodyMinusButton.onClick.AddListener(() =>
         {
             Debug.Log("pressed Button");
-        playerCustomization.ChangeBodyPart(PlayerCustomization.BodyPartType.Body, false);
+        playerCustomization.ChangeBodyPart(BodyPartType.Body, false);
         });  
 
         headPlusButton.onClick.AddListener(() =>
         {
             Debug.Log("pressed Head Button");
-        playerCustomization.ChangeBodyPart(PlayerCustomization.BodyPartType.Head, true);        
+        playerCustomization.ChangeBodyPart(BodyPartType.Head, true);        
         });
         
         headMinusButton.onClick.AddListener(() =>
         {
              Debug.Log("pressed Head Button");
-        playerCustomization.ChangeBodyPart(PlayerCustomization.BodyPartType.Head, false);        
+        playerCustomization.ChangeBodyPart(BodyPartType.Head, false);        
         });
     }
 
