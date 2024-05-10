@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class ObjectPlacer : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> placedGameObject = new();
+    [SerializeField] private List<GameObject> placedGameObject;
+ 
+
 
     public int PlaceObject(ObjectsDatabaseSo database, int selectedObjectIndex, GameObject prefab, Grid grid, Vector3Int gridPosition)
     {

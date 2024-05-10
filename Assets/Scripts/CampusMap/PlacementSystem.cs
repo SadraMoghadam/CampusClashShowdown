@@ -54,6 +54,7 @@ public class PlacementSystem : MonoBehaviour
         floorData = new();
         buildingsData = new();
         
+        
     }
 
     public void StartPlacement(int ID)
