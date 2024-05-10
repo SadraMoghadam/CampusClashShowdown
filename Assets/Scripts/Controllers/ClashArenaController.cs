@@ -74,6 +74,7 @@ public class ClashArenaController : NetworkBehaviour
         playerPausedDictionary = new Dictionary<ulong, bool>();
     }
     
+    
     public override void OnNetworkSpawn() {
         state.OnValueChanged += State_OnValueChanged;
         
@@ -179,5 +180,4 @@ public class ClashArenaController : NetworkBehaviour
     public int GetRemainingTime() {
         return (int)gamePlayingTimer.Value;
     }
-
 }

@@ -1,46 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOverUI : MonoBehaviour {
+public class PlayerDisconnectUI : MonoBehaviour {
 
 
-    [SerializeField] private TextMeshProUGUI recipesDeliveredText;
     [SerializeField] private Button playAgainButton;
 
 
     private void Awake() {
         playAgainButton.onClick.AddListener(() => {
-            NetworkManager.Singleton.Shutdown();
             GameManager.LoadScene(GameManager.Scene.NetworkLobbyScene);
         });
     }
 
     private void Start() {
-        ClashArenaController.Instance.OnStateChanged += ClashArenaController_OnStateChanged;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
 
         Hide();
     }
 
-    private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e) {
-        if (ClashArenaController.Instance.IsGameOver()) {
-            Show();
-        } else {
-            Hide();
-        }
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
+        Show();
     }
 
     private void Show() {
         gameObject.SetActive(true);
-        playAgainButton.Select();
     }
 
     private void Hide() {
         gameObject.SetActive(false);
     }
-
 
 }

@@ -52,6 +52,8 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         if (IsServer) {
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
         }
+        Debug.Log(NetworkManager.LocalClientId);
+        Debug.Log(NetworkManager.ServerClientId);
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
