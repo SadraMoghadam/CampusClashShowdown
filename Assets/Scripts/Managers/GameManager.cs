@@ -94,4 +94,7 @@ public class GameManager : MonoBehaviour
     }
     
     
+    public static void LoadNetwork(Scene targetScene) {
+        NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
+    }
 }

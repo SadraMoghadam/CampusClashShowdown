@@ -417,6 +417,10 @@ PrefabInstance:
       propertyPath: NetworkConfig.PlayerPrefab
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5021366953944688802, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
+      propertyPath: NetworkConfig.ConnectionApproval
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6871677393498929854, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
       propertyPath: m_Name
       value: NetworkManager

@@ -2173,7 +2173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5425984463536367384, guid: 8c91a45029dcb824d86d74c59bb1381c, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5605176584703289889, guid: 8c91a45029dcb824d86d74c59bb1381c, type: 3}
       propertyPath: GlobalObjectIdHash
@@ -2481,6 +2481,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1136026635}
     m_Modifications:
+    - target: {fileID: 578018131682156324, guid: f8677c049083b1a489fdd77fa7c7d719, type: 3}
+      propertyPath: playAgainButton
+      value: 
+      objectReference: {fileID: 5726086361172467485}
     - target: {fileID: 1719818087534152007, guid: f8677c049083b1a489fdd77fa7c7d719, type: 3}
       propertyPath: m_text
       value: A Player is Disconnected.
@@ -2776,6 +2780,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22e8241ff1a129541972ecc0f8dda597, type: 3}
+--- !u!114 &5726086361172467485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4593898679530479337, guid: f8677c049083b1a489fdd77fa7c7d719, type: 3}
+  m_PrefabInstance: {fileID: 4256419805806085026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5918972005385440075
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3137,7 +3152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6871677393498929854, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7899715238800808732, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
       propertyPath: ConnectionData.Port

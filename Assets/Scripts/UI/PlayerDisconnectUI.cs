@@ -23,7 +23,8 @@ public class PlayerDisconnectUI : MonoBehaviour {
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
-        Show();
+        if(clientId == NetworkManager.ServerClientId)
+            Show();
     }
 
     private void Show() {

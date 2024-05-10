@@ -12,7 +12,8 @@ public class NewBehaviourScript : MonoBehaviour
     private void Awake() {
         createGameButton.onClick.AddListener(() => {
             MultiplayerController.Instance.StartHost();
-            GameManager.LoadSceneNetwork(GameManager.Scene.CharactersLobbyScene);
+            GameManager.LoadNetwork(GameManager.Scene.CharactersLobbyScene);
+            // GameManager.LoadSceneNetwork(GameManager.Scene.CharactersLobbyScene);
         });
         joinGameButton.onClick.AddListener(() => {
             MultiplayerController.Instance.StartClient();
