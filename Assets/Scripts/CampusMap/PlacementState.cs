@@ -51,14 +51,15 @@ public class PlacementState : IBuildingState
 
 
 
-        GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData : buildingData;
-        selectedData.AddObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size, database.objectsData[selectedObjectIndex].ID, index);
+        GridData selectedData = buildingData;
+        Vector2Int buildingSize = new Vector2Int(database.objectsData[selectedObjectIndex].Size.x + (int)1.5, database.objectsData[selectedObjectIndex].Size.y + (int)1.5);
+        selectedData.AddObjectAt(gridPosition, buildingSize, database.objectsData[selectedObjectIndex].ID, index);
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), false);
     }
 
     public bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
     {
-        GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ? floorData : buildingData;
+        GridData selectedData = buildingData;
         return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size);
     }
 

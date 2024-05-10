@@ -9,6 +9,12 @@ public class GridData
 {
     Dictionary<Vector3Int, PlacementData> placedObjects = new();
 
+    public GridData()
+    {
+        
+    }
+
+
     public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, int ID, int placedObjectIndex)
     {
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
@@ -33,7 +39,8 @@ public class GridData
             for (int y = 0; y < objectSize.y; y++)
             {
                 x += (int)0.5;
-                returnVal.Add(gridPosition + new Vector3Int(x, 0, y));
+
+                returnVal.Add(gridPosition + new Vector3Int(x, y, 0));
             }
         }
         return returnVal;

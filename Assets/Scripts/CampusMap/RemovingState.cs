@@ -13,13 +13,12 @@ public class RemovingState : IBuildingState
     ObjectPlacer objectPlacer;
     ObjectsDatabaseSo database;
 
-    public RemovingState(ObjectsDatabaseSo database, Grid grid, PreviewSystem previewSystem, GridData buildingData, GridData floorData, ObjectPlacer objectPlacer)
+    public RemovingState(ObjectsDatabaseSo database, Grid grid, PreviewSystem previewSystem, GridData buildingData, ObjectPlacer objectPlacer)
     {
         this.database = database;
         this.grid = grid;
         this.previewSystem = previewSystem;
         this.buildingData = buildingData;
-        this.floorData = floorData;
         this.objectPlacer = objectPlacer;
 
         previewSystem.StartShowingRemovePreview();

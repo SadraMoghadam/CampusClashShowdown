@@ -70,7 +70,7 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         gridVisualization.SetActive(true);
-        buildingState = new RemovingState(database, grid, preview, floorData, buildingsData, objectPlacer);
+        buildingState = new RemovingState(database, grid, preview, buildingsData, objectPlacer);
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
