@@ -17,6 +17,7 @@ public class GridData
 
     public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, int ID, int placedObjectIndex)
     {
+
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
         PlacementData data = new PlacementData(positionToOccupy, ID, placedObjectIndex);
         foreach(var pos in positionToOccupy)
@@ -33,18 +34,24 @@ public class GridData
 
     private List<Vector3Int> CalculatePositions(Vector3Int gridPosition, Vector2Int objectSize)
     {
-        List<Vector3Int> returnVal = new();
-        for (int x = 0; x < objectSize.x; x++)
-        {
-            for (int y = 0; y < objectSize.y; y++)
-            {
-                //x += (int)0.5;
+        List<Vector3Int> positions = new List<Vector3Int>();
 
-                returnVal.Add(gridPosition + new Vector3Int(x, y, 0));
+        int padding = 0;  // Una cella di distanza da ogni lato
+
+        // Espandi la griglia per includere il padding
+        for (int x = -padding; x < objectSize.x + padding; x++)
+        {
+            for (int y = -padding; y < objectSize.y + padding; y++)
+            {
+                Vector3Int position = new Vector3Int(gridPosition.x + x, gridPosition.y + y, gridPosition.z);
+                positions.Add(position);
             }
         }
-        return returnVal;
+
+        return positions;
     }
+
+
 
     internal int GetRepresentationIndex(Vector3Int gridPosition)
     {
@@ -67,13 +74,18 @@ public class GridData
     public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize)
     {
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
+        int[] index = { -1, -1, 0, -1, +1, 0, 0, +1, +1, -1 };
         foreach (var pos in positionToOccupy)
         {
-            if (placedObjects.ContainsKey(pos))
+            for(int i = 0; i < index.Length - 1; i++)
             {
-                return false;
+                Vector3Int position = new Vector3Int(pos.x + index[i], pos.y + index[i + 1]);
+                if (placedObjects.ContainsKey(position))
+                {
+                    return false;
+                }
             }
-            
+           
         }
         return true;
     }

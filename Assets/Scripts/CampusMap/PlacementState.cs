@@ -53,7 +53,7 @@ public class PlacementState : IBuildingState
 
         GridData selectedData = buildingData;
 
-        Vector2Int buildingSize = new Vector2Int(database.objectsData[selectedObjectIndex].Size.x + (int)1.5, database.objectsData[selectedObjectIndex].Size.y + (int)1.5);
+        Vector2Int buildingSize = new Vector2Int(database.objectsData[selectedObjectIndex].Size.x, database.objectsData[selectedObjectIndex].Size.y);
         selectedData.AddObjectAt(gridPosition, buildingSize, database.objectsData[selectedObjectIndex].ID, index);
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), false);
     }
