@@ -8,7 +8,7 @@ using UnityEngine;
 public class GridData
 {
     Dictionary<Vector3Int, PlacementData> placedObjects = new();
-
+    List<Vector3Int> roadPositions = new();
     public GridData()
     {
         
@@ -73,6 +73,10 @@ public class GridData
 
     public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize)
     {
+        if (roadPositions.Count == 0)
+        {
+            InstantiateRoadPositions();
+        }
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
         int[] index = { -1, -1, 0, -1, +1, 0, 0, +1, +1, -1 };
         foreach (var pos in positionToOccupy)
@@ -85,9 +89,106 @@ public class GridData
                     return false;
                 }
             }
+            if(roadPositions.Contains(pos))
+            {
+                
+                return false;
+            }
            
         }
+        
         return true;
+    }
+
+    private void InstantiateRoadPositions()
+    {
+        
+        
+
+        for (int i = -3; i < 5; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, 3, 0));
+        }
+        for (int i = -8; i < 6; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, 11, 0));
+        }
+        for (int i = -12; i < 10; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, -7, 0));
+        }
+        for (int i = -12; i < 10; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, -9, 0));
+        }
+        for (int i = -6; i < -3; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, -11, 0));
+        }
+        for (int i = 6; i < 9; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, -3, 0));
+        }
+        for (int i = -12; i < -7; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, 8, 0));
+        }
+        for (int i = -12; i < -7; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, 4, 0));
+        }
+        for (int i = -10; i < -4; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, 1, 0));
+        }
+        for (int i = -12; i < -9; i++)
+        {
+            roadPositions.Add(new Vector3Int(i, -1, 0));
+        }
+
+        for (int i = -11; i<11; i++)
+        {
+            roadPositions.Add(new Vector3Int(-4, i, 0));
+        }
+        for (int i = -11; i < 11; i++)
+        {
+            roadPositions.Add(new Vector3Int(5, i, 0));
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            roadPositions.Add(new Vector3Int(-12, i, 0));
+        }
+        for (int i = 9; i < 11; i++)
+        {
+            roadPositions.Add(new Vector3Int(-8, i, 0));
+        }
+        for (int i = 2; i < 4; i++)
+        {
+            roadPositions.Add(new Vector3Int(-8, i, 0));
+        }
+        for (int i = -10; i < -5; i++)
+        {
+            roadPositions.Add(new Vector3Int(4, i, 0));
+        }
+        for (int i = -10; i < -5; i++)
+        {
+            roadPositions.Add(new Vector3Int(6, i, 0));
+        }
+        for (int i = -9; i < 1; i++)
+        {
+            roadPositions.Add(new Vector3Int(-10, i, 0));
+        }
+        
+
+       
+
+        roadPositions.Add(new Vector3Int(-8, -8, 0));
+        roadPositions.Add(new Vector3Int(-6, -8, 0));
+        roadPositions.Add(new Vector3Int(-2, -8, 0));
+        roadPositions.Add(new Vector3Int(1, -8, 0));
+        roadPositions.Add(new Vector3Int(-6, -10, 0));
+        roadPositions.Add(new Vector3Int(-2, -10, 0));
+
     }
 }
 public class PlacementData

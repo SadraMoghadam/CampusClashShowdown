@@ -9,7 +9,6 @@ public class RemovingState : IBuildingState
     Grid grid;
     PreviewSystem previewSystem;
     GridData buildingData;
-    GridData floorData;
     ObjectPlacer objectPlacer;
     ObjectsDatabaseSo database;
 
@@ -36,10 +35,7 @@ public class RemovingState : IBuildingState
         {
             selectedData = buildingData;
         }
-        else if(floorData.CanPlaceObjectAt(gridPosition, Vector2Int.one) == false)
-        {
-            selectedData = floorData;
-        }
+        
 
         if(selectedData != null)
         {
@@ -57,7 +53,7 @@ public class RemovingState : IBuildingState
 
     private bool CheckIfSelectionIsValid(Vector3Int gridPosition)
     {
-        return !(buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one) && floorData.CanPlaceObjectAt(gridPosition, Vector2Int.one));
+        return !(buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one));
     }
 
     public void UpdateState(Vector3Int gridPosition)
