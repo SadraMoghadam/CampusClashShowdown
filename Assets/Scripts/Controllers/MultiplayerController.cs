@@ -13,6 +13,8 @@ public class MultiplayerController : NetworkBehaviour
     private int _team1Score;
     private int _team2Score;
     
+    private NetworkList<PlayerData> playerDataNetworkList;
+    
     // private GameManager _gameManager;
     // private ClashArenaController _clashArenaController;
     // private ClashSceneUI _clashSceneUI;
@@ -20,6 +22,7 @@ public class MultiplayerController : NetworkBehaviour
     
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailedToJoinGame;
+    public event EventHandler OnPlayerDataNetworkListChanged;
 
     public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
 
@@ -41,6 +44,7 @@ public class MultiplayerController : NetworkBehaviour
         // _clashArenaController = ClashArenaController.Instance;
         // _gameManager = GameManager.Instance;
         // _clashSceneUI = ClashSceneUI.Instance;
+        playerDataNetworkList = new NetworkList<PlayerData>();
         _team1Score = 0;
         _team2Score = 0;
         _isConveyorBeltStopped = false;
@@ -53,9 +57,19 @@ public class MultiplayerController : NetworkBehaviour
     }
     
 
-      public void StartHost() {
+    public void StartHost() {
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
         NetworkManager.Singleton.StartHost();
+    }
+      
+    private void NetworkManager_OnClientConnectedCallback(ulong clientId) {
+        playerDataNetworkList.Add(new PlayerData {
+            clientId = clientId,
+            // colorId = GetFirstUnusedColorId(),
+        }); 
+        // SetPlayerNameServerRpc(GetPlayerName());
+        // SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse) {
@@ -238,4 +252,34 @@ public class MultiplayerController : NetworkBehaviour
     // }
 
     
+    public bool IsPlayerIndexConnected(int playerIndex) {
+        return playerIndex < playerDataNetworkList.Count;
+    }
+    
+    public int GetPlayerDataIndexFromClientId(ulong clientId) {
+        for (int i=0; i< playerDataNetworkList.Count; i++) {
+            if (playerDataNetworkList[i].clientId == clientId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public PlayerData GetPlayerDataFromClientId(ulong clientId) {
+        foreach (PlayerData playerData in playerDataNetworkList) {
+            if (playerData.clientId == clientId) {
+                return playerData;
+            }
+        }
+        return default;
+    }
+
+    public PlayerData GetPlayerData() {
+        return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
+    }
+
+    public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex) {
+        return playerDataNetworkList[playerIndex];
+    }
+
 }
