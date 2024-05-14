@@ -29,10 +29,6 @@ public class ClashArenaController : NetworkBehaviour
     
     
     public event EventHandler OnStateChanged;
-    public event EventHandler OnLocalGamePaused;
-    public event EventHandler OnLocalGameUnpaused;
-    public event EventHandler OnMultiplayerGamePaused;
-    public event EventHandler OnMultiplayerGameUnpaused;
     public event EventHandler OnLocalPlayerReadyChanged;
     
     private NetworkVariable<State> state = new NetworkVariable<State>(State.WaitingToStart);
@@ -41,9 +37,7 @@ public class ClashArenaController : NetworkBehaviour
     private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(180f);
     private float gamePlayingTimerMax = 180f;
     private bool isLocalGamePaused = false;
-    private NetworkVariable<bool> isGamePaused = new NetworkVariable<bool>(false);
     private Dictionary<ulong, bool> playerReadyDictionary;
-    private Dictionary<ulong, bool> playerPausedDictionary;
     private bool autoTestGamePausedState;
     
     
@@ -71,7 +65,6 @@ public class ClashArenaController : NetworkBehaviour
             _instance = this;
         }
         playerReadyDictionary = new Dictionary<ulong, bool>();
-        playerPausedDictionary = new Dictionary<ulong, bool>();
     }
     
     

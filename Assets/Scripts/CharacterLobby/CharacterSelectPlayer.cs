@@ -16,11 +16,13 @@ public class CharacterSelectPlayer : MonoBehaviour {
     
 
     private void Start() {
-        MultiplayerController.Instance.OnPlayerDataNetworkListChanged += KitchenGameMultiplayer_OnPlayerDataNetworkListChanged;
+        MultiplayerController.Instance.OnPlayerDataNetworkListChanged += MultiplayerController_OnPlayerDataNetworkListChanged;
         CharacterSelectReady.Instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
+        
 
         // kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
 
+        // StartCoroutine(UpdatePlayerCR());
         UpdatePlayer();
     }
 
@@ -28,7 +30,8 @@ public class CharacterSelectPlayer : MonoBehaviour {
         UpdatePlayer();
     }
 
-    private void KitchenGameMultiplayer_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e) {
+    private void MultiplayerController_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e) {
+        // StartCoroutine(UpdatePlayerCR());
         UpdatePlayer();
     }
 
@@ -48,6 +51,12 @@ public class CharacterSelectPlayer : MonoBehaviour {
         }
     }
 
+    private IEnumerator UpdatePlayerCR()
+    {
+        yield return new WaitForSeconds(.2f);
+        UpdatePlayer();
+    }
+
     private void Show() {
         gameObject.SetActive(true);
     }
@@ -57,7 +66,7 @@ public class CharacterSelectPlayer : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        MultiplayerController.Instance.OnPlayerDataNetworkListChanged -= KitchenGameMultiplayer_OnPlayerDataNetworkListChanged;
+        MultiplayerController.Instance.OnPlayerDataNetworkListChanged -= MultiplayerController_OnPlayerDataNetworkListChanged;
     }
 
 

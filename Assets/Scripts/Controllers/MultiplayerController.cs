@@ -45,17 +45,16 @@ public class MultiplayerController : NetworkBehaviour
         // _gameManager = GameManager.Instance;
         // _clashSceneUI = ClashSceneUI.Instance;
         playerDataNetworkList = new NetworkList<PlayerData>();
+        playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
         _team1Score = 0;
         _team2Score = 0;
         _isConveyorBeltStopped = false;
     }
     
     
-    
-    private void Start() {
-        // StartHost();
+    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
+        OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
     }
-    
 
     public void StartHost() {
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
@@ -63,14 +62,26 @@ public class MultiplayerController : NetworkBehaviour
         NetworkManager.Singleton.StartHost();
     }
       
-    private void NetworkManager_OnClientConnectedCallback(ulong clientId) {
-        playerDataNetworkList.Add(new PlayerData {
+    private void NetworkManager_OnClientConnectedCallback(ulong clientId)
+    {
+        PlayerData newPlayerData = new PlayerData
+        {
             clientId = clientId,
-            // colorId = GetFirstUnusedColorId(),
-        }); 
+        };
+        playerDataNetworkList.Add(newPlayerData); 
+        // ClientConnectedCallbackServerRpc(clientId);
         // SetPlayerNameServerRpc(GetPlayerName());
         // SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
+
+    // [ServerRpc(RequireOwnership = false)]
+    // private void ClientConnectedCallbackServerRpc(ulong clientId)
+    // {
+    //     playerDataNetworkList.Add(new PlayerData {
+    //         clientId = clientId,
+    //     }); 
+    // }
+    
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse) {
         if (SceneManager.GetActiveScene().name != GameManager.Scene.CharactersLobbyScene.ToString()) {
