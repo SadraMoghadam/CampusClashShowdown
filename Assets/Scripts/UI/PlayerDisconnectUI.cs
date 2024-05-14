@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -23,9 +24,9 @@ public class PlayerDisconnectUI : MonoBehaviour {
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
-        // if(clientId == NetworkManager.ServerClientId)
-        //     Show();
-        Show();
+        if(clientId == NetworkManager.Singleton.LocalClient.ClientId)
+            Show();
+        // Show();
     }
 
     private void Show() {
@@ -36,4 +37,8 @@ public class PlayerDisconnectUI : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
+    }
 }

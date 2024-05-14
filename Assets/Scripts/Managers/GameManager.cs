@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
 
     [NonSerialized] public AudioManager AudioManager;
     public BodyPartData[] avatarBodyPartDataArray;
+    public TeamCharacteristicsScriptableObject team1;
+    public TeamCharacteristicsScriptableObject team2;
+    public PlayerVisualScriptableObject playerMeshes;
     public static GameManager Instance => _instance;
     private static GameManager _instance;
     private static Scene _targetScene;

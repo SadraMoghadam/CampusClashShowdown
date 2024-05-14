@@ -17,11 +17,13 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     [SerializeField] private Transform holdingPoint;
     [SerializeField] private GameObject playerArrow;
     [SerializeField] private GameObject playerTeamIndicator;
+    [SerializeField] private PlayerVisual playerVisual;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
     private ClashArenaController _clashArenaController;
+    private GameManager _gameManager;
     private PickableObject _pickableObject;
     private string _teamName;
     private Color _teamColor;
@@ -32,6 +34,13 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     private static PlayerController _instance;
     public static PlayerController Instance => _instance;
 
+
+    private void Start()
+    {
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
+            MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -48,7 +57,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         _animator = GetComponent<Animator>();
         AssignPlayerId(GetComponent<NetworkObject>().OwnerClientId);
         playerArrow.SetActive(true);
-        transform.position = _clashArenaController.spawnLocations[(int)OwnerClientId].position;
+        transform.position = _clashArenaController.spawnLocations[MultiplayerController.Instance.GetPlayerDataIndexFromClientId(OwnerClientId )].position;
         if (IsServer) {
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
         }
@@ -130,19 +139,19 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void SetTeam()
     {
-        if(_clashArenaController == null)
-            _clashArenaController = ClashArenaController.Instance;
+        if(_gameManager == null)
+            _gameManager = GameManager.Instance;
         if (OwnerClientId % 2 == 0)
         {
-            _teamColor = _clashArenaController.team1.color;
-            _teamName = _clashArenaController.team1.name;
-            _teamCharacteristics = _clashArenaController.team1;
+            _teamColor = _gameManager.team1.color;
+            _teamName = _gameManager.team1.name;
+            _teamCharacteristics = _gameManager.team1;
         }
         else
         {
-            _teamColor = _clashArenaController.team2.color;
-            _teamName = _clashArenaController.team2.name;
-            _teamCharacteristics = _clashArenaController.team2;
+            _teamColor = _gameManager.team2.color;
+            _teamName = _gameManager.team2.name;
+            _teamCharacteristics = _gameManager.team2;
         }
         playerTeamIndicator.GetComponent<Renderer>().material.color = _teamColor; // Set the color of boxes with respect to their team
     }

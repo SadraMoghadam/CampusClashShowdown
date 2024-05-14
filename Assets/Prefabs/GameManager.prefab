@@ -49,6 +49,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241b01a428295a147b53171d145f3693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  avatarBodyPartDataArray: []
+  team1: {fileID: 11400000, guid: 99467d78ed61c3f40b5b99c818f1b7db, type: 2}
+  team2: {fileID: 11400000, guid: daf6b46a3b6931a48853187ce29176f7, type: 2}
+  playerMeshes: {fileID: 11400000, guid: 99caef304233a084da2ed6effad358b7, type: 2}
 --- !u!114 &7154795370293158211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3092843191
+  GlobalObjectIdHash: 2680671488
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1

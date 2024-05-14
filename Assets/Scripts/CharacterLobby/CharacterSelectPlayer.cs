@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,18 +10,23 @@ public class CharacterSelectPlayer : MonoBehaviour {
 
 
     [SerializeField] private int playerIndex;
-    // [SerializeField] private GameObject readyGameObject;
-    // [SerializeField] private PlayerVisual playerVisual;
-    // [SerializeField] private Button kickButton;
+    [SerializeField] private GameObject readyGameObject;
+    [SerializeField] private PlayerVisual playerVisual;
+    [SerializeField] private Button kickButton;
     // [SerializeField] private TextMeshPro playerNameText;
     
 
+    private void Awake() {
+        kickButton.onClick.AddListener(() => {
+            PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            MultiplayerController.Instance.KickPlayer(playerData.clientId);
+        });
+    }
+    
     private void Start() {
         MultiplayerController.Instance.OnPlayerDataNetworkListChanged += MultiplayerController_OnPlayerDataNetworkListChanged;
         CharacterSelectReady.Instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
-        
-
-        // kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
+        kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
 
         // StartCoroutine(UpdatePlayerCR());
         UpdatePlayer();
@@ -40,12 +46,12 @@ public class CharacterSelectPlayer : MonoBehaviour {
             Show();
 
             PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
-
-            // readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
-
+            readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
+            // Tuple<int, int> playerMeshIndices = PlayerPrefsManager.GetHeadAndBodyMeshIndices();
+            playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
+                MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
             // playerNameText.text = playerData.playerName.ToString();
 
-            // playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor(playerData.colorId));
         } else {
             Hide();
         }

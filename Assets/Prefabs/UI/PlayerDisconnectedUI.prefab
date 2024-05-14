@@ -381,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 783939ca6d62f4a4c93ce4803171b97c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playAgainButton: {fileID: 0}
+  playAgainButton: {fileID: 4593898679530479337}
 --- !u!1 &9038549121753387448
 GameObject:
   m_ObjectHideFlags: 0

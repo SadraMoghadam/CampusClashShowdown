@@ -34,7 +34,8 @@ public class MultiplayerController : NetworkBehaviour
     private static MultiplayerController _instance;
     public static MultiplayerController Instance => _instance;
 
-    private void Awake() {
+    private void Awake() 
+    {
         if (_instance == null)
         {
             _instance = this;
@@ -52,13 +53,16 @@ public class MultiplayerController : NetworkBehaviour
     }
     
     
-    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
+    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
+    {
         OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void StartHost() {
+    public void StartHost() 
+    {
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Server_OnClientDisconnectCallback;
         NetworkManager.Singleton.StartHost();
     }
       
@@ -68,12 +72,22 @@ public class MultiplayerController : NetworkBehaviour
         {
             clientId = clientId,
         };
-        playerDataNetworkList.Add(newPlayerData); 
+        playerDataNetworkList.Add(newPlayerData);
+        SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2); 
         // ClientConnectedCallbackServerRpc(clientId);
         // SetPlayerNameServerRpc(GetPlayerName());
         // SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
+    private void NetworkManager_Server_OnClientDisconnectCallback(ulong clientId) {
+        for (int i = 0; i < playerDataNetworkList.Count; i++) {
+            PlayerData playerData = playerDataNetworkList[i];
+            if (playerData.clientId == clientId) {
+                // Disconnected!
+                playerDataNetworkList.RemoveAt(i);
+            }
+        }
+    }
     // [ServerRpc(RequireOwnership = false)]
     // private void ClientConnectedCallbackServerRpc(ulong clientId)
     // {
@@ -83,7 +97,8 @@ public class MultiplayerController : NetworkBehaviour
     // }
     
 
-    private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse) {
+    private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse) 
+    {
         if (SceneManager.GetActiveScene().name != GameManager.Scene.CharactersLobbyScene.ToString()) {
             connectionApprovalResponse.Approved = false;
             connectionApprovalResponse.Reason = "Game has already started";
@@ -99,15 +114,33 @@ public class MultiplayerController : NetworkBehaviour
         connectionApprovalResponse.Approved = true;
     }
 
-    public void StartClient() {
+    public void StartClient() 
+    {
         OnTryingToJoinGame?.Invoke(this, EventArgs.Empty);
 
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
-        // NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
         NetworkManager.Singleton.StartClient();
     }
+    
+    private void NetworkManager_Client_OnClientConnectedCallback(ulong clientId) {
+        SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2);
+    }
 
-    private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId) {
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerMeshServerRpc(int headMeshId, int bodyMeshId, ServerRpcParams serverRpcParams = default) {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.headMeshId = headMeshId;
+        playerData.bodyMeshId = bodyMeshId;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+
+    private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId) 
+    {
         OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
     }
 
@@ -263,11 +296,13 @@ public class MultiplayerController : NetworkBehaviour
     // }
 
     
-    public bool IsPlayerIndexConnected(int playerIndex) {
+    public bool IsPlayerIndexConnected(int playerIndex) 
+    {
         return playerIndex < playerDataNetworkList.Count;
     }
     
-    public int GetPlayerDataIndexFromClientId(ulong clientId) {
+    public int GetPlayerDataIndexFromClientId(ulong clientId) 
+    {
         for (int i=0; i< playerDataNetworkList.Count; i++) {
             if (playerDataNetworkList[i].clientId == clientId) {
                 return i;
@@ -276,7 +311,8 @@ public class MultiplayerController : NetworkBehaviour
         return -1;
     }
 
-    public PlayerData GetPlayerDataFromClientId(ulong clientId) {
+    public PlayerData GetPlayerDataFromClientId(ulong clientId) 
+    {
         foreach (PlayerData playerData in playerDataNetworkList) {
             if (playerData.clientId == clientId) {
                 return playerData;
@@ -285,12 +321,28 @@ public class MultiplayerController : NetworkBehaviour
         return default;
     }
 
-    public PlayerData GetPlayerData() {
+    public PlayerData GetPlayerData() 
+    {
         return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
     }
 
-    public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex) {
+    public PlayerData GetPlayerDataFromPlayerIndex(int playerIndex) 
+    {
         return playerDataNetworkList[playerIndex];
     }
+    
+    public Mesh GetPlayerHeadMesh(int headMeshId) 
+    {
+        return GameManager.Instance.playerMeshes.HeadMeshes[headMeshId];
+    }
+    
+    public Mesh GetPlayerBodyMesh(int bodyMeshId) 
+    {
+        return GameManager.Instance.playerMeshes.BodyMeshes[bodyMeshId];
+    }
 
+    public void KickPlayer(ulong clientId) {
+        NetworkManager.Singleton.DisconnectClient(clientId);
+        NetworkManager_Server_OnClientDisconnectCallback(clientId);
+    }
 }
