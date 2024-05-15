@@ -39,6 +39,13 @@ public class PlayerDisconnectUI : MonoBehaviour {
 
     private void OnDestroy()
     {
-        NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
+        try
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }

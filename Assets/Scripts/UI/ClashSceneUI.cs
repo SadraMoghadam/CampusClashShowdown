@@ -84,7 +84,10 @@ public class ClashSceneUI : MonoBehaviour
         slider.gameObject.SetActive(true);
         float timer = 0f;
 
-        isAbleToPress = false;
+        if (slider.name == conveyorStopCooldown.name)
+        {
+            isAbleToPress = false;
+        }
         while (timer < fillTime)
         {
             timer += Time.deltaTime;

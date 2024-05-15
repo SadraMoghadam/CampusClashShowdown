@@ -323,7 +323,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     if(deltaTime <= 0.01f)
                         playerUI.DisablePushOrPullTimerSlider();
                     else
-                        playerUI.SetPushOrPullTimer(deltaTime / timeToMoveObjects);
+                        playerUI.SetPushOrPullTimer(deltaTime / (timeToMoveObjects / _playerController.strength));
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
                         // _timePushed = Time.time + pushCooldownTime;

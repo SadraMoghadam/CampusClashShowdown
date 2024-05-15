@@ -28,10 +28,18 @@ public class PowerUpController : NetworkBehaviour
 
         _isNetworkSpawned = true;
         _numOfPowerUps = 0;
-        GenerateRandomSpawnTimeAndResetTimerServerRpc();
+        
+        ClashArenaController.Instance.OnStateChanged += ClashArenaController_OnStateChanged;
     }
     
     
+    private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e)
+    {
+        if (ClashArenaController.Instance.IsGamePlaying())
+        {
+            GenerateRandomSpawnTimeAndResetTimerServerRpc();
+        }
+    }
 
     private void Update()
     {

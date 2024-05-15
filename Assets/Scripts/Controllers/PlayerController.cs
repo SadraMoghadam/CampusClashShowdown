@@ -28,6 +28,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     private string _teamName;
     private Color _teamColor;
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
+    private bool _canMove;
 
 
 
@@ -37,9 +38,23 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void Start()
     {
+        _canMove = false;
         PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
         playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
             MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
+        ClashArenaController.Instance.OnStateChanged += ClashArenaController_OnStateChanged;
+    }
+
+    private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e)
+    {
+        if (ClashArenaController.Instance.IsGamePlaying())
+        {
+            _canMove = true;
+        }
+        else
+        {
+            _canMove = false;
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -79,6 +94,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void Update() {
         if (!IsOwner) return;
+        if(!_canMove) return;
         
         GatherInput();
         Look();
@@ -141,7 +157,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     {
         if(_gameManager == null)
             _gameManager = GameManager.Instance;
-        if (OwnerClientId % 2 == 0)
+        if (MultiplayerController.Instance.GetPlayerDataIndexFromClientId(OwnerClientId) < 2)
         {
             _teamColor = _gameManager.team1.color;
             _teamName = _gameManager.team1.name;
@@ -195,5 +211,10 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     public TeamCharacteristicsScriptableObject GetTeamCharacteristics()
     {
         return _teamCharacteristics;
+    }
+
+    public void SetPlayerAbleToMove(bool canMove)
+    {
+        _canMove = canMove;
     }
 }

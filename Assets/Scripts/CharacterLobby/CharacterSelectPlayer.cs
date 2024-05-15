@@ -47,6 +47,7 @@ public class CharacterSelectPlayer : MonoBehaviour {
 
             PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
             readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
+            SetCharacterTeamColor(playerIndex, playerData.clientId);
             // Tuple<int, int> playerMeshIndices = PlayerPrefsManager.GetHeadAndBodyMeshIndices();
             playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
                 MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
@@ -54,6 +55,22 @@ public class CharacterSelectPlayer : MonoBehaviour {
 
         } else {
             Hide();
+        }
+    }
+
+    private void SetCharacterTeamColor(int playerIndex, ulong clientId)
+    {
+        if (!CharacterSelectReady.Instance.IsPlayerReady(clientId))
+        {
+            return;
+        }
+        if (playerIndex < 2)
+        {
+            readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;   
+        }
+        else
+        {
+            readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
         }
     }
 
