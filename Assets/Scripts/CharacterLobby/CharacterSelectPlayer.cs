@@ -13,12 +13,13 @@ public class CharacterSelectPlayer : MonoBehaviour {
     [SerializeField] private GameObject readyGameObject;
     [SerializeField] private PlayerVisual playerVisual;
     [SerializeField] private Button kickButton;
-    // [SerializeField] private TextMeshPro playerNameText;
+    [SerializeField] private TextMeshPro playerNameText;
     
 
     private void Awake() {
         kickButton.onClick.AddListener(() => {
             PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            NetworkLobby.Instance.KickPlayer(playerData.playerId.ToString());
             MultiplayerController.Instance.KickPlayer(playerData.clientId);
         });
     }
@@ -51,7 +52,7 @@ public class CharacterSelectPlayer : MonoBehaviour {
             // Tuple<int, int> playerMeshIndices = PlayerPrefsManager.GetHeadAndBodyMeshIndices();
             playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
                 MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
-            // playerNameText.text = playerData.playerName.ToString();
+            playerNameText.text = playerData.playerName.ToString();
 
         } else {
             Hide();

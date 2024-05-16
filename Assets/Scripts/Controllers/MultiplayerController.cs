@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public class MultiplayerController : NetworkBehaviour
 {
-    private const int MAX_PLAYER_AMOUNT = 4;
+    public const int MAX_PLAYER_AMOUNT = 4;
     private bool _isConveyorBeltStopped = false;
     private int _team1Score;
     private int _team2Score;
@@ -24,16 +25,12 @@ public class MultiplayerController : NetworkBehaviour
     public event EventHandler OnFailedToJoinGame;
     public event EventHandler OnPlayerDataNetworkListChanged;
 
-    public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
-
-    public void SetIsConveyorBeltStopped(bool isConveyorBeltStopped)
-    {
-        _isConveyorBeltStopped = isConveyorBeltStopped;
-    }
-
     private static MultiplayerController _instance;
     public static MultiplayerController Instance => _instance;
 
+    private string _playerName;
+    
+    
     private void Awake() 
     {
         if (_instance == null)
@@ -50,6 +47,8 @@ public class MultiplayerController : NetworkBehaviour
         _team1Score = 0;
         _team2Score = 0;
         _isConveyorBeltStopped = false;
+        _playerName =
+            PlayerPrefsManager.GetString(PlayerPrefsKeys.PlayerName, "Player" + UnityEngine.Random.Range(100, 1000));
     }
     
     
@@ -75,7 +74,7 @@ public class MultiplayerController : NetworkBehaviour
         playerDataNetworkList.Add(newPlayerData);
         SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2); 
         // ClientConnectedCallbackServerRpc(clientId);
-        // SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerNameServerRpc(GetPlayerName());
         // SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
@@ -123,18 +122,46 @@ public class MultiplayerController : NetworkBehaviour
         NetworkManager.Singleton.StartClient();
     }
     
-    private void NetworkManager_Client_OnClientConnectedCallback(ulong clientId) {
+    private void NetworkManager_Client_OnClientConnectedCallback(ulong clientId) 
+    {
+        SetPlayerNameServerRpc(GetPlayerName());
         SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2);
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerNameServerRpc(string playerName, ServerRpcParams serverRpcParams = default) 
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerName = playerName;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetPlayerMeshServerRpc(int headMeshId, int bodyMeshId, ServerRpcParams serverRpcParams = default) {
+    private void SetPlayerMeshServerRpc(int headMeshId, int bodyMeshId, ServerRpcParams serverRpcParams = default) 
+    {
         int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
 
         PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.headMeshId = headMeshId;
         playerData.bodyMeshId = bodyMeshId;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerIdServerRpc(string playerId, ServerRpcParams serverRpcParams = default) 
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        playerData.playerId = playerId;
 
         playerDataNetworkList[playerDataIndex] = playerData;
     }
@@ -344,5 +371,22 @@ public class MultiplayerController : NetworkBehaviour
     public void KickPlayer(ulong clientId) {
         NetworkManager.Singleton.DisconnectClient(clientId);
         NetworkManager_Server_OnClientDisconnectCallback(clientId);
+    }
+    
+    
+    public bool GetIsConveyorBeltStopped() => _isConveyorBeltStopped;
+
+    public void SetIsConveyorBeltStopped(bool isConveyorBeltStopped)
+    {
+        _isConveyorBeltStopped = isConveyorBeltStopped;
+    }
+    
+    public string GetPlayerName() {
+        return _playerName;
+    }
+
+    public void SetPlayerName(string playerName) {
+        _playerName = playerName;
+        PlayerPrefsManager.SetString(PlayerPrefsKeys.PlayerName, playerName);
     }
 }

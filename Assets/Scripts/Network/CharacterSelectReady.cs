@@ -43,6 +43,7 @@ public class CharacterSelectReady : NetworkBehaviour {
         }
 
         if (allClientsReady) {
+            NetworkLobby.Instance.DeleteLobby();
             GameManager.LoadSceneNetwork(GameManager.Scene.ClashScene1);
         }
     }

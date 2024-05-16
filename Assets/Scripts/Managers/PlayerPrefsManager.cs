@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public enum PlayerPrefsKeys
 {
+    PlayerName,
     GameStarted,
     Level,
     GameTimer,

@@ -202,6 +202,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3245439402144401818, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1955700580001657407, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
 --- !u!1001 &157631343
 PrefabInstance:
@@ -280,6 +283,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3245439402144401818, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1955700580001657407, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
@@ -467,6 +473,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerDisconnectedUI
       objectReference: {fileID: 0}
+    - target: {fileID: 8797729750727879378, guid: f8677c049083b1a489fdd77fa7c7d719, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -650,6 +660,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3245439402144401818, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1955700580001657407, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
 --- !u!1001 &1258099444
 PrefabInstance:
@@ -728,6 +741,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3245439402144401818, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1955700580001657407, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 3b7521e911948944e892fd7531bf90c6, type: 3}
