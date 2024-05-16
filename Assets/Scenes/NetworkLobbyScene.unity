@@ -259,12 +259,20 @@ PrefabInstance:
       value: NetworkManager
       objectReference: {fileID: 0}
     - target: {fileID: 7899715238800808732, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
+      propertyPath: m_ProtocolType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7899715238800808732, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
       propertyPath: ConnectionData.Port
-      value: 8014
+      value: 8600
       objectReference: {fileID: 0}
     - target: {fileID: 7899715238800808732, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
       propertyPath: m_MaxConnectAttempts
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7899715238800808732, guid: 8609f7d92b8aac24b82ae871c0578fc0, type: 3}
+      propertyPath: ConnectionData.ServerListenAddress
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

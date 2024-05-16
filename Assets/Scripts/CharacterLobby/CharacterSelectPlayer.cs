@@ -48,11 +48,11 @@ public class CharacterSelectPlayer : MonoBehaviour {
 
             PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
             readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
-            SetCharacterTeamColor(playerIndex, playerData.clientId);
             // Tuple<int, int> playerMeshIndices = PlayerPrefsManager.GetHeadAndBodyMeshIndices();
             playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
                 MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
             playerNameText.text = playerData.playerName.ToString();
+            SetCharacterTeamColor(playerIndex, playerData.clientId);
 
         } else {
             Hide();
@@ -63,15 +63,25 @@ public class CharacterSelectPlayer : MonoBehaviour {
     {
         if (!CharacterSelectReady.Instance.IsPlayerReady(clientId))
         {
+            if (playerIndex < 2)
+            {
+                playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
+            }
+            else
+            {
+                playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
+            }
             return;
         }
         if (playerIndex < 2)
         {
-            readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;   
+            readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
+            playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
         }
         else
         {
             readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
+            playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
         }
     }
 
