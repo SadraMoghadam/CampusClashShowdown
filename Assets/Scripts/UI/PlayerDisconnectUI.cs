@@ -13,7 +13,7 @@ public class PlayerDisconnectUI : MonoBehaviour {
 
     private void Awake() {
         playAgainButton.onClick.AddListener(() => {
-            GameManager.LoadScene(GameManager.Scene.NetworkLobbyScene);
+            GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
     }
 

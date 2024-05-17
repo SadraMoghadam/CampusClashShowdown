@@ -28,6 +28,10 @@ public class CharacterSelectPlayer : MonoBehaviour {
         MultiplayerController.Instance.OnPlayerDataNetworkListChanged += MultiplayerController_OnPlayerDataNetworkListChanged;
         CharacterSelectReady.Instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
         kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
+        if (playerIndex == 0)
+        {
+            kickButton.gameObject.SetActive(false);
+        }
 
         // StartCoroutine(UpdatePlayerCR());
         UpdatePlayer();
@@ -47,12 +51,14 @@ public class CharacterSelectPlayer : MonoBehaviour {
             Show();
 
             PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            Debug.Log(playerData);
             readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
             // Tuple<int, int> playerMeshIndices = PlayerPrefsManager.GetHeadAndBodyMeshIndices();
             playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
                 MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
             playerNameText.text = playerData.playerName.ToString();
             SetCharacterTeamColor(playerIndex, playerData.clientId);
+            SetCharacterNameColor(playerIndex);
 
         } else {
             Hide();
@@ -63,24 +69,27 @@ public class CharacterSelectPlayer : MonoBehaviour {
     {
         if (!CharacterSelectReady.Instance.IsPlayerReady(clientId))
         {
-            if (playerIndex < 2)
-            {
-                playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
-            }
-            else
-            {
-                playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
-            }
             return;
         }
         if (playerIndex < 2)
         {
             readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
-            playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
         }
         else
         {
             readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
+        }
+    }
+
+    private void SetCharacterNameColor(int playerIndex)
+    {
+        
+        if (playerIndex < 2)
+        {
+            playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
+        }
+        else
+        {
             playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
         }
     }

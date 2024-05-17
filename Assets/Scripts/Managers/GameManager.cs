@@ -57,26 +57,29 @@ public class GameManager : MonoBehaviour
     /// For each scene change we can call this function
     /// </summary>
     /// <param name="sceneName"></param>
-    public static async void LoadScene(Scene sceneName)
+    public static async void LoadScene(Scene targetScene)
     {
-        var scene = SceneManager.LoadSceneAsync(sceneName.ToString());
         SceneManager.LoadScene(Scene.LoadingScene.ToString());
-        scene.allowSceneActivation = false;
-        await Task.Delay(200);
+        await Task.Delay(100);
         var slider = FindObjectOfType<Slider>();
-        slider.value = 0;
-        do
+        if (slider == null)
         {
-            await Task.Delay(300);
-            slider.value = scene.progress;
-        } while (scene.progress < 0.9f);
-
+            Debug.LogError("Slider not found in the loading scene.");
+            return;
+        }
+        var asyncLoad = SceneManager.LoadSceneAsync(targetScene.ToString());
+        asyncLoad.allowSceneActivation = false;
+        while (asyncLoad.progress < 0.9f)
+        {
+            slider.value = asyncLoad.progress;
+            await Task.Delay(100); 
+        }
+        slider.value = 1.0f;
         await Task.Delay(500);
-        scene.allowSceneActivation = true;
-        SceneManager.LoadScene(sceneName.ToString());
+        asyncLoad.allowSceneActivation = true;
     }
     
-    public static async void LoadSceneNetwork(Scene sceneName)
+    public static async void LoadSceneNetwork(Scene targetScene)
     {
         // var scene = SceneManager.LoadSceneAsync(sceneName.ToString());
         
@@ -93,7 +96,7 @@ public class GameManager : MonoBehaviour
             } while (slider.value <= 0.9f);
             slider.value += 0.1f; 
             await Task.Delay(300);
-            NetworkManager.Singleton.SceneManager.LoadScene(sceneName.ToString(), LoadSceneMode.Single);    
+            NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);    
         }
     }
     

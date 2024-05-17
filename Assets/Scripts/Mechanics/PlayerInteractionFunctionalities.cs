@@ -289,7 +289,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     if(deltaTime <= 0.01f)
                         playerUI.DisablePushOrPullTimerSlider();
                     else
-                        playerUI.SetPushOrPullTimer(deltaTime / timeToMoveObjects);
+                        playerUI.SetPushOrPullTimer(deltaTime / (timeToMoveObjects / _playerController.strength));
                     if (deltaTime >= timeToMoveObjects / _playerController.strength)
                     {
                         // _timePushed = Time.time + pushCooldownTime;
@@ -340,6 +340,11 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
                     _holdingPushLayerWeight = 0;
                     SetLayerWeightServerRpc(_holdingLayer, _holdingPushLayerWeight);
                 }
+
+                if (!_isInPushablePositiveArea && !_isInPushableNegativeArea)
+                {
+                    playerUI.DisablePushOrPullTimerSlider();
+                }
             }   
         }
     }
@@ -376,6 +381,10 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         if (other.CompareTag("ObjectEntryArea"))
         {
             _isInDeliveryArea = true;
+        }
+        else
+        {
+            _isInDeliveryArea = false;
         }
     }
     

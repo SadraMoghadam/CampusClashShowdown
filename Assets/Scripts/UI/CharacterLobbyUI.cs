@@ -19,7 +19,7 @@ public class CharacterLobbyUI : MonoBehaviour
         mainMenuButton.onClick.AddListener(() => {
             NetworkLobby.Instance.LeaveLobby();
             NetworkManager.Singleton.Shutdown();
-            GameManager.LoadScene(GameManager.Scene.NetworkLobbyScene);
+            GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
         readyButton.onClick.AddListener(() => {
             CharacterSelectReady.Instance.SetPlayerReady();

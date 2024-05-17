@@ -67,15 +67,19 @@ public class MultiplayerController : NetworkBehaviour
       
     private void NetworkManager_OnClientConnectedCallback(ulong clientId)
     {
+        if (playerDataNetworkList == null)
+        {
+            playerDataNetworkList = new NetworkList<PlayerData>();
+        }
         PlayerData newPlayerData = new PlayerData
         {
             clientId = clientId,
         };
         playerDataNetworkList.Add(newPlayerData);
-        SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2); 
+        SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2);
         // ClientConnectedCallbackServerRpc(clientId);
         SetPlayerNameServerRpc(GetPlayerName());
-        // SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
 
     private void NetworkManager_Server_OnClientDisconnectCallback(ulong clientId) {
@@ -325,6 +329,7 @@ public class MultiplayerController : NetworkBehaviour
     
     public bool IsPlayerIndexConnected(int playerIndex) 
     {
+        Debug.Log("BBBBBBBBBBBBBBBBBBBB" + playerDataNetworkList.Count);
         return playerIndex < playerDataNetworkList.Count;
     }
     
