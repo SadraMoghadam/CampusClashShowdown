@@ -14,8 +14,9 @@ public class GameOverUI : MonoBehaviour {
 
     private void Awake() {
         playAgainButton.onClick.AddListener(() => {
+            NetworkLobby.Instance.LeaveLobby();
             NetworkManager.Singleton.Shutdown();
-            GameManager.LoadScene(GameManager.Scene.NetworkLobbyScene);
+            GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
     }
 

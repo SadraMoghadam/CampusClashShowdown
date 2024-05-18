@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public enum PlayerPrefsKeys
 {
+    PlayerName,
     GameStarted,
     Level,
     GameTimer,
@@ -179,6 +180,27 @@ public class PlayerPrefsManager : MonoBehaviour
     
     }
     
+    public static void SaveAvatar(int headMeshIndex, int bodyMeshIndex){
+        List<BodyPartTypeIndex> bodyPartTypeIndexList = new List<BodyPartTypeIndex>();
+        bodyPartTypeIndexList.Add(new BodyPartTypeIndex {
+            bodyPartType = BodyPartType.Head,
+            index = headMeshIndex,
+        });
+        bodyPartTypeIndexList.Add(new BodyPartTypeIndex {
+            bodyPartType = BodyPartType.Body,
+            index = bodyMeshIndex,
+        });
+
+        SaveObject saveObject = new SaveObject {
+            bodyPartTypeIndexList = bodyPartTypeIndexList,
+        };
+
+        string json = JsonUtility.ToJson(saveObject);
+        Debug.Log(json);
+        PlayerPrefs.SetString(PlayerPrefsKeys.PlayerCustomization.ToString(), json);
+    
+    }
+    
     public static void LoadAvatar()
     {
         string json = PlayerPrefs.GetString(PlayerPrefsKeys.PlayerCustomization.ToString());
@@ -188,5 +210,25 @@ public class PlayerPrefsManager : MonoBehaviour
             BodyPartData bodyPartData = PlayerCustomization.GetBodyPartData(bodyPartTypeIndex.bodyPartType, GameManager.Instance.avatarBodyPartDataArray);   
             bodyPartData.skinnedMeshRenderer.sharedMesh = bodyPartData.meshArray[bodyPartTypeIndex.index];
         }
+    }
+
+    public static Tuple<int, int> GetHeadAndBodyMeshIndices()
+    {
+        if (!PlayerPrefs.HasKey(PlayerPrefsKeys.PlayerCustomization.ToString()))
+        {
+            SaveAvatar(0, 0);
+        }
+        int headMeshIndex = 0;
+        int bodyMeshIndex = 0;
+        string json = PlayerPrefs.GetString(PlayerPrefsKeys.PlayerCustomization.ToString());
+        SaveObject saveObject = JsonUtility.FromJson<SaveObject>(json); 
+        foreach (BodyPartTypeIndex bodyPartTypeIndex in saveObject.bodyPartTypeIndexList){
+            if (bodyPartTypeIndex.bodyPartType == BodyPartType.Head)
+                headMeshIndex = bodyPartTypeIndex.index;
+            if (bodyPartTypeIndex.bodyPartType == BodyPartType.Body)
+                bodyMeshIndex = bodyPartTypeIndex.index;
+        }
+
+        return new Tuple<int, int>(headMeshIndex, bodyMeshIndex);
     }
 }

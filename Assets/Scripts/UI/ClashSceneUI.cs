@@ -36,9 +36,8 @@ public class ClashSceneUI : MonoBehaviour
         {
             _instance = this;
         }
-        _clashArenaController = ClashArenaController.Instance;
-        team1Background.color = _clashArenaController.team1.color;
-        team2Background.color = _clashArenaController.team2.color;
+        team1Background.color = GameManager.Instance.team1.color;
+        team2Background.color = GameManager.Instance.team2.color;
         team1Score.text = "0";
         team2Score.text = "0";
         conveyorStopCooldown.gameObject.SetActive(false);
@@ -85,7 +84,10 @@ public class ClashSceneUI : MonoBehaviour
         slider.gameObject.SetActive(true);
         float timer = 0f;
 
-        isAbleToPress = false;
+        if (slider.name == conveyorStopCooldown.name)
+        {
+            isAbleToPress = false;
+        }
         while (timer < fillTime)
         {
             timer += Time.deltaTime;

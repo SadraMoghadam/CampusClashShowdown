@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -12,7 +13,7 @@ public class PlayerDisconnectUI : MonoBehaviour {
 
     private void Awake() {
         playAgainButton.onClick.AddListener(() => {
-            GameManager.LoadScene(GameManager.Scene.NetworkLobbyScene);
+            GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
     }
 
@@ -23,8 +24,9 @@ public class PlayerDisconnectUI : MonoBehaviour {
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
-        if(clientId == NetworkManager.ServerClientId)
+        if(clientId == NetworkManager.Singleton.LocalClient.ClientId)
             Show();
+        // Show();
     }
 
     private void Show() {
@@ -35,4 +37,15 @@ public class PlayerDisconnectUI : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        try
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 }

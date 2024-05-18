@@ -17,21 +17,45 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     [SerializeField] private Transform holdingPoint;
     [SerializeField] private GameObject playerArrow;
     [SerializeField] private GameObject playerTeamIndicator;
+    [SerializeField] private PlayerVisual playerVisual;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
     private static readonly int Speed = Animator.StringToHash("Speed");
     private ClashArenaController _clashArenaController;
+    private GameManager _gameManager;
     private PickableObject _pickableObject;
     private string _teamName;
     private Color _teamColor;
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
+    private bool _canMove;
 
 
 
     private static PlayerController _instance;
     public static PlayerController Instance => _instance;
 
+
+    private void Start()
+    {
+        _canMove = false;
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
+            MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
+        ClashArenaController.Instance.OnStateChanged += ClashArenaController_OnStateChanged;
+    }
+
+    private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e)
+    {
+        if (ClashArenaController.Instance.IsGamePlaying())
+        {
+            _canMove = true;
+        }
+        else
+        {
+            _canMove = false;
+        }
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -48,7 +72,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         _animator = GetComponent<Animator>();
         AssignPlayerId(GetComponent<NetworkObject>().OwnerClientId);
         playerArrow.SetActive(true);
-        transform.position = _clashArenaController.spawnLocations[(int)OwnerClientId].position;
+        transform.position = _clashArenaController.spawnLocations[MultiplayerController.Instance.GetPlayerDataIndexFromClientId(OwnerClientId )].position;
         if (IsServer) {
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
         }
@@ -70,6 +94,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void Update() {
         if (!IsOwner) return;
+        if(!_canMove) return;
         
         GatherInput();
         Look();
@@ -130,19 +155,19 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void SetTeam()
     {
-        if(_clashArenaController == null)
-            _clashArenaController = ClashArenaController.Instance;
-        if (OwnerClientId % 2 == 0)
+        if(_gameManager == null)
+            _gameManager = GameManager.Instance;
+        if (MultiplayerController.Instance.GetPlayerDataIndexFromClientId(OwnerClientId) < 2)
         {
-            _teamColor = _clashArenaController.team1.color;
-            _teamName = _clashArenaController.team1.name;
-            _teamCharacteristics = _clashArenaController.team1;
+            _teamColor = _gameManager.team1.color;
+            _teamName = _gameManager.team1.name;
+            _teamCharacteristics = _gameManager.team1;
         }
         else
         {
-            _teamColor = _clashArenaController.team2.color;
-            _teamName = _clashArenaController.team2.name;
-            _teamCharacteristics = _clashArenaController.team2;
+            _teamColor = _gameManager.team2.color;
+            _teamName = _gameManager.team2.name;
+            _teamCharacteristics = _gameManager.team2;
         }
         playerTeamIndicator.GetComponent<Renderer>().material.color = _teamColor; // Set the color of boxes with respect to their team
     }
@@ -186,5 +211,10 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     public TeamCharacteristicsScriptableObject GetTeamCharacteristics()
     {
         return _teamCharacteristics;
+    }
+
+    public void SetPlayerAbleToMove(bool canMove)
+    {
+        _canMove = canMove;
     }
 }

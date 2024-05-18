@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,18 +10,30 @@ public class CharacterSelectPlayer : MonoBehaviour {
 
 
     [SerializeField] private int playerIndex;
-    // [SerializeField] private GameObject readyGameObject;
-    // [SerializeField] private PlayerVisual playerVisual;
-    // [SerializeField] private Button kickButton;
-    // [SerializeField] private TextMeshPro playerNameText;
+    [SerializeField] private GameObject readyGameObject;
+    [SerializeField] private PlayerVisual playerVisual;
+    [SerializeField] private Button kickButton;
+    [SerializeField] private TextMeshPro playerNameText;
     
 
+    private void Awake() {
+        kickButton.onClick.AddListener(() => {
+            PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            NetworkLobby.Instance.KickPlayer(playerData.playerId.ToString());
+            MultiplayerController.Instance.KickPlayer(playerData.clientId);
+        });
+    }
+    
     private void Start() {
-        MultiplayerController.Instance.OnPlayerDataNetworkListChanged += KitchenGameMultiplayer_OnPlayerDataNetworkListChanged;
+        MultiplayerController.Instance.OnPlayerDataNetworkListChanged += MultiplayerController_OnPlayerDataNetworkListChanged;
         CharacterSelectReady.Instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
+        kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
+        if (playerIndex == 0)
+        {
+            kickButton.gameObject.SetActive(false);
+        }
 
-        // kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
-
+        // StartCoroutine(UpdatePlayerCR());
         UpdatePlayer();
     }
 
@@ -28,7 +41,8 @@ public class CharacterSelectPlayer : MonoBehaviour {
         UpdatePlayer();
     }
 
-    private void KitchenGameMultiplayer_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e) {
+    private void MultiplayerController_OnPlayerDataNetworkListChanged(object sender, System.EventArgs e) {
+        // StartCoroutine(UpdatePlayerCR());
         UpdatePlayer();
     }
 
@@ -37,15 +51,53 @@ public class CharacterSelectPlayer : MonoBehaviour {
             Show();
 
             PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+            Debug.Log(playerData);
+            readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
+            // Tuple<int, int> playerMeshIndices = PlayerPrefsManager.GetHeadAndBodyMeshIndices();
+            playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
+                MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
+            playerNameText.text = playerData.playerName.ToString();
+            SetCharacterTeamColor(playerIndex, playerData.clientId);
+            SetCharacterNameColor(playerIndex);
 
-            // readyGameObject.SetActive(CharacterSelectReady.Instance.IsPlayerReady(playerData.clientId));
-
-            // playerNameText.text = playerData.playerName.ToString();
-
-            // playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor(playerData.colorId));
         } else {
             Hide();
         }
+    }
+
+    private void SetCharacterTeamColor(int playerIndex, ulong clientId)
+    {
+        if (!CharacterSelectReady.Instance.IsPlayerReady(clientId))
+        {
+            return;
+        }
+        if (playerIndex < 2)
+        {
+            readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
+        }
+        else
+        {
+            readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
+        }
+    }
+
+    private void SetCharacterNameColor(int playerIndex)
+    {
+        
+        if (playerIndex < 2)
+        {
+            playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
+        }
+        else
+        {
+            playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team2.color;
+        }
+    }
+
+    private IEnumerator UpdatePlayerCR()
+    {
+        yield return new WaitForSeconds(.2f);
+        UpdatePlayer();
     }
 
     private void Show() {
@@ -57,7 +109,7 @@ public class CharacterSelectPlayer : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        MultiplayerController.Instance.OnPlayerDataNetworkListChanged -= KitchenGameMultiplayer_OnPlayerDataNetworkListChanged;
+        MultiplayerController.Instance.OnPlayerDataNetworkListChanged -= MultiplayerController_OnPlayerDataNetworkListChanged;
     }
 
 

@@ -15,10 +15,11 @@ public struct PlayerData : IEquatable<PlayerData>, INetworkSerializable {
     public FixedString64Bytes playerId;
 
 
-    public bool Equals(PlayerData other) {
-        return 
-            clientId == other.clientId && 
-            bodyMeshId == other.bodyMeshId && 
+    public bool Equals(PlayerData other)
+    {
+        return
+            clientId == other.clientId &&
+            bodyMeshId == other.bodyMeshId &&
             headMeshId == other.headMeshId &&
             playerName == other.playerName &&
             playerId == other.playerId;
