@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     }
 
     [NonSerialized] public AudioManager AudioManager;
+    [NonSerialized] public LeaderboardManager LeaderboardManager;
     public BodyPartData[] avatarBodyPartDataArray;
     public TeamCharacteristicsScriptableObject team1;
     public TeamCharacteristicsScriptableObject team2;
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
         _instance = this;
         
         GameManager[] gameManagers = FindObjectsOfType<GameManager>();
+        AudioManager = GetComponent<AudioManager>();
+        LeaderboardManager = GetComponent<LeaderboardManager>();
         if(gameManagers.Length > 1)
         {
             for (int i = 0; i < gameManagers.Length - 1; i++)
