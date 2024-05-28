@@ -72,7 +72,7 @@ public class LeaderboardManager : MonoBehaviour
         {
             GameObject newEntry = Instantiate(leaderboardUI.entryPrefab, leaderboardUI.contentPanel);
             LeaderboardEntryUI newLeaderboardEntry = newEntry.GetComponent<LeaderboardEntryUI>();
-            newLeaderboardEntry.rank.text = entry.Rank.ToString() + 1;
+            newLeaderboardEntry.rank.text = (entry.Rank + 1).ToString();
             newLeaderboardEntry.username.text = entry.PlayerName;
             newLeaderboardEntry.resourceCount.text = entry.Score.ToString();
         }

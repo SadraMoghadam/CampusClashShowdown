@@ -882,6 +882,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkLobbyUI
       objectReference: {fileID: 0}
+    - target: {fileID: 3894820975628198983, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8462920806749071959, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
       propertyPath: lobbyCreateUI
       value: 
@@ -1167,6 +1171,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1707720208}
     m_Modifications:
+    - target: {fileID: 128091606062240660, guid: 4ce3f074badcaba4ca66eea3424eefa7, type: 3}
+      propertyPath: m_text
+      value: Connection Error Message
+      objectReference: {fileID: 0}
     - target: {fileID: 1332772407144977319, guid: 4ce3f074badcaba4ca66eea3424eefa7, type: 3}
       propertyPath: m_Name
       value: ConnectionResponseMessageUI
