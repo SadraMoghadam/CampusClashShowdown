@@ -394,4 +394,20 @@ public class MultiplayerController : NetworkBehaviour
         _playerName = playerName;
         PlayerPrefsManager.SetString(PlayerPrefsKeys.PlayerName, playerName);
     }
+
+    public void Restart()
+    {
+        Destroy(gameObject);
+    }
+
+    public override void OnDestroy()
+    {
+        
+        NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
+        NetworkManager.Singleton.ConnectionApprovalCallback -= NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_Server_OnClientDisconnectCallback;
+        
+        NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_Client_OnClientDisconnectCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_Client_OnClientConnectedCallback;
+    }
 }

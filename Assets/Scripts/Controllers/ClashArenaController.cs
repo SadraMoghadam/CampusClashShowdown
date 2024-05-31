@@ -13,18 +13,13 @@ using Random = UnityEngine.Random;
 public class ClashArenaController : NetworkBehaviour
 {
     public List<Transform> spawnLocations;
-    
-    
     public Transform boxPrefab;
     public List<Transform> resourceDeliveryPathPoints;
     public Transform resourceBoxPrefab;
-    
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
-
-
     [SerializeField] private Transform playerPrefab;
-    
+    [SerializeField] private Camera endGameCamera;
     
     public event EventHandler OnStateChanged;
     public event EventHandler OnLocalPlayerReadyChanged;
@@ -32,8 +27,8 @@ public class ClashArenaController : NetworkBehaviour
     private NetworkVariable<State> state = new NetworkVariable<State>(State.WaitingToStart);
     private bool isLocalPlayerReady;
     private NetworkVariable<float> countdownToStartTimer = new NetworkVariable<float>(3f);
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(180f);
-    private float gamePlayingTimerMax = 180f;
+    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(3f);
+    private float gamePlayingTimerMax = 3f;
     private bool isLocalGamePaused = false;
     private Dictionary<ulong, bool> playerReadyDictionary;
     private bool autoTestGamePausedState;
@@ -102,6 +97,7 @@ public class ClashArenaController : NetworkBehaviour
                 gamePlayingTimer.Value -= Time.deltaTime;
                 if (gamePlayingTimer.Value < 0f) {
                     state.Value = State.GameOver;
+                    endGameCamera.gameObject.SetActive(true);
                 }
                 break;
             case State.GameOver:
