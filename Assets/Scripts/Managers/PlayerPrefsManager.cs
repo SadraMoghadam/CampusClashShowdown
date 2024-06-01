@@ -170,11 +170,11 @@ public class PlayerPrefsManager : MonoBehaviour
             });
         }
 
-        SaveObject saveObject = new SaveObject {
+        SaveAvatarObject saveAvatarObject = new SaveAvatarObject {
             bodyPartTypeIndexList = bodyPartTypeIndexList,
         };
 
-        string json = JsonUtility.ToJson(saveObject);
+        string json = JsonUtility.ToJson(saveAvatarObject);
         Debug.Log(json);
         PlayerPrefs.SetString(PlayerPrefsKeys.PlayerCustomization.ToString(), json);
     
@@ -191,25 +191,21 @@ public class PlayerPrefsManager : MonoBehaviour
             index = bodyMeshIndex,
         });
 
-        SaveObject saveObject = new SaveObject {
+        SaveAvatarObject saveAvatarObject = new SaveAvatarObject {
             bodyPartTypeIndexList = bodyPartTypeIndexList,
         };
 
-        string json = JsonUtility.ToJson(saveObject);
+        string json = JsonUtility.ToJson(saveAvatarObject);
         Debug.Log(json);
         PlayerPrefs.SetString(PlayerPrefsKeys.PlayerCustomization.ToString(), json);
     
     }
     
-    public static void LoadAvatar()
+    public static SaveAvatarObject LoadAvatar()
     {
         string json = PlayerPrefs.GetString(PlayerPrefsKeys.PlayerCustomization.ToString());
-        SaveObject saveObject = JsonUtility.FromJson<SaveObject>(json); 
-
-        foreach (BodyPartTypeIndex bodyPartTypeIndex in saveObject.bodyPartTypeIndexList){
-            BodyPartData bodyPartData = PlayerCustomization.GetBodyPartData(bodyPartTypeIndex.bodyPartType, GameManager.Instance.avatarBodyPartDataArray);   
-            bodyPartData.skinnedMeshRenderer.sharedMesh = bodyPartData.meshArray[bodyPartTypeIndex.index];
-        }
+        SaveAvatarObject saveAvatarObject = JsonUtility.FromJson<SaveAvatarObject>(json);
+        return saveAvatarObject;
     }
 
     public static Tuple<int, int> GetHeadAndBodyMeshIndices()
@@ -221,8 +217,8 @@ public class PlayerPrefsManager : MonoBehaviour
         int headMeshIndex = 0;
         int bodyMeshIndex = 0;
         string json = PlayerPrefs.GetString(PlayerPrefsKeys.PlayerCustomization.ToString());
-        SaveObject saveObject = JsonUtility.FromJson<SaveObject>(json); 
-        foreach (BodyPartTypeIndex bodyPartTypeIndex in saveObject.bodyPartTypeIndexList){
+        SaveAvatarObject saveAvatarObject = JsonUtility.FromJson<SaveAvatarObject>(json); 
+        foreach (BodyPartTypeIndex bodyPartTypeIndex in saveAvatarObject.bodyPartTypeIndexList){
             if (bodyPartTypeIndex.bodyPartType == BodyPartType.Head)
                 headMeshIndex = bodyPartTypeIndex.index;
             if (bodyPartTypeIndex.bodyPartType == BodyPartType.Body)

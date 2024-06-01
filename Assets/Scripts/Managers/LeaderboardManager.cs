@@ -21,8 +21,8 @@ public class LeaderboardManager : MonoBehaviour
 
     private async void Awake()
     {
-        await InitializeUnityServices();
-        await SignInAnonymously();
+        // await InitializeUnityServices();
+        // await SignInAnonymously();
     }
 
     private void Start()
