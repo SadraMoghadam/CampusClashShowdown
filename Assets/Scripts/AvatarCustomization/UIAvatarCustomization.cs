@@ -61,7 +61,7 @@ public class UIAvatarCustomization : MonoBehaviour
         resetButton.onClick.AddListener(() =>
         {
             playerCustomization.ResetBodyPartData();
-            SetPlayerName(_playerInitialName);
+            // SetPlayerName(_playerInitialName);
         });
     }
 

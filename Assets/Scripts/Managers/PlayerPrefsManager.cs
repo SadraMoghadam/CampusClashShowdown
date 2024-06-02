@@ -158,17 +158,22 @@ public class PlayerPrefsManager : MonoBehaviour
         // SetVector3(scale, value.localScale);
     }
     
-    public static void SaveAvatar(BodyPartData bodyPartData){
+    public static void SaveAvatar(BodyPartData bodyData, BodyPartData headData){
         List<BodyPartTypeIndex> bodyPartTypeIndexList = new List<BodyPartTypeIndex>();  
     
-        foreach (BodyPartType bodyPartType in Enum.GetValues(typeof(BodyPartType))) {
-            int meshIndex = Array.IndexOf(bodyPartData.meshArray,bodyPartData.skinnedMeshRenderer.sharedMesh);
+        int meshIndex = Array.IndexOf(bodyData.meshArray,bodyData.skinnedMeshRenderer.sharedMesh);
 
-            bodyPartTypeIndexList.Add(new BodyPartTypeIndex {
-                bodyPartType = bodyPartType,
-                index = meshIndex,
-            });
-        }
+        bodyPartTypeIndexList.Add(new BodyPartTypeIndex {
+            bodyPartType = BodyPartType.Body,
+            index = meshIndex,
+        });
+        
+        meshIndex = Array.IndexOf(headData.meshArray,headData.skinnedMeshRenderer.sharedMesh);
+
+        bodyPartTypeIndexList.Add(new BodyPartTypeIndex {
+            bodyPartType = BodyPartType.Head,
+            index = meshIndex,
+        });
 
         SaveAvatarObject saveAvatarObject = new SaveAvatarObject {
             bodyPartTypeIndexList = bodyPartTypeIndexList,

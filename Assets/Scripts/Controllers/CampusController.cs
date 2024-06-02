@@ -16,6 +16,7 @@ public class CampusController : MonoBehaviour
     public Camera mainCamera;
     public Camera avatarCustomizationCamera;
     public Canvas mainCanvas;
+    public Canvas avatarCustomizationCanvas;
     private GameManager _gameManager;
     
     private static CampusController _instance;
@@ -67,12 +68,14 @@ public class CampusController : MonoBehaviour
             mainCamera.gameObject.SetActive(false);
             avatarCustomizationCamera.gameObject.SetActive(true);
             mainCanvas.gameObject.SetActive(false);
+            avatarCustomizationCanvas.gameObject.SetActive(true);
         }
         else
         {
             mainCamera.gameObject.SetActive(true);
             avatarCustomizationCamera.gameObject.SetActive(false);
             mainCanvas.gameObject.SetActive(true);
+            avatarCustomizationCanvas.gameObject.SetActive(false);
         }
     }
 

@@ -34,19 +34,22 @@ public class PlayerCustomization : MonoBehaviour
 { 
     //private string PLAYER_PREFS_SAVE = "PlayerCustomization";        
     [SerializeField] private BodyPartData[] bodyPartDataArray;
-    private BodyPartData _bodyPartData;
+    private BodyPartData _bodyData;
+    private BodyPartData _headData;
     private Mesh _firstHeadMesh;
     private Mesh _firstBodyMesh;
 
-    private void Awake()
+    private void OnEnable()
     {
         if (PlayerPrefs.HasKey(PlayerPrefsKeys.PlayerCustomization.ToString()))
         {
             LoadAvatar();
         }
 
-        _firstBodyMesh = bodyPartDataArray[0].skinnedMeshRenderer.sharedMesh;
-        _firstHeadMesh = bodyPartDataArray[1].skinnedMeshRenderer.sharedMesh;
+        _bodyData = bodyPartDataArray[0];
+        _headData = bodyPartDataArray[1];
+        _firstBodyMesh = _bodyData.skinnedMeshRenderer.sharedMesh;
+        _firstHeadMesh = _headData.skinnedMeshRenderer.sharedMesh;
     }
 
     public void ChangeBodyPart(BodyPartType bodyPartType, bool forward ){
@@ -75,7 +78,14 @@ public class PlayerCustomization : MonoBehaviour
        
          // Imposta la prossima mesh
          bodyPartData.skinnedMeshRenderer.sharedMesh = bodyPartData.meshArray[nextIndex];
-         _bodyPartData = bodyPartData;
+         if (bodyPartType == BodyPartType.Body)
+         {
+             _bodyData = bodyPartData;
+         }
+         else
+         {
+             _headData = bodyPartData;
+         }
     }
 
     public void LoadAvatar()
@@ -91,7 +101,7 @@ public class PlayerCustomization : MonoBehaviour
 
     public void SaveBodyPartData()
     {
-        PlayerPrefsManager.SaveAvatar(_bodyPartData);
+        PlayerPrefsManager.SaveAvatar(_bodyData, _headData);
     }
 
     public void ResetBodyPartData()

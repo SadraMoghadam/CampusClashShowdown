@@ -11,6 +11,7 @@ public enum SoundName
     CampusArea,
     ClashArena,
     PauseMenu,
+    SettingsMenu
 }
 
 /// <summary>
