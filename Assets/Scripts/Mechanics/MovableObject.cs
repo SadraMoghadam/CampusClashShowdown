@@ -12,6 +12,7 @@ public enum AxisMovementType
 
 public class MovableObject : NetworkBehaviour
 {
+    public int id = 0;
     [SerializeField] private AxisMovementType axisMovementType;
     // [SerializeField] private float moveSpeed = 1f;
     // [SerializeField] private Vector3 initPosition;

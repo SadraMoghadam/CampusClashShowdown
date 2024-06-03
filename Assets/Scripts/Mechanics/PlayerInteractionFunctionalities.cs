@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -12,7 +13,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     [SerializeField] private LayerMask layerMaskInteract;
     [SerializeField] private float pushCooldownTime = 2f;
     [SerializeField] private float conveyorBeltStopButtonCoolDown = 5;
-    [SerializeField ]private PlayerUI playerUI;
+    [SerializeField] private PlayerUI playerUI;
     private bool _isInPickableArea = false;
     private bool _isInPushablePositiveArea = false;
     private bool _isInPushableNegativeArea = false;
@@ -212,10 +213,15 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
 
     private void Interact()
     {
+        HideKeyBindingHelper();
+        HideAllKeyBindings();
+        
         if (_isObjectPickedUp)
         {
             if (_isInDeliveryArea)
             {
+                ShowKeyBindingHelperByType(KeyBindingType.DeliveryArea);
+                ShowKeyBindingByType(KeyBindingType.DeliveryArea);
                 // Drop the object
                 if (Input.GetKeyDown(_interactKey))
                 {
@@ -224,6 +230,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             }
             else
             {
+                ShowKeyBindingHelperByType(KeyBindingType.DropBox);
                 // Drop and destroy the object
                 if (Input.GetKeyDown(_interactKey))
                 {
@@ -235,6 +242,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         {
             if (_isInPickableArea)
             {
+                ShowKeyBindingHelperByType(KeyBindingType.PickableArea);
+                ShowKeyBindingByType(KeyBindingType.PickableArea);
                 // Pick up the object
                 if (Input.GetKeyDown(_interactKey))
                 {
@@ -244,17 +253,21 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             
             else if (_isInBlockButtonArea)
             {
-                    if (Input.GetKeyDown(_interactKey))
-                    {
-                        Press();
-                        _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
-                    }
+                ShowKeyBindingHelperByType(KeyBindingType.BlockButtonArea);
+                ShowKeyBindingByType(KeyBindingType.BlockButtonArea);
+                if (Input.GetKeyDown(_interactKey))
+                {
+                    Press();
+                    _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
+                }
             }
             
             else if (_isInConveyorButtonArea)
             {
                 if (_clashSceneUI.isAbleToPress)
                 {
+                    ShowKeyBindingHelperByType(KeyBindingType.ConveyorButtonArea);
+                    ShowKeyBindingByType(KeyBindingType.ConveyorButtonArea);
                     if (Input.GetKeyDown(_interactKey))
                     {
                         Press();
@@ -267,6 +280,9 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             
             else if (_isInPushablePositiveArea)
             {
+                MovableObject movableObject = _colliderTransform.GetComponent<MovableObject>();
+                ShowKeyBindingByType(KeyBindingType.PushAndPullArea, movableObject.id);
+                ShowKeyBindingHelperByType(KeyBindingType.PushAndPullArea);
                 if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
                 {
                     SetMovableObjectAsParent(_colliderTransform.transform);
@@ -300,6 +316,9 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             
             else if (_isInPushableNegativeArea)
             {
+                MovableObject movableObject = _colliderTransform.GetComponent<MovableObject>();
+                ShowKeyBindingByType(KeyBindingType.PushAndPullArea, movableObject.id);
+                ShowKeyBindingHelperByType(KeyBindingType.PushAndPullArea);
                 if (Input.GetKeyDown(_pushKey) || Input.GetKeyDown(_pullKey))
                 {
                     SetMovableObjectAsParent(_colliderTransform.transform);
@@ -492,7 +511,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         
     }
     
-    public void DropDown()
+    private void DropDown()
     {
         if(!IsLocalPlayer)
             return;
@@ -504,7 +523,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     }
     
     
-    public void DropDownAndDestroy()
+    private void DropDownAndDestroy()
     {
         if(!IsLocalPlayer)
             return;
@@ -515,9 +534,36 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     }
     
 
-    public void Press()
+    private void Press()
     {
         PressServerRpc();
+    }
+
+    private void HideAllKeyBindings()
+    {
+        _clashArenaController.keyBindingUis.ForEach(keyBindingUi => keyBindingUi.Hide());
+    }
+
+    private void ShowKeyBindingByType(KeyBindingType type, int id = -1)
+    {
+        if (id == -1)
+        {
+            _clashArenaController.keyBindingUis.First(keyBindingUi => keyBindingUi.type == type).Show();   
+        }
+        else
+        {
+            _clashArenaController.keyBindingUis.First(keyBindingUi => keyBindingUi.type == type && keyBindingUi.id == id).Show();
+        }
+    }
+    
+    private void HideKeyBindingHelper()
+    {
+        _clashArenaController.keyBindingHelperUi.Hide();
+    }
+
+    private void ShowKeyBindingHelperByType(KeyBindingType type)
+    {
+        _clashArenaController.keyBindingHelperUi.Show(type);
     }
 
     [ServerRpc(RequireOwnership = false)]
