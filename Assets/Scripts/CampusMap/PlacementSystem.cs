@@ -74,6 +74,7 @@ public class PlacementSystem : MonoBehaviour
         buildingState = new RemovingState(database, grid, preview, buildingsData, objectPlacer);
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
+       
     } 
 
     private void PlaceStructure()
@@ -86,6 +87,7 @@ public class PlacementSystem : MonoBehaviour
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
         buildingState.OnAction(gridPosition);
+        StopPlacement();
 
     }
 

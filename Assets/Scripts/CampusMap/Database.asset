@@ -13,11 +13,23 @@ MonoBehaviour:
   m_Name: Database
   m_EditorClassIdentifier: 
   objectsData:
-  - <Name>k__BackingField: building-sample-tower
+  - <Name>k__BackingField: skyscraperC
+    <ID>k__BackingField: 0
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: e1027757d4f8fb64ca8bb67063a9b808, type: 3}
+  - <Name>k__BackingField: low_buildingH
     <ID>k__BackingField: 1
     <Size>k__BackingField: {x: 1, y: 1}
-    <Prefab>k__BackingField: {fileID: 2469728991745747664, guid: 0279550e9893a0c46a9ef53b47979031, type: 3}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 99bdadf04dca3f24f88a9fe9499e8c43, type: 3}
   - <Name>k__BackingField: largeBuildingA
     <ID>k__BackingField: 2
     <Size>k__BackingField: {x: 2, y: 1}
     <Prefab>k__BackingField: {fileID: 2052336819297791323, guid: b0d63af15cb1dfe409388ab065c88de9, type: 3}
+  - <Name>k__BackingField: small_buildingF
+    <ID>k__BackingField: 3
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 8ccf71395c6bd234aa057708905f3025, type: 3}
+  - <Name>k__BackingField: small_buildingE
+    <ID>k__BackingField: 4
+    <Size>k__BackingField: {x: 2, y: 1}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 794bbcb97a048be418c4a2f2ad7d3934, type: 3}
