@@ -15,6 +15,7 @@ public class PlayerDisconnectUI : MonoBehaviour {
         playAgainButton.onClick.AddListener(() => {
             NetworkLobby.Instance.LeaveLobby();
             NetworkManager.Singleton.Shutdown();
+            MultiplayerController.Instance.Restart();
             GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
     }

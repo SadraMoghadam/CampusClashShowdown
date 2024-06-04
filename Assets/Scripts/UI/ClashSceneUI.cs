@@ -18,7 +18,6 @@ public class ClashSceneUI : MonoBehaviour
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private Button settingsButton;
     [SerializeField] private SettingsClashUI settingsClashUI;
-    [SerializeField] private GameObject KeyBindingHelperUI;
     
 
     private ClashArenaController _clashArenaController;

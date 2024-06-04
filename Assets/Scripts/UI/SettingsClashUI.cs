@@ -1,14 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsUI : MonoBehaviour
+public class SettingsClashUI : MonoBehaviour
 {
     
     [SerializeField] private Button closeButton;
+    [SerializeField] private Button keyBindingsButton;
     [SerializeField] private Button quitButton;
+    [SerializeField] private GameObject KeyBindingsUIGO;
     
     private GameManager _gameManager;
 
@@ -20,38 +23,21 @@ public class SettingsUI : MonoBehaviour
             Hide();
         });
         
+        keyBindingsButton.onClick.AddListener(() =>
+        {
+            KeyBindingsUIGO.SetActive(true);
+        });
+        
         quitButton.onClick.AddListener(() =>
         {
-#if UNITY_STANDALONE
-            Application.Quit();
-#endif
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#endif
+            NetworkLobby.Instance.LeaveLobby();
+            NetworkManager.Singleton.Shutdown();
+            MultiplayerController.Instance.Restart();
+            GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
-    }
-
-    private void OnEnable()
-    {
-        // _gameManager.AudioManager.play(SoundName.SettingsMenu);
         
     }
-    //
-    // private void OnGraphicsClicked()
-    // {
-    //     
-    // }
-    //
-    // private void OnAudioClicked()
-    // {
-    //     
-    // }
-    //
-    // private void OnControlsClicked()
-    // {
-    //     
-    // }
-    //
+    
     private void Hide()
     {
         gameObject.SetActive(false);

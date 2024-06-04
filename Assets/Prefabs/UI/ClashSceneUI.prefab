@@ -1751,9 +1751,8 @@ MonoBehaviour:
   team2Background: {fileID: 1573227262495342424}
   timerImage: {fileID: 711345147003661653}
   timerText: {fileID: 2257958303996776106}
-  settingsButton: {fileID: 0}
+  settingsButton: {fileID: 9193406135658582841}
   settingsClashUI: {fileID: 0}
-  KeyBindingHelperUI: {fileID: 0}
   isAbleToPress: 0
 --- !u!1 &5379188866829175418
 GameObject:
@@ -1995,8 +1994,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279095039
-  m_fontColor: {r: 1, g: 0.8078432, b: 0.050980397, a: 1}
+    rgba: 4292978460
+  m_fontColor: {r: 0.10980393, g: 0.654902, b: 0.882353, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
