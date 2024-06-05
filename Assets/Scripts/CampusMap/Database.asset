@@ -17,10 +17,10 @@ MonoBehaviour:
     <ID>k__BackingField: 0
     <Size>k__BackingField: {x: 1, y: 1}
     <Prefab>k__BackingField: {fileID: 919132149155446097, guid: e1027757d4f8fb64ca8bb67063a9b808, type: 3}
-  - <Name>k__BackingField: low_buildingH
+  - <Name>k__BackingField: skyscraperE
     <ID>k__BackingField: 1
     <Size>k__BackingField: {x: 1, y: 1}
-    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 99bdadf04dca3f24f88a9fe9499e8c43, type: 3}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 411cd05685625e34396022f20b0e7c9c, type: 3}
   - <Name>k__BackingField: largeBuildingA
     <ID>k__BackingField: 2
     <Size>k__BackingField: {x: 2, y: 1}
