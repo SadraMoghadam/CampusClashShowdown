@@ -42,7 +42,7 @@ public class CameraDrag : MonoBehaviour
         }
           if (isDragging)
         {
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, smoothSpeed * Time.deltaTime);
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, targetPosition, smoothSpeed * Time.fixedDeltaTime);
         }
     }
 
