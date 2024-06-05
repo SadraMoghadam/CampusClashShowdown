@@ -31,7 +31,7 @@ public class RemovingState : IBuildingState
     public void OnAction(Vector3Int gridPosition)
     {
         GridData selectedData = null;
-        if (buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one) == false)
+        if (buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one, false) == false)
         {
             selectedData = buildingData;
         }
@@ -48,17 +48,17 @@ public class RemovingState : IBuildingState
             objectPlacer.RemoveObjectAt(gameObjectIndex);
         }
         Vector3 cellPosition = grid.CellToWorld(gridPosition);
-        previewSystem.UpdatePosition(cellPosition, CheckIfSelectionIsValid(gridPosition));
+        previewSystem.UpdatePosition(cellPosition, CheckIfSelectionIsValid(gridPosition, false));
     }
 
-    private bool CheckIfSelectionIsValid(Vector3Int gridPosition)
+    private bool CheckIfSelectionIsValid(Vector3Int gridPosition, Boolean building)
     {
-        return !(buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one));
+        return !(buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one, building));
     }
 
     public void UpdateState(Vector3Int gridPosition)
     {
-        bool validity = CheckIfSelectionIsValid(gridPosition);
+        bool validity = CheckIfSelectionIsValid(gridPosition, false);
         previewSystem.UpdatePosition(grid.GetCellCenterWorld(gridPosition) - new Vector3(-0.1f, 0.4f, 0.1f), validity);
         /*if (database.objectsData[gameObjectIndex].Size.x == 1)
         {

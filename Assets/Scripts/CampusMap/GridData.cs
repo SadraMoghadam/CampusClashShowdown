@@ -71,31 +71,48 @@ public class GridData
         }
     }
 
-    public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize)
+    public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize, Boolean building)
     {
         if (roadPositions.Count == 0)
         {
             InstantiateRoadPositions();
         }
-        List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
-        int[] index = { -1, -1, 0, -1, +1, 0, 0, +1, +1, -1 };
-        foreach (var pos in positionToOccupy)
+        if(building)
         {
-            for(int i = 0; i < index.Length - 1; i++)
+            List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
+            int[] index = { -1, -1, 0, -1, +1, 0, 0, +1, +1, -1 };
+            foreach (var pos in positionToOccupy)
             {
-                Vector3Int position = new Vector3Int(pos.x + index[i], pos.y + index[i + 1]);
-                if (placedObjects.ContainsKey(position))
+                for (int i = 0; i < index.Length - 1; i++)
                 {
+                    Vector3Int position = new Vector3Int(pos.x + index[i], pos.y + index[i + 1]);
+                    if (placedObjects.ContainsKey(position))
+                    {
+                        return false;
+                    }
+                }
+                if (roadPositions.Contains(pos))
+                {
+
                     return false;
                 }
+
             }
-            if(roadPositions.Contains(pos))
+        }
+        else
+        {
+            List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
+            if (roadPositions.Contains(positionToOccupy[0]))
             {
-                
+
+                return true;
+            }
+            if (placedObjects.ContainsKey(positionToOccupy[0]))
+            {
                 return false;
             }
-           
         }
+        
         
         return true;
     }

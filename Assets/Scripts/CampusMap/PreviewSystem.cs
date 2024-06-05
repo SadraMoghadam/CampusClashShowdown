@@ -25,7 +25,7 @@ public class PreviewSystem : MonoBehaviour
     internal void StartShowingRemovePreview()
     {
         cellIndicator.SetActive(true);
-        PrepareCursor(Vector2Int.one);
+        PrepareCursor(Vector2Int.one, false);
         ApplyFeedbackToCursor(false);
     }
 
@@ -33,15 +33,23 @@ public class PreviewSystem : MonoBehaviour
     {
         previewObject = Instantiate(prefab);
         PreparePreview(previewObject);
-        PrepareCursor(size);
+        PrepareCursor(size, true);
         cellIndicator.SetActive(true);
     }
 
-    private void PrepareCursor(Vector2Int size)
+    private void PrepareCursor(Vector2Int size, Boolean building)
     {
-        if (size.x > 0 || size.y >0)
+        if (building == true)
         {
-            cellIndicator.transform.localScale = new Vector3(size.x + 2, 3, size.y + 2);
+            if (size.x > 0 || size.y > 0)
+            {
+                cellIndicator.transform.localScale = new Vector3(size.x + 2, 3, size.y + 2);
+                cellIndicatorRenderer.material.mainTextureScale = size;
+            }
+        }
+        else
+        {
+            cellIndicator.transform.localScale = new Vector3(size.x, 1, size.y);
             cellIndicatorRenderer.material.mainTextureScale = size;
         }
     }

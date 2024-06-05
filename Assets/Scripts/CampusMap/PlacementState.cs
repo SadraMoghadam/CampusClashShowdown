@@ -43,7 +43,7 @@ public class PlacementState : IBuildingState
 
     public void OnAction(Vector3Int gridPosition)
     {
-        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex, true);
         if (placementValidity == false)
             return;
 
@@ -58,15 +58,15 @@ public class PlacementState : IBuildingState
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), false);
     }
 
-    public bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex)
+    public bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex, bool building)
     {
         GridData selectedData = buildingData;
-        return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size);
+        return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size, building);
     }
 
     public void UpdateState(Vector3Int gridPosition)
     {
-        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex, true);
 
         if (database.objectsData[selectedObjectIndex].Size.x == 1)
         {
