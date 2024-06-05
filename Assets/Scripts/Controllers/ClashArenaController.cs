@@ -60,7 +60,9 @@ public class ClashArenaController : NetworkBehaviour
             _instance = this;
         }
         playerReadyDictionary = new Dictionary<ulong, bool>();
+        GameManager.Instance.AudioManager.Play(SoundName.ClashTheme);
     }
+
     
     
     public override void OnNetworkSpawn() {

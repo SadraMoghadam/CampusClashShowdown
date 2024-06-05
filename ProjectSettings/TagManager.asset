@@ -18,6 +18,7 @@ TagManager:
   - ObjectEntryArea
   - BlockButton
   - ConveyorButton
+  - Map
   layers:
   - Default
   - TransparentFX
