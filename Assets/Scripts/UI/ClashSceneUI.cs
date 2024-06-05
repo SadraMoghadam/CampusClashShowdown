@@ -16,8 +16,8 @@ public class ClashSceneUI : MonoBehaviour
     [SerializeField] private Image team2Background;
     [SerializeField] private Image timerImage;
     [SerializeField] private TMP_Text timerText;
-
-
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private SettingsClashUI settingsClashUI;
     
 
     private ClashArenaController _clashArenaController;
@@ -44,7 +44,10 @@ public class ClashSceneUI : MonoBehaviour
         speedPowerUp.gameObject.SetActive(false);
         strengthPowerUp.gameObject.SetActive(false);
         isAbleToPress = true;
-        
+        settingsButton.onClick.AddListener(() =>
+        {
+            settingsClashUI.gameObject.SetActive(true);
+        });
     }
 
     private void Update() {
@@ -112,4 +115,6 @@ public class ClashSceneUI : MonoBehaviour
         else if(slider.name == strengthPowerUp.name)
             StopCoroutine(_strengthPowerUpCR);
     }
+    
+    
 }

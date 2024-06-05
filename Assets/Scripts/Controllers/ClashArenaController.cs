@@ -16,6 +16,8 @@ public class ClashArenaController : NetworkBehaviour
     public Transform boxPrefab;
     public List<Transform> resourceDeliveryPathPoints;
     public Transform resourceBoxPrefab;
+    public List<KeyBindingUI> keyBindingUis;
+    public KeyBindingHelperUI keyBindingHelperUi;
     private static ClashArenaController _instance;
     public static ClashArenaController Instance => _instance;
     [SerializeField] private Transform playerPrefab;
@@ -27,8 +29,8 @@ public class ClashArenaController : NetworkBehaviour
     private NetworkVariable<State> state = new NetworkVariable<State>(State.WaitingToStart);
     private bool isLocalPlayerReady;
     private NetworkVariable<float> countdownToStartTimer = new NetworkVariable<float>(3f);
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(3f);
-    private float gamePlayingTimerMax = 3f;
+    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(180f);
+    private float gamePlayingTimerMax = 180f;
     private bool isLocalGamePaused = false;
     private Dictionary<ulong, bool> playerReadyDictionary;
     private bool autoTestGamePausedState;

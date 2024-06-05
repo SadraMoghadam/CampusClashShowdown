@@ -71,6 +71,13 @@ public class AvatarEndGame : MonoBehaviour
     }
 
     private void OnDestroy() {
-        MultiplayerController.Instance.OnPlayerDataNetworkListChanged -= MultiplayerController_OnPlayerDataNetworkListChanged;
+        try
+        {
+            MultiplayerController.Instance.OnPlayerDataNetworkListChanged -= MultiplayerController_OnPlayerDataNetworkListChanged;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 }

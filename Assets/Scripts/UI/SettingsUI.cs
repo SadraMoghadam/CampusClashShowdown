@@ -8,6 +8,7 @@ public class SettingsUI : MonoBehaviour
 {
     
     [SerializeField] private Button closeButton;
+    [SerializeField] private Button quitButton;
     
     private GameManager _gameManager;
 
@@ -17,6 +18,16 @@ public class SettingsUI : MonoBehaviour
         closeButton.onClick.AddListener(() =>
         {
             Hide();
+        });
+        
+        quitButton.onClick.AddListener(() =>
+        {
+#if UNITY_STANDALONE
+            Application.Quit();
+#endif
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
         });
     }
 

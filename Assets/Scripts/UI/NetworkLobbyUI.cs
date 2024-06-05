@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,8 @@ public class NewBehaviourScript : MonoBehaviour
     {
         mainMenuButton.onClick.AddListener(() => {
             NetworkLobby.Instance.LeaveLobby();
-            // GameManager.LoadScene(GameManager.Scene.MainMenuScene);
+            NetworkManager.Singleton.Shutdown();
+            GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
         createLobbyButton.onClick.AddListener(() => {
             lobbyCreateUI.Show();
