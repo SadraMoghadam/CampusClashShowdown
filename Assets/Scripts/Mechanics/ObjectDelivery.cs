@@ -96,12 +96,14 @@ public class ObjectDelivery : NetworkBehaviour
     {
         if (other.CompareTag("ObjectDestroyingArea"))
         {
+            GameManager.Instance.AudioManager.Instantplay(SoundName.DestroyedBox, transform.position);
             DestroyObjectServerRpc();
             // StartCoroutine(DestroyObjectProcess());
         }
         
         if (other.CompareTag("ObjectDeliveryArea"))
         {
+            GameManager.Instance.AudioManager.Instantplay(SoundName.BoxDelivered, transform.position);
             ResourceObjectDelivered();
             // StartCoroutine(DestroyObjectProcess());
         }

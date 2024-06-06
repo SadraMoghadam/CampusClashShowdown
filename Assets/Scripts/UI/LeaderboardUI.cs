@@ -20,6 +20,7 @@ public class LeaderboardUI : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.Instance.AudioManager.ChangeMusicVolume(.3f);
         GameManager.Instance.LeaderboardManager.FetchAndDisplayLeaderboard(this);
     }
 
@@ -31,6 +32,7 @@ public class LeaderboardUI : MonoBehaviour
 
     private void Hide() 
     {
+        GameManager.Instance.AudioManager.ChangeMusicVolume(1);
         gameObject.SetActive(false);
     }
 }

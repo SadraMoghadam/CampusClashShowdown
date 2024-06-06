@@ -14,7 +14,6 @@ public class SettingsUI : MonoBehaviour
 
     private void Awake()
     {
-        
         closeButton.onClick.AddListener(() =>
         {
             Hide();
@@ -33,27 +32,12 @@ public class SettingsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // _gameManager.AudioManager.play(SoundName.SettingsMenu);
-        
+        GameManager.Instance.AudioManager.ChangeMusicVolume(.6f);
     }
-    //
-    // private void OnGraphicsClicked()
-    // {
-    //     
-    // }
-    //
-    // private void OnAudioClicked()
-    // {
-    //     
-    // }
-    //
-    // private void OnControlsClicked()
-    // {
-    //     
-    // }
-    //
+    
     private void Hide()
     {
+        GameManager.Instance.AudioManager.ChangeMusicVolume(1);
         gameObject.SetActive(false);
     }
 }

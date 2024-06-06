@@ -101,6 +101,8 @@ public class ClashArenaController : NetworkBehaviour
                 gamePlayingTimer.Value -= Time.deltaTime;
                 if (gamePlayingTimer.Value < 0f) {
                     state.Value = State.GameOver;
+                    GameManager.Instance.AudioManager.Stop(SoundName.ClashTheme);
+                    GameManager.Instance.AudioManager.Instantplay(SoundName.GameOver, transform.position);
                     endGameCamera.gameObject.SetActive(true);
                 }
                 break;

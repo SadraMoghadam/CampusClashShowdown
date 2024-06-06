@@ -98,6 +98,11 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         
         GatherInput();
         Look();
+        
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _gameManager.AudioManager.Instantplay(SoundName.Sprint, transform.position);
+        }
     }
 
     private void FixedUpdate() {
@@ -150,6 +155,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         {
             actualSpeed = runSpeed;  
         }
+
         _rb.MovePosition(transform.position + transform.forward * (_input.normalized.magnitude * actualSpeed * Time.deltaTime));
     }
 

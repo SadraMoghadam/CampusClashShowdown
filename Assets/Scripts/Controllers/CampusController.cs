@@ -34,7 +34,7 @@ public class CampusController : MonoBehaviour
 
     private async void Start()
     {
-        _gameManager.AudioManager.Play(SoundName.CampusTheme);
+        GameManager.Instance.AudioManager.Play(SoundName.CampusTheme);
         bool isGameStarted = PlayerPrefsManager.GetBool(PlayerPrefsKeys.GameStarted, false);
         if (!isGameStarted)
         {

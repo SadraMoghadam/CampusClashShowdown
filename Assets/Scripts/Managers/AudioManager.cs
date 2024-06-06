@@ -19,7 +19,8 @@ public enum SoundName
     BoxDelivered,
     PowerUpGained,
     PowerUpFinished,
-    EndGame,
+    GameOver,
+    GatesMovement,
 }
 
 /// <summary>
@@ -30,7 +31,7 @@ public class Sound
 {
     public SoundName name;
     public AudioClip clip;
-    [Range(0f, 1f)] public float volume;
+    [Range(0f, 1.5f)] public float volume;
     [Range(.1f, 3f)] public float pitch;
     public bool loop;
     public AudioSource source;
@@ -73,7 +74,7 @@ public class AudioManager : MonoBehaviour
         {
             if(sounds[i].source == null)
                 continue;
-            sounds[i].source.volume = sounds[i].volume * coefficient;
+            sounds[i].source.volume = coefficient;
         }
     }
 
@@ -81,9 +82,7 @@ public class AudioManager : MonoBehaviour
     {
         for (int i = 2; i < sounds.Length; i++)
         {
-            if(sounds[i].source == null)
-                continue;
-            sounds[i].source.volume = sounds[i].volume * coefficient;
+            sounds[i].volume = coefficient;
         }
     }
     

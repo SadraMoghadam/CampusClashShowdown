@@ -174,6 +174,7 @@ public class MovableObject : NetworkBehaviour
     [ClientRpc]
     private void SetAnimationClientRpc(bool isInteger, bool isTrigger, int id, int value = 0)
     {
+        GameManager.Instance.AudioManager.Instantplay(SoundName.Dragging, transform.position);
         if (isInteger)
         {
             _animator.SetInteger(id, value);

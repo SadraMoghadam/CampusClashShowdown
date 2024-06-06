@@ -448,6 +448,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private void SetConveyorStopCooldownClientRpc(float cooldown)
     {
         // Execute this on all clients except the local one
+        GameManager.Instance.AudioManager.Instantplay(SoundName.PressingButton, transform.position);
         _clashSceneUI.SetConveyorStopCooldownSliderValue(cooldown);
     }
     
@@ -505,6 +506,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         _isObjectPickedUp = true;
         // _pickableObject = objectGeneratorTransform.GetComponent<PickableObjectGenerator>();
         // _pickableObject.Pick();
+        GameManager.Instance.AudioManager.Instantplay(SoundName.PickBox, transform.position);
         PickableObject.SpawnObject(_playerController);
         _holdingPickLayerWeight = 1;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
@@ -516,6 +518,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         if(!IsLocalPlayer)
             return;
         _isObjectPickedUp = false;
+        GameManager.Instance.AudioManager.Instantplay(SoundName.DropBox, transform.position);
         PickableObject.DestroyObject(_playerController.GetChild());
         _holdingPickLayerWeight = 0;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
@@ -528,6 +531,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         if(!IsLocalPlayer)
             return;
         _isObjectPickedUp = false;
+        GameManager.Instance.AudioManager.Instantplay(SoundName.DropBox, transform.position);
         PickableObject.DestroyObject(_playerController.GetChild());
         _holdingPickLayerWeight = 0;
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);

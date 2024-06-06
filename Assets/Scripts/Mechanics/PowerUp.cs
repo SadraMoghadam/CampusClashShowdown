@@ -53,6 +53,8 @@ public class PowerUp : NetworkBehaviour
     {
         SetPowerValue(powerUpMultiplierCoefficient);
         yield return new WaitForSeconds(powerUpTime);
+        if(_playerController.IsLocalPlayer)
+            GameManager.Instance.AudioManager.Instantplay(SoundName.PowerUpFinished, transform.position);
         SetPowerValue(1);
         StopAllCoroutines();
         DestroyPowerUpServerRpc();
@@ -93,6 +95,7 @@ public class PowerUp : NetworkBehaviour
     {
         if (!_playerController.IsLocalPlayer)
             return;
+        GameManager.Instance.AudioManager.Instantplay(SoundName.PowerUpGained, transform.position);
         switch (powerUpType)
         {
             case PowerUpType.Speed:

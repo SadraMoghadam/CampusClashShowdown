@@ -50,8 +50,12 @@ public class BlockButton : NetworkBehaviour
     private IEnumerator PressCR()
     {
         _blockPickableArea = !_blockPickableArea;
+        GameManager.Instance.AudioManager.Instantplay(SoundName.PressingButton, transform.position);
+        GameManager.Instance.AudioManager.Instantplay(SoundName.GatesMovement, transform.position);
+        yield return new WaitForSeconds(.05f);
+        GameManager.Instance.AudioManager.Instantplay(SoundName.GatesMovement, transform.position);
         PlayAnimationServerRpc(_blockPickableArea);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.9f);
         BlockArea(_blockPickableArea);
     }
     
