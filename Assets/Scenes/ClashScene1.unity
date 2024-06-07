@@ -1838,6 +1838,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3665945934267739985, guid: cc292fbecab09b34caa86a2b3adb4c68, type: 3}
+      propertyPath: uiCamera
+      value: 
+      objectReference: {fileID: 875425977}
+    - target: {fileID: 3665945934267739985, guid: cc292fbecab09b34caa86a2b3adb4c68, type: 3}
       propertyPath: rewardsUI
       value: 
       objectReference: {fileID: 50283091767807184}

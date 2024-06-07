@@ -13,6 +13,7 @@ public class GameOverUI : MonoBehaviour {
     [SerializeField] private Button rewardsButton;
     [SerializeField] private RewardsUI rewardsUI;
     [SerializeField] private Canvas mainCanvas;
+    [SerializeField] private Camera uiCamera;
 
 
     private void Awake() {
@@ -39,6 +40,7 @@ public class GameOverUI : MonoBehaviour {
     }
 
     private void Show() {
+        uiCamera.gameObject.SetActive(true);
         gameObject.SetActive(true);
         rewardsButton.Select();
     }

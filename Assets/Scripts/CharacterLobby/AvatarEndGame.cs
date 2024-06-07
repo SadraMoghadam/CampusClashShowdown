@@ -16,11 +16,6 @@ public class AvatarEndGame : MonoBehaviour
     
     private void Start() {
         MultiplayerController.Instance.OnPlayerDataNetworkListChanged += MultiplayerController_OnPlayerDataNetworkListChanged;
-        CharacterSelectReady.Instance.OnReadyChanged += CharacterSelectReady_OnReadyChanged;
-        UpdatePlayer();
-    }
-
-    private void CharacterSelectReady_OnReadyChanged(object sender, System.EventArgs e) {
         UpdatePlayer();
     }
 
@@ -39,9 +34,7 @@ public class AvatarEndGame : MonoBehaviour
             playerNameText.text = playerData.playerName.ToString();
             SetCharacterNameColor(playerIndex);
 
-        } else {
-            Hide();
-        }
+        } 
     }
 
     private void SetCharacterNameColor(int playerIndex)
