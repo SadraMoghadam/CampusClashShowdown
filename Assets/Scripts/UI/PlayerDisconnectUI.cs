@@ -27,7 +27,7 @@ public class PlayerDisconnectUI : MonoBehaviour {
     }
 
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
-        if(clientId == NetworkManager.Singleton.LocalClient.ClientId)
+        if(clientId == NetworkManager.Singleton.LocalClient.ClientId && !ClashArenaController.Instance.IsGameOver())
             Show();
         // Show();
     }

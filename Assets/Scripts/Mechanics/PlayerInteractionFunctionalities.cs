@@ -253,12 +253,15 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
             
             else if (_isInBlockButtonArea)
             {
-                ShowKeyBindingHelperByType(KeyBindingType.BlockButtonArea);
-                ShowKeyBindingByType(KeyBindingType.BlockButtonArea);
-                if (Input.GetKeyDown(_interactKey))
+                if (_colliderTransform.GetComponent<BlockButton>().isAbleToPress)
                 {
-                    Press();
-                    _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
+                    ShowKeyBindingHelperByType(KeyBindingType.BlockButtonArea);
+                    ShowKeyBindingByType(KeyBindingType.BlockButtonArea);
+                    if (Input.GetKeyDown(_interactKey))
+                    {
+                        Press();
+                        _colliderTransform.GetComponent<BlockButton>().BlockButtonBehavior();
+                    }
                 }
             }
             

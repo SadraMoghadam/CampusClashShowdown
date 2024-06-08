@@ -20,6 +20,8 @@ public class ObjectDelivery : NetworkBehaviour
     private NetworkVariable<bool> _isStopped;
 
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
+
+    private NetworkVariable<int> _teamId = new NetworkVariable<int>(0); 
     // private Vector3 _currentPosition; 
     // private Vector3 _previousPosition; 
 
@@ -97,8 +99,6 @@ public class ObjectDelivery : NetworkBehaviour
         if (other.CompareTag("ObjectDestroyingArea"))
         {
             GameManager.Instance.AudioManager.Instantplay(SoundName.DestroyedBox, transform.position);
-            Team enemyTeam = _teamCharacteristics.team == Team.Team1 ? Team.Team2 : Team.Team1;
-            ClashRewardCalculator.Instance.AddRewardByRewardType(enemyTeam, RewardType.BoxDestruction);
             DestroyObjectServerRpc();
             // StartCoroutine(DestroyObjectProcess());
         }
@@ -123,6 +123,8 @@ public class ObjectDelivery : NetworkBehaviour
     private void DestroyObjectClientRpc() 
     {
         StartCoroutine(DestroyObjectProcess());
+        Team team = _teamId.Value == 1 ? Team.Team2 : Team.Team1;
+        ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BoxDestruction);
     }
 
     private IEnumerator DestroyObjectProcess()
@@ -147,24 +149,26 @@ public class ObjectDelivery : NetworkBehaviour
     public void SetResourceObjectAttributes(TeamCharacteristicsScriptableObject teamCharacteristics)
     {
         _teamCharacteristics = teamCharacteristics;
+        _teamId.Value = teamCharacteristics.team == Team.Team1 ? 1 : 2;
         Color teamColor = teamCharacteristics.color;
         float r = teamColor.r;
         float g = teamColor.g;
         float b = teamColor.b;
-        SetResourceObjectAttributesServerRpc(r, g, b);
-        ClashRewardCalculator.Instance.AddRewardByRewardType(_teamCharacteristics.team, RewardType.BoxConveyorPlacement);
+        SetResourceObjectAttributesServerRpc(r, g, b, teamCharacteristics.team == Team.Team1 ? 1 : 2);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetResourceObjectAttributesServerRpc(float r, float g, float b)
+    private void SetResourceObjectAttributesServerRpc(float r, float g, float b, int teamId)
     {
-        SetResourceObjectAttributesClientRpc(r, g, b);
+        SetResourceObjectAttributesClientRpc(r, g, b, teamId);
     }
 
     [ClientRpc]
-    private void SetResourceObjectAttributesClientRpc(float r, float g, float b)
+    private void SetResourceObjectAttributesClientRpc(float r, float g, float b, int teamId)
     {
         GetComponent<Renderer>().material.color = new Color(r, g, b); // Set the color of boxes with respect to their team
+        Team team = teamId == 1 ? Team.Team1 : Team.Team2;
+        ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BoxConveyorPlacement);
 
     }
 

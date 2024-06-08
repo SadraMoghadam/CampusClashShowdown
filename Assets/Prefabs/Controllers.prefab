@@ -100,8 +100,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  minTimeToSpawnPrefab: 1
-  maxTimeToSpawnPrefab: 3
+  minTimeToSpawnPrefab: 40
+  maxTimeToSpawnPrefab: 50
   maxNumOfPowerUps: 3
 --- !u!114 &388614620448816564
 MonoBehaviour:

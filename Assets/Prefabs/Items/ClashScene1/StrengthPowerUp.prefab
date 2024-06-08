@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6903910135239292272}
   - component: {fileID: 4095114387124204230}
+  - component: {fileID: 5377116101845891956}
   - component: {fileID: 3756036790170304462}
   - component: {fileID: 8001409175381024613}
   - component: {fileID: 4993272256937551233}
-  - component: {fileID: 5377116101845891956}
   m_Layer: 0
   m_Name: StrengthPowerUp
   m_TagString: Untagged
@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.81, y: 0.5, z: 2.48}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.17, y: 0.17, z: 0.17}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -55,8 +55,29 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 5.9, y: 5.9, z: 5.9}
+  m_Center: {x: 0, y: 2.95, z: 0}
+--- !u!114 &5377116101845891956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6470741938982593441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 214173449
+  InScenePlacedSourceGlobalObjectIdHash: 2307897230
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &3756036790170304462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpType: 1
-  powerUpTime: 5
+  powerUpTime: 15
   powerUpMultiplierCoefficient: 2
 --- !u!23 &8001409175381024613
 MeshRenderer:
@@ -92,7 +113,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6538903991835684241, guid: 6b1ce3597c39e9c41b73ba9b348c0cef, type: 3}
+  - {fileID: 2100000, guid: 339748b4e32d10142ac4c71ad8086e28, type: 2}
+  - {fileID: 2100000, guid: 1cae10bd7ff32b34d9b227fd31726179, type: 2}
+  - {fileID: 2100000, guid: 1cae10bd7ff32b34d9b227fd31726179, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,25 +144,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6470741938982593441}
-  m_Mesh: {fileID: -2643173543783292932, guid: 81e8e673df8df3442adf5451b1cd0fc7, type: 3}
---- !u!114 &5377116101845891956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6470741938982593441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
+  m_Mesh: {fileID: -3142160206416209169, guid: bf559147019e4a648917405ce3df64d0, type: 3}

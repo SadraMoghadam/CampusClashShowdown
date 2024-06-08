@@ -31,8 +31,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.81, y: 0.5, z: 2.48}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -55,8 +55,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 6.8, y: 6.8, z: 6.8}
+  m_Center: {x: 0, y: 3.58, z: 0}
 --- !u!114 &8448121713954678865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,8 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1180894557
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2359987851
+  InScenePlacedSourceGlobalObjectIdHash: 1180894557
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerUpType: 0
-  powerUpTime: 6
+  powerUpTime: 12
   powerUpMultiplierCoefficient: 1.5
 --- !u!23 &8001409175381024613
 MeshRenderer:
@@ -113,7 +113,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3963241562183589234, guid: fcf7f01c8d8ceb74c8542da29dd0523f, type: 3}
+  - {fileID: 2100000, guid: d92f13431c3159a4bb0f0e95e25bb6f1, type: 2}
+  - {fileID: 2100000, guid: d92f13431c3159a4bb0f0e95e25bb6f1, type: 2}
+  - {fileID: 2100000, guid: afc9cab385c7ccb47ae7fd8e7633fe01, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,4 +144,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6470741938982593441}
-  m_Mesh: {fileID: -2643173543783292932, guid: 81e8e673df8df3442adf5451b1cd0fc7, type: 3}
+  m_Mesh: {fileID: 1855923187887352656, guid: a639f02dfd3d3944496bc5184a3df36e, type: 3}

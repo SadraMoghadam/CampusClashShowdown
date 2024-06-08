@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Team1
   m_EditorClassIdentifier: 
   id: 1
+  team: 0
   name: Mangiagalli
-  color: {r: 1, g: 0.75294125, b: 0.22352943, a: 1}
+  color: {r: 0.80574083, g: 0, b: 1, a: 1}
   maxPlayers: 2

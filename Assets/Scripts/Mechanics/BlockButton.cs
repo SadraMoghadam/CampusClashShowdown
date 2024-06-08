@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class BlockButton : NetworkBehaviour
 {
+    public bool isAbleToPress;
     [SerializeField] private Animator blockFencesAnimator;
     [SerializeField] private GameObject pickableArea;
     [SerializeField] private GameObject objectDeliveryArea;
@@ -20,6 +21,7 @@ public class BlockButton : NetworkBehaviour
         //     _instance = this;
         // }
         _blockPickableArea = false;
+        isAbleToPress = true;
         BlockArea(_blockPickableArea);
     }
 
@@ -50,12 +52,14 @@ public class BlockButton : NetworkBehaviour
     private IEnumerator PressCR()
     {
         _blockPickableArea = !_blockPickableArea;
+        isAbleToPress = false;
         GameManager.Instance.AudioManager.Instantplay(SoundName.PressingButton, transform.position);
         GameManager.Instance.AudioManager.Instantplay(SoundName.GatesMovement, transform.position);
         yield return new WaitForSeconds(.05f);
         GameManager.Instance.AudioManager.Instantplay(SoundName.GatesMovement, transform.position);
         PlayAnimationServerRpc(_blockPickableArea);
         yield return new WaitForSeconds(.9f);
+        isAbleToPress = true;
         BlockArea(_blockPickableArea);
     }
     

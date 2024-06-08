@@ -5,7 +5,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RewardsUI : NetworkBehaviour
+public class RewardsUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI boxesDeliveredText;
     [SerializeField] private TextMeshProUGUI boxesDestroyedText;
@@ -18,9 +18,9 @@ public class RewardsUI : NetworkBehaviour
 
     private void Awake() {
         playAgainButton.onClick.AddListener(() => {
-            NetworkLobby.Instance.LeaveLobby();
-            NetworkManager.Singleton.Shutdown();
-            MultiplayerController.Instance.Restart();
+            // NetworkLobby.Instance.LeaveLobby();
+            // NetworkManager.Singleton.Shutdown();
+            // MultiplayerController.Instance.Restart();
             GameManager.LoadScene(GameManager.Scene.CampusScene);
         });
 
@@ -29,14 +29,11 @@ public class RewardsUI : NetworkBehaviour
 
     private void CalculateRewards()
     {
-        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
-        
-        Team team = playerData.teamId == 1 ? Team.Team1 : Team.Team2;
-        boxesDeliveredText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(team, RewardType.BoxDelivery).ToString();
-        boxesDestroyedText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(team, RewardType.BoxDestruction).ToString();
-        boxesPlacedText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(team, RewardType.BoxConveyorPlacement).ToString();
-        beltMovementText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(team, RewardType.BeltMovement).ToString(); 
-        int totalReward = ClashRewardCalculator.Instance.CalculateRewards(team);
+        boxesDeliveredText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BoxDelivery).ToString();
+        boxesDestroyedText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BoxDestruction).ToString();
+        boxesPlacedText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BoxConveyorPlacement).ToString();
+        beltMovementText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BeltMovement).ToString(); 
+        int totalReward = ClashRewardCalculator.Instance.CalculateRewards();
         totalResourcesText.text = "+ " + totalReward;
     }
 

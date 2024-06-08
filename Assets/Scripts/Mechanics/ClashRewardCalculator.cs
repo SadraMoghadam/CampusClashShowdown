@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 
@@ -12,7 +13,7 @@ public enum RewardType
     BoxConveyorPlacement,
 }
 
-public class ClashRewardCalculator : MonoBehaviour
+public class ClashRewardCalculator : NetworkBehaviour
 {
     private Dictionary<Team, int> _totalBoxesDelivered;
     private Dictionary<Team, int> _totalBoxesDestroyed;
@@ -107,9 +108,50 @@ public class ClashRewardCalculator : MonoBehaviour
 
         return total;
     }
+    
+    public int GetTotalByRewardType(RewardType type)
+    {
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        
+        Team team = playerData.teamId == 1 ? Team.Team1 : Team.Team2;
+        int total = 0;
+        switch (type)
+        {
+            case RewardType.BoxDelivery:
+                total = _totalBoxesDelivered[team];
+                break;
+            case RewardType.BoxDestruction:
+                total = _totalBoxesDestroyed[team];
+                break;
+            case RewardType.BoxConveyorPlacement:
+                total = _totalBoxesPlacedOnConveyor[team];
+                break;
+            case RewardType.BeltMovement:
+                total = _totalBeltsMoved[team];
+                break;
+            default:
+                break;
+        }
+
+        return total;
+    }
 
     public int CalculateRewards(Team team)
     {
+        int totalReward = _totalBoxesDelivered[team] * _boxDeliveryRewardCoefficient +
+                          _totalBoxesDestroyed[team] * _boxDestructionRewardCoefficient +
+                          _totalBoxesPlacedOnConveyor[team] * _boxConveyorPlacementRewardCoefficient +
+                          _totalBeltsMoved[team] * _beltMovementRewardCoefficient;
+        int currentResources = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 0);
+        PlayerPrefsManager.SetInt(PlayerPrefsKeys.Resource, currentResources + totalReward);
+        return totalReward;
+    }
+    
+    public int CalculateRewards()
+    {
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        
+        Team team = playerData.teamId == 1 ? Team.Team1 : Team.Team2;
         int totalReward = _totalBoxesDelivered[team] * _boxDeliveryRewardCoefficient +
                           _totalBoxesDestroyed[team] * _boxDestructionRewardCoefficient +
                           _totalBoxesPlacedOnConveyor[team] * _boxConveyorPlacementRewardCoefficient +

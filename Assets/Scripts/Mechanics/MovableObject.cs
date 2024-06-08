@@ -19,7 +19,7 @@ public class MovableObject : NetworkBehaviour
     [SerializeField] private int initPosition; // Either 0, 1, or -1
     [SerializeField] private Transform childTransform;
     [SerializeField] private List<Collider> destroyingAreaColliders;
-    private int _objectCurrentPosition;
+    private NetworkVariable<int> _objectCurrentPosition = new NetworkVariable<int>(0);
     // private PlayerController _playerController;
     private FollowTransform _followTransform;
     private bool _isInPosition; // is the object in the first position
@@ -39,7 +39,7 @@ public class MovableObject : NetworkBehaviour
         }
         _followTransform = GetComponent<FollowTransform>();
         _animator = GetComponent<Animator>();
-        _objectCurrentPosition = initPosition;
+        _objectCurrentPosition.Value = initPosition;
         InitializeAnimation();
         // StartCoroutine(WaitForPlayerControllerInitialization());
     }
@@ -84,28 +84,33 @@ public class MovableObject : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void MoveServerRpc(int direction, int teamId)
     {
-        MoveObject(direction, teamId);
+        bool isMoved = MoveObject(direction);
         // Synchronize the movement with all clients
-        SetTransformClientRpc(childTransform.localPosition);
+        SetTransformClientRpc(childTransform.localPosition, isMoved, teamId);
     }
 
     [ClientRpc]
-    private void SetTransformClientRpc(Vector3 newPosition)
+    private void SetTransformClientRpc(Vector3 newPosition, bool isMoved, int teamId)
     {
         // Update the object's position on all clients
         childTransform.localPosition = newPosition;
+        if (isMoved)
+        {
+            Team team = teamId == 1 ? Team.Team1 : Team.Team2;
+            ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BeltMovement);
+        }
     }
 
-    private void MoveObject(int direction, int teamId)
+    private bool MoveObject(int direction)
     {
-        if ((_objectCurrentPosition == -1 && direction == -1) || 
-            (_objectCurrentPosition == 1 && direction == 1))
+        if ((_objectCurrentPosition.Value == -1 && direction == -1) || 
+            (_objectCurrentPosition.Value == 1 && direction == 1))
         {
-            return;
+            return false;
         }
 
-        _objectCurrentPosition += direction;
-        if (_objectCurrentPosition != 0)
+        _objectCurrentPosition.Value += direction;
+        if (_objectCurrentPosition.Value != 0)
         {
             SetDestroyingArea(true);
         }
@@ -114,9 +119,7 @@ public class MovableObject : NetworkBehaviour
             SetDestroyingArea(false);
         }
         TriggerAnimation(direction);
-        Team team = teamId == 1 ? Team.Team1 : Team.Team2;
-        ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BeltMovement);
-
+        return true;
     }
 
     private void SetDestroyingArea(bool flag)
