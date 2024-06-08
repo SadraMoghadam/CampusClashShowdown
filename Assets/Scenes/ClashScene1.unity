@@ -2952,6 +2952,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: RewardsUI
       objectReference: {fileID: 0}
+    - target: {fileID: 913569819783476316, guid: 5e8e138caf3fc884abf76643087db053, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3619242570161212973, guid: 5e8e138caf3fc884abf76643087db053, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 4161580917
+      objectReference: {fileID: 0}
+    - target: {fileID: 3619242570161212973, guid: 5e8e138caf3fc884abf76643087db053, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 254276061
+      objectReference: {fileID: 0}
     - target: {fileID: 4337149349218022439, guid: 5e8e138caf3fc884abf76643087db053, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2994,7 +3006,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4337149349218022439, guid: 5e8e138caf3fc884abf76643087db053, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -349.79
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4337149349218022439, guid: 5e8e138caf3fc884abf76643087db053, type: 3}
       propertyPath: m_LocalRotation.w

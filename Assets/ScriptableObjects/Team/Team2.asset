@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Team2
   m_EditorClassIdentifier: 
   id: 2
+  team: 1
   name: Golgi
   color: {r: 0.1745283, g: 1, b: 0.799297, a: 1}
   maxPlayers: 2

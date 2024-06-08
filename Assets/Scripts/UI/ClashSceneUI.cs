@@ -55,13 +55,13 @@ public class ClashSceneUI : MonoBehaviour
         timerText.text = ClashArenaController.Instance.GetRemainingTime().ToString();
     }
     
-    public void SetScore(int teamId, int score)
+    public void SetScore(Team team, int score)
     {
-        if (teamId == 1)
+        if (team == Team.Team1)
         {
             team1Score.text = score.ToString();
         }
-        else if (teamId == 2)
+        else if (team == Team.Team2)
         {
             team2Score.text = score.ToString();
         }

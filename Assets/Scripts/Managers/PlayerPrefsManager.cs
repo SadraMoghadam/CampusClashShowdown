@@ -13,6 +13,7 @@ public enum PlayerPrefsKeys
     Level,
     GameTimer,
     PlayerCustomization,
+    Resource,
 }
 
 /// <summary>

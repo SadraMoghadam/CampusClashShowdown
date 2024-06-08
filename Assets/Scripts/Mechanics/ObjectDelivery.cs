@@ -97,6 +97,8 @@ public class ObjectDelivery : NetworkBehaviour
         if (other.CompareTag("ObjectDestroyingArea"))
         {
             GameManager.Instance.AudioManager.Instantplay(SoundName.DestroyedBox, transform.position);
+            Team enemyTeam = _teamCharacteristics.team == Team.Team1 ? Team.Team2 : Team.Team1;
+            ClashRewardCalculator.Instance.AddRewardByRewardType(enemyTeam, RewardType.BoxDestruction);
             DestroyObjectServerRpc();
             // StartCoroutine(DestroyObjectProcess());
         }
@@ -150,6 +152,7 @@ public class ObjectDelivery : NetworkBehaviour
         float g = teamColor.g;
         float b = teamColor.b;
         SetResourceObjectAttributesServerRpc(r, g, b);
+        ClashRewardCalculator.Instance.AddRewardByRewardType(_teamCharacteristics.team, RewardType.BoxConveyorPlacement);
     }
 
     [ServerRpc(RequireOwnership = false)]

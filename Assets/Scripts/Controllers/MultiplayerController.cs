@@ -203,12 +203,14 @@ public class MultiplayerController : NetworkBehaviour
         if (teamId == 1)
         {
             _team1Score++;
-            ClashSceneUI.Instance.SetScore(1, _team1Score);
+            ClashSceneUI.Instance.SetScore(Team.Team1, _team1Score);
+            ClashRewardCalculator.Instance.AddRewardByRewardType(Team.Team1, RewardType.BoxDelivery);
         }
         else if (teamId == 2)
         {
             _team2Score++;
-            ClashSceneUI.Instance.SetScore(2, _team2Score);
+            ClashSceneUI.Instance.SetScore(Team.Team2, _team2Score);
+            ClashRewardCalculator.Instance.AddRewardByRewardType(Team.Team2, RewardType.BoxDelivery);
         }
         Debug.Log("Team1: " + _team1Score + " - Team2: " + _team2Score);
     }

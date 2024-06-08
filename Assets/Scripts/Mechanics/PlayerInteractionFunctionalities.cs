@@ -470,7 +470,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private void PushAndPull(Transform objectTransform)
     {
         MovableObject movableObject = objectTransform.GetComponent<MovableObject>();
-        movableObject.Move(_moveObjectDirection);
+        movableObject.Move(_moveObjectDirection, _playerController.GetTeamId());
     }
 
     public void SetMovableObjectAsParent(Transform movableObjectParent) {

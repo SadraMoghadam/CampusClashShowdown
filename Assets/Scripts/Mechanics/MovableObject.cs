@@ -59,7 +59,7 @@ public class MovableObject : NetworkBehaviour
     /// player (enemies in the opposite direction of allies)  
     /// </summary>
     /// <param name="direction">Can be either 1 or -1 depending on the object and the player team</param>
-    public void Move(int direction)
+    public void Move(int direction, int teamId)
     {
         // if (_playerController == null)
         // {
@@ -71,20 +71,20 @@ public class MovableObject : NetworkBehaviour
         // // Apply the movement to the object's position
         // transform.Translate(movement);
         // MoveServerRpc(direction);
-        StartCoroutine(MoveCR(direction));
+        StartCoroutine(MoveCR(direction, teamId));
     }
 
-    private IEnumerator MoveCR(int direction)
+    private IEnumerator MoveCR(int direction, int teamId)
     {
         yield return new WaitForSeconds(0.2f);
-        MoveServerRpc(direction);   
+        MoveServerRpc(direction, teamId);   
         StopAllCoroutines();
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void MoveServerRpc(int direction)
+    private void MoveServerRpc(int direction, int teamId)
     {
-        MoveObject(direction);
+        MoveObject(direction, teamId);
         // Synchronize the movement with all clients
         SetTransformClientRpc(childTransform.localPosition);
     }
@@ -96,7 +96,7 @@ public class MovableObject : NetworkBehaviour
         childTransform.localPosition = newPosition;
     }
 
-    private void MoveObject(int direction)
+    private void MoveObject(int direction, int teamId)
     {
         if ((_objectCurrentPosition == -1 && direction == -1) || 
             (_objectCurrentPosition == 1 && direction == 1))
@@ -114,6 +114,8 @@ public class MovableObject : NetworkBehaviour
             SetDestroyingArea(false);
         }
         TriggerAnimation(direction);
+        Team team = teamId == 1 ? Team.Team1 : Team.Team2;
+        ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BeltMovement);
 
     }
 

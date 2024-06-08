@@ -6,6 +6,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+
+public enum Team
+{
+    Team1,
+    Team2
+}
+
 /// <summary>
 /// This Class can be used as a singleton and has the control info and functionalities that will be needed in
 /// the ClashArena scenes 
@@ -29,8 +36,8 @@ public class ClashArenaController : NetworkBehaviour
     private NetworkVariable<State> state = new NetworkVariable<State>(State.WaitingToStart);
     private bool isLocalPlayerReady;
     private NetworkVariable<float> countdownToStartTimer = new NetworkVariable<float>(3f);
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(180f);
-    private float gamePlayingTimerMax = 180f;
+    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(60f);
+    private float gamePlayingTimerMax = 60f;
     private bool isLocalGamePaused = false;
     private Dictionary<ulong, bool> playerReadyDictionary;
     private bool autoTestGamePausedState;

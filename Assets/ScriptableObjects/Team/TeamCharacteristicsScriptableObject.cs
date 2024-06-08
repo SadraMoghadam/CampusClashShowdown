@@ -6,6 +6,7 @@ using UnityEngine;
 public class TeamCharacteristicsScriptableObject : ScriptableObject
 {
     public int id;
+    public Team team;
     public string name;
     public Color color;
     public int maxPlayers;
