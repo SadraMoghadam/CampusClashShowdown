@@ -46,7 +46,7 @@ public class CampusUI : MonoBehaviour
         
 
 
-        PlayerPrefsManager.SetString(PlayerPrefsKeys.ResourcesQty, "200" );
+        PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, "200" );
 
     }
 
@@ -56,18 +56,18 @@ public class CampusUI : MonoBehaviour
     {
         if (building)
         {
-            if (Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200")) - cost >= 0)
+            if (Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) - cost >= 0)
             {
-                int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200")) - cost;
-                PlayerPrefsManager.SetString(PlayerPrefsKeys.ResourcesQty, updatedCost.ToString());
-                resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200");
+                int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) - cost;
+                PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, updatedCost.ToString());
+                resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
             }
         }
         else
         {
-            int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200")) + cost;
-            PlayerPrefsManager.SetString(PlayerPrefsKeys.ResourcesQty, updatedCost.ToString());
-            resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200");
+            int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) + cost;
+            PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, updatedCost.ToString());
+            resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
         }
         
        
@@ -77,7 +77,7 @@ public class CampusUI : MonoBehaviour
     {
         playerName.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.PlayerName, "PlayerName");
         starValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Stars, "200");
-        resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200");
+        resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
         
 
 

@@ -14,10 +14,9 @@ public enum PlayerPrefsKeys
     Level,
     GameTimer,
     PlayerCustomization,
-    Resource,
     BuildingData,
     Stars,
-    ResourcesQty,
+    Resource,
 }
 
 /// <summary>

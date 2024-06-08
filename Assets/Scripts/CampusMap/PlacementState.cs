@@ -24,7 +24,7 @@ public class PlacementState : IBuildingState
         this.objectPlacer = objectPlacer;
 
         selectedObjectIndex = database.objectsData.FindIndex(data => data.ID == ID);
-        if (selectedObjectIndex > -1 && (Int32.Parse(PlayerPrefs.GetString(PlayerPrefsKeys.ResourcesQty.ToString())) - 100 >= 0))
+        if (selectedObjectIndex > -1 && (Int32.Parse(PlayerPrefs.GetString(PlayerPrefsKeys.Resource.ToString())) - 100 >= 0))
         {
 
             previewSystem.StartShowingPlacementPreview(database.objectsData[selectedObjectIndex].Prefab, database.objectsData[selectedObjectIndex].Size);
@@ -60,7 +60,7 @@ public class PlacementState : IBuildingState
 
     private bool CheckResources(int selectedObjectIndex)
     {
-        if(Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.ResourcesQty, "200")) >= 0)
+        if(Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) >= 0)
         {
             return true;
         }
