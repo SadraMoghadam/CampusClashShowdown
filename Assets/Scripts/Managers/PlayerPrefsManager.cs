@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,9 @@ public enum PlayerPrefsKeys
     GameTimer,
     PlayerCustomization,
     Resource,
+    BuildingData,
+    Stars,
+    ResourcesQty,
 }
 
 /// <summary>
@@ -24,6 +28,7 @@ public class PlayerPrefsManager : MonoBehaviour
     
     private void Start()
     {
+        
     }
 
     public static void DeletePlayerPrefs()
@@ -158,6 +163,8 @@ public class PlayerPrefsManager : MonoBehaviour
         value.transform.eulerAngles = GetVector3(eulerAngles);
         // SetVector3(scale, value.localScale);
     }
+
+    
     
     public static void SaveAvatar(BodyPartData bodyData, BodyPartData headData){
         List<BodyPartTypeIndex> bodyPartTypeIndexList = new List<BodyPartTypeIndex>();  
@@ -206,7 +213,25 @@ public class PlayerPrefsManager : MonoBehaviour
         PlayerPrefs.SetString(PlayerPrefsKeys.PlayerCustomization.ToString(), json);
     
     }
-    
+
+    public static void SaveBuildings(GridData placedObjects)
+    {
+        string json = JsonConvert.SerializeObject(placedObjects);
+        Debug.Log(json);
+        PlayerPrefs.SetString(PlayerPrefsKeys.BuildingData.ToString(), json);
+    }
+
+    public static GridData LoadBuildings()
+    {
+        string json = PlayerPrefs.GetString(PlayerPrefsKeys.BuildingData.ToString());
+        if (string.IsNullOrEmpty(json))
+        {
+            return new GridData();
+        }
+        GridData buildingData = JsonConvert.DeserializeObject<GridData>(json);
+        return buildingData;
+    }
+
     public static SaveAvatarObject LoadAvatar()
     {
         string json = PlayerPrefs.GetString(PlayerPrefsKeys.PlayerCustomization.ToString());

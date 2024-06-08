@@ -11,14 +11,16 @@ public class RemovingState : IBuildingState
     GridData buildingData;
     ObjectPlacer objectPlacer;
     ObjectsDatabaseSo database;
+    CampusUI campusUI;
 
-    public RemovingState(ObjectsDatabaseSo database, Grid grid, PreviewSystem previewSystem, GridData buildingData, ObjectPlacer objectPlacer)
+    public RemovingState(ObjectsDatabaseSo database, Grid grid, PreviewSystem previewSystem, GridData buildingData, ObjectPlacer objectPlacer, CampusUI campusUI)
     {
         this.database = database;
         this.grid = grid;
         this.previewSystem = previewSystem;
         this.buildingData = buildingData;
         this.objectPlacer = objectPlacer;
+        this.campusUI = campusUI;
 
         previewSystem.StartShowingRemovePreview();
     }
@@ -46,6 +48,10 @@ public class RemovingState : IBuildingState
             }
             selectedData.RemoveObjectAt(gridPosition);
             objectPlacer.RemoveObjectAt(gameObjectIndex);
+            campusUI.updateResources(100, gameObjectIndex, false);
+            PlayerPrefsManager.SaveBuildings(selectedData);
+            
+            
         }
         Vector3 cellPosition = grid.CellToWorld(gridPosition);
         previewSystem.UpdatePosition(cellPosition, CheckIfSelectionIsValid(gridPosition, false));
@@ -60,13 +66,6 @@ public class RemovingState : IBuildingState
     {
         bool validity = CheckIfSelectionIsValid(gridPosition, false);
         previewSystem.UpdatePosition(grid.GetCellCenterWorld(gridPosition) - new Vector3(-0.1f, 0.4f, 0.1f), validity);
-        /*if (database.objectsData[gameObjectIndex].Size.x == 1)
-        {
-            previewSystem.UpdatePosition(grid.GetCellCenterWorld(gridPosition) - new Vector3(0, 0.5f, 0), validity);
-        }
-        else
-        {
-            previewSystem.UpdatePosition(grid.GetCellCenterWorld(gridPosition) - new Vector3(-0.5f, 0.5f, 0), validity);
-        }*/
+        
     }
 }
