@@ -54,20 +54,21 @@ public class CampusUI : MonoBehaviour
 
     public void updateResources(int cost, int index, bool building)
     {
+        int resources = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 200);
         if (building)
         {
-            if (Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) - cost >= 0)
+            if (resources - cost >= 0)
             {
-                int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) - cost;
-                PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, updatedCost.ToString());
-                resourceValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
+                int updatedCost = resources - cost;
+                PlayerPrefsManager.SetInt(PlayerPrefsKeys.Resource, updatedCost);
+                resourceValue.text = updatedCost.ToString();
             }
         }
         else
         {
-            int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) + cost;
-            PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, updatedCost.ToString());
-            resourceValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
+            int updatedCost = resources + cost;
+            PlayerPrefsManager.SetInt(PlayerPrefsKeys.Resource, updatedCost);
+            resourceValue.text = updatedCost.ToString();
         }
         
        
@@ -76,8 +77,8 @@ public class CampusUI : MonoBehaviour
     private void OnEnable()
     {
         playerName.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.PlayerName, "PlayerName");
-        resourceValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
-        starValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Stars, "200");
+        resourceValue.text = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 200).ToString();
+        starValue.text = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Stars, 200).ToString();
 
 
     }

@@ -36,8 +36,8 @@ public class ClashArenaController : NetworkBehaviour
     private NetworkVariable<State> state = new NetworkVariable<State>(State.WaitingToStart);
     private bool isLocalPlayerReady;
     private NetworkVariable<float> countdownToStartTimer = new NetworkVariable<float>(3f);
-    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(60f);
-    private float gamePlayingTimerMax = 60f;
+    private NetworkVariable<float> gamePlayingTimer = new NetworkVariable<float>(180f);
+    private float gamePlayingTimerMax = 180f;
     private bool isLocalGamePaused = false;
     private Dictionary<ulong, bool> playerReadyDictionary;
     private bool autoTestGamePausedState;

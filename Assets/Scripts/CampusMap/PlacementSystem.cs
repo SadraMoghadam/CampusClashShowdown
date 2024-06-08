@@ -66,7 +66,7 @@ public class PlacementSystem : MonoBehaviour
     public void StartPlacement(int ID)
     {
         StopPlacement();
-        if ((Int32.Parse(PlayerPrefs.GetString(PlayerPrefsKeys.Resource.ToString())) - 100 >= 0))
+        if (PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 200) - 100 >= 0)
         {
             gridVisualization.SetActive(true);
         }
