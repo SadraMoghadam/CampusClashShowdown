@@ -71,7 +71,9 @@ public class CharacterSelectPlayer : MonoBehaviour {
         {
             return;
         }
-        if (playerIndex < 2)
+
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+        if (playerData.teamId == 1)
         {
             readyGameObject.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
         }
@@ -84,7 +86,8 @@ public class CharacterSelectPlayer : MonoBehaviour {
     private void SetCharacterNameColor(int playerIndex)
     {
         
-        if (playerIndex < 2)
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
+        if (playerData.teamId == 1)
         {
             playerNameText.GetComponent<TMP_Text>().color = GameManager.Instance.team1.color;
         }

@@ -80,6 +80,7 @@ public class MultiplayerController : NetworkBehaviour
         // ClientConnectedCallbackServerRpc(clientId);
         SetPlayerNameServerRpc(GetPlayerName());
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerTeamServerRpc();
     }
 
     private void NetworkManager_Server_OnClientDisconnectCallback(ulong clientId) {
@@ -131,6 +132,7 @@ public class MultiplayerController : NetworkBehaviour
         SetPlayerNameServerRpc(GetPlayerName());
         SetPlayerMeshServerRpc(PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item1, PlayerPrefsManager.GetHeadAndBodyMeshIndices().Item2);
         SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
+        SetPlayerTeamServerRpc();
     }
     
     [ServerRpc(RequireOwnership = false)]
@@ -166,6 +168,25 @@ public class MultiplayerController : NetworkBehaviour
         PlayerData playerData = playerDataNetworkList[playerDataIndex];
 
         playerData.playerId = playerId;
+
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerTeamServerRpc(ServerRpcParams serverRpcParams = default) 
+    {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+
+        PlayerData playerData = playerDataNetworkList[playerDataIndex];
+
+        if (playerDataIndex < 2)
+        {
+            playerData.teamId = 1;
+        }
+        else
+        {
+            playerData.teamId = 2;
+        }
 
         playerDataNetworkList[playerDataIndex] = playerData;
     }

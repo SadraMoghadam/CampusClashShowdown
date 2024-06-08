@@ -27,6 +27,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     private PickableObject _pickableObject;
     private string _teamName;
     private Color _teamColor;
+    private int _teamId;
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
     private bool _canMove;
 
@@ -163,14 +164,16 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     {
         if(_gameManager == null)
             _gameManager = GameManager.Instance;
-        if (MultiplayerController.Instance.GetPlayerDataIndexFromClientId(OwnerClientId) < 2)
+        if (MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId).teamId == 1)
         {
+            _teamId = 1;
             _teamColor = _gameManager.team1.color;
             _teamName = _gameManager.team1.name;
             _teamCharacteristics = _gameManager.team1;
         }
         else
         {
+            _teamId = 2;
             _teamColor = _gameManager.team2.color;
             _teamName = _gameManager.team2.name;
             _teamCharacteristics = _gameManager.team2;
@@ -212,6 +215,11 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     public Color GetTeamColor()
     {
         return _teamColor;
+    }
+    
+    public int GetTeamId()
+    {
+        return _teamId;
     }
 
     public TeamCharacteristicsScriptableObject GetTeamCharacteristics()

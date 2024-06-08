@@ -19,5 +19,7 @@ public interface IParent<T>
 
     public Color GetTeamColor();
     
+    public int GetTeamId();
+    
     public TeamCharacteristicsScriptableObject GetTeamCharacteristics();
 }
