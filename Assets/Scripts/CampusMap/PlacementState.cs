@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,29 +11,25 @@ public class PlacementState : IBuildingState
     PreviewSystem previewSystem;
     ObjectsDatabaseSo database;
     GridData buildingData;
-    GridData floorData;
     ObjectPlacer objectPlacer;
 
-    public PlacementState(int iD, Grid grid, PreviewSystem previewSystem, ObjectsDatabaseSo database, GridData floorData ,GridData buildingData, ObjectPlacer objectPlacer)
+    public PlacementState(int iD, Grid grid, PreviewSystem previewSystem, ObjectsDatabaseSo database, GridData buildingData, ObjectPlacer objectPlacer)
     {
         ID = iD;
         this.grid = grid;
         this.previewSystem = previewSystem;
         this.database = database;
-        this.floorData = floorData;
+  
         this.buildingData = buildingData;
         this.objectPlacer = objectPlacer;
 
         selectedObjectIndex = database.objectsData.FindIndex(data => data.ID == ID);
-        if (selectedObjectIndex > -1)
+        if (selectedObjectIndex > -1 && (Int32.Parse(PlayerPrefs.GetString(PlayerPrefsKeys.Resource.ToString())) - 100 >= 0))
         {
 
             previewSystem.StartShowingPlacementPreview(database.objectsData[selectedObjectIndex].Prefab, database.objectsData[selectedObjectIndex].Size);
         }
-        else
-        {
-            throw new System.Exception($"No objects with ID {iD}");
-        }
+        
 
     }
 
@@ -44,7 +41,8 @@ public class PlacementState : IBuildingState
     public void OnAction(Vector3Int gridPosition)
     {
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex, true);
-        if (placementValidity == false)
+        bool resourcesQty = CheckResources(selectedObjectIndex);
+        if (placementValidity == false || resourcesQty == false)
             return;
 
         int index = objectPlacer.PlaceObject(database, selectedObjectIndex, database.objectsData[selectedObjectIndex].Prefab, grid, gridPosition);
@@ -55,7 +53,18 @@ public class PlacementState : IBuildingState
 
         Vector2Int buildingSize = new Vector2Int(database.objectsData[selectedObjectIndex].Size.x, database.objectsData[selectedObjectIndex].Size.y);
         selectedData.AddObjectAt(gridPosition, buildingSize, database.objectsData[selectedObjectIndex].ID, index);
+        PlayerPrefsManager.SaveBuildings(selectedData);
+        
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), false);
+    }
+
+    private bool CheckResources(int selectedObjectIndex)
+    {
+        if(Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) >= 0)
+        {
+            return true;
+        }
+        return false;
     }
 
     public bool CheckPlacementValidity(Vector3Int gridPosition, int selectedObjectIndex, bool building)

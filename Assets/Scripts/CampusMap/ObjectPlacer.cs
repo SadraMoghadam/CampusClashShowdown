@@ -6,7 +6,12 @@ using UnityEngine;
 public class ObjectPlacer : MonoBehaviour
 {
     [SerializeField] private List<GameObject> placedGameObject;
- 
+
+    private void Start()
+    {
+       
+    }
+
 
 
     public int PlaceObject(ObjectsDatabaseSo database, int selectedObjectIndex, GameObject prefab, Grid grid, Vector3Int gridPosition)
@@ -22,6 +27,7 @@ public class ObjectPlacer : MonoBehaviour
         }
 
         placedGameObject.Add(newObject);
+        
         return placedGameObject.Count - 1;
     }
 
@@ -33,5 +39,6 @@ public class ObjectPlacer : MonoBehaviour
         }
         Destroy(placedGameObject[gameObjectIndex]);
         placedGameObject[gameObjectIndex] = null;
+        
     }
 }

@@ -2,17 +2,35 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 //where we store the data about the buildings that are already placed
 //TODO: insert the data of the positions of the streets when we have them
 public class GridData
 {
-    Dictionary<Vector3Int, PlacementData> placedObjects = new();
+    [SerializeField] Dictionary<Vector3Int, PlacementData> placedObjects = new();
     List<Vector3Int> roadPositions = new();
     public GridData()
     {
-        
+       
     }
+
+   public int length()
+    {
+        return placedObjects.Count;
+    }
+
+
+    public Dictionary<Vector3Int, PlacementData> getPlacedObjects()
+    {
+        return placedObjects;
+    }
+
+    public void setPlacedObjects(Dictionary<Vector3Int, PlacementData> input)
+    {
+        placedObjects = input;
+    }
+
 
 
     public void AddObjectAt(Vector3Int gridPosition, Vector2Int objectSize, int ID, int placedObjectIndex)
@@ -20,6 +38,7 @@ public class GridData
 
         List<Vector3Int> positionToOccupy = CalculatePositions(gridPosition, objectSize);
         PlacementData data = new PlacementData(positionToOccupy, ID, placedObjectIndex);
+
         foreach(var pos in positionToOccupy)
         {
             if(placedObjects.ContainsKey(pos))
@@ -28,7 +47,9 @@ public class GridData
 
             }
             placedObjects[pos] = data;
+
         }
+        
 
     }
 
@@ -69,6 +90,7 @@ public class GridData
         {
             placedObjects.Remove(pos);
         }
+        
     }
 
     public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize, Boolean building)
@@ -119,8 +141,6 @@ public class GridData
 
     private void InstantiateRoadPositions()
     {
-        
-        
 
         for (int i = -3; i < 5; i++)
         {
@@ -210,11 +230,11 @@ public class GridData
 }
 public class PlacementData
 {
-    public List<Vector3Int> occupiedPositions;
+    [SerializeField] public List<Vector3Int> occupiedPositions;
 
-    public int ID { get; private set; }
+    [SerializeField] public int ID { get; private set; }
 
-    public int PlacedObjectIndex { get; private set; }
+    [SerializeField] public int PlacedObjectIndex { get; private set; }
 
     public PlacementData(List<Vector3Int> occupiedPositions, int iD, int placedObjectIndex)
     {

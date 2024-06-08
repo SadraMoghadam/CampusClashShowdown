@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class PlacementSystem : MonoBehaviour
 {
-  
+
+    [SerializeField] CampusUI campusUI;
 
     [SerializeField] InputManager inputManager;
 
@@ -17,7 +18,7 @@ public class PlacementSystem : MonoBehaviour
 
     [SerializeField] Grid grid;
 
-    private GridData floorData, buildingsData;
+    private GridData buildingsData;
 
     [SerializeField] private PreviewSystem preview;
 
@@ -51,18 +52,28 @@ public class PlacementSystem : MonoBehaviour
     private void Start()
     {
         StopPlacement();
-        floorData = new();
-        buildingsData = new();
-        
-        
+        buildingsData = PlayerPrefsManager.LoadBuildings();
+        Debug.Log(buildingsData);
+        foreach (var i in buildingsData.getPlacedObjects())
+        {
+            objectPlacer.PlaceObject(database, i.Value.ID, database.objectsData[i.Value.ID].Prefab, grid, i.Key);
+        }
+
+
+
     }
 
     public void StartPlacement(int ID)
     {
         StopPlacement();
-        gridVisualization.SetActive(true);
+        if ((Int32.Parse(PlayerPrefs.GetString(PlayerPrefsKeys.Resource.ToString())) - 100 >= 0))
+        {
+            gridVisualization.SetActive(true);
+        }
 
-        buildingState = new PlacementState(ID, grid, preview, database, floorData, buildingsData, objectPlacer);
+        buildingState = new PlacementState(ID, grid, preview, database, buildingsData, objectPlacer);
+        campusUI.updateResources(100, ID, true);
+
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
@@ -71,7 +82,8 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         gridVisualization.SetActive(true);
-        buildingState = new RemovingState(database, grid, preview, buildingsData, objectPlacer);
+        buildingState = new RemovingState(database, grid, preview, buildingsData, objectPlacer, campusUI);
+        
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
        
@@ -87,6 +99,7 @@ public class PlacementSystem : MonoBehaviour
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
         buildingState.OnAction(gridPosition);
+        
         StopPlacement();
 
     }
