@@ -18,7 +18,7 @@ public class CampusUI : MonoBehaviour
     
     
     [SerializeField] private TMP_Text playerName;
-    [SerializeField] private TMP_Text resourcesValue;
+    [SerializeField] private TMP_Text resourceValue;
     [SerializeField] private TMP_Text starValue;
 
     private void Awake()
@@ -46,7 +46,7 @@ public class CampusUI : MonoBehaviour
         
 
 
-        PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, "200" );
+        //PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, "200" );
 
     }
 
@@ -60,14 +60,14 @@ public class CampusUI : MonoBehaviour
             {
                 int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) - cost;
                 PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, updatedCost.ToString());
-                resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
+                resourceValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
             }
         }
         else
         {
             int updatedCost = Int32.Parse(PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200")) + cost;
             PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, updatedCost.ToString());
-            resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
+            resourceValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
         }
         
        
@@ -76,10 +76,8 @@ public class CampusUI : MonoBehaviour
     private void OnEnable()
     {
         playerName.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.PlayerName, "PlayerName");
+        resourceValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
         starValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Stars, "200");
-        resourcesValue.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.Resource, "200");
-        
-
 
 
     }

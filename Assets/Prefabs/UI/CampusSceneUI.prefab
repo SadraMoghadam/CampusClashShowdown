@@ -1084,7 +1084,7 @@ MonoBehaviour:
   leaderBoardPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
   playerName: {fileID: 7880390715299303622}
-  resourcesValue: {fileID: 4112381409440165787}
+  resourceValue: {fileID: 4112381409440165787}
   starValue: {fileID: 6872802808824797242}
 --- !u!1 &2546775927348918229
 GameObject:
@@ -1098,7 +1098,7 @@ GameObject:
   - component: {fileID: 3682059822549012239}
   - component: {fileID: 7967623024616139207}
   - component: {fileID: 4514776939457420522}
-  - component: {fileID: 6150002989355130981}
+  - component: {fileID: 4400639430522097338}
   m_Layer: 5
   m_Name: Building2
   m_TagString: Untagged
@@ -1175,7 +1175,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 6150002989355130981}
+  m_TargetGraphic: {fileID: 4400639430522097338}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1218,7 +1218,7 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 6, y: -6}
   m_UseGraphicAlpha: 1
---- !u!114 &6150002989355130981
+--- !u!114 &4400639430522097338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2455,7 +2455,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 161.6499, y: 253.56}
-  m_SizeDelta: {x: 292.5, y: 1450}
+  m_SizeDelta: {x: 292.5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5586663717092049745
 MonoBehaviour:

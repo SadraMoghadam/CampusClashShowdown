@@ -17,6 +17,7 @@ public enum PlayerPrefsKeys
     BuildingData,
     Stars,
     Resource,
+    
 }
 
 /// <summary>
@@ -215,19 +216,30 @@ public class PlayerPrefsManager : MonoBehaviour
 
     public static void SaveBuildings(GridData placedObjects)
     {
-        string json = JsonConvert.SerializeObject(placedObjects);
+        Dictionary<Vector3Int, PlacementData> obj = placedObjects.getPlacedObjects();
+
+        var settings = new JsonSerializerSettings();
+        settings.Converters.Add(new Vector3IntConverter());
+
+        string json = JsonConvert.SerializeObject(obj, settings);
         Debug.Log(json);
         PlayerPrefs.SetString(PlayerPrefsKeys.BuildingData.ToString(), json);
     }
 
     public static GridData LoadBuildings()
     {
+        GridData buildingData = new GridData();
         string json = PlayerPrefs.GetString(PlayerPrefsKeys.BuildingData.ToString());
-        if (string.IsNullOrEmpty(json))
+
+        if (!string.IsNullOrEmpty(json))
         {
-            return new GridData();
+            var settings = new JsonSerializerSettings();
+            settings.Converters.Add(new Vector3IntConverter());
+
+            Dictionary<Vector3Int, PlacementData> buildings = JsonConvert.DeserializeObject<Dictionary<Vector3Int, PlacementData>>(json, settings);
+            buildingData.setPlacedObjects(buildings);
         }
-        GridData buildingData = JsonConvert.DeserializeObject<GridData>(json);
+
         return buildingData;
     }
 
@@ -257,4 +269,36 @@ public class PlayerPrefsManager : MonoBehaviour
 
         return new Tuple<int, int>(headMeshIndex, bodyMeshIndex);
     }
+
+   
 }
+
+public class Vector3IntConverter : JsonConverter<Dictionary<Vector3Int, PlacementData>>
+{
+    public override void WriteJson(JsonWriter writer, Dictionary<Vector3Int, PlacementData> value, JsonSerializer serializer)
+    {
+        var dict = new Dictionary<string, PlacementData>();
+        foreach (var kvp in value)
+        {
+            string key = $"{kvp.Key.x},{kvp.Key.y},{kvp.Key.z}";
+            dict[key] = kvp.Value;
+        }
+        serializer.Serialize(writer, dict);
+    }
+
+    public override Dictionary<Vector3Int, PlacementData> ReadJson(JsonReader reader, Type objectType, Dictionary<Vector3Int, PlacementData> existingValue, bool hasExistingValue, JsonSerializer serializer)
+    {
+        var dict = serializer.Deserialize<Dictionary<string, PlacementData>>(reader);
+        var result = new Dictionary<Vector3Int, PlacementData>();
+        foreach (var kvp in dict)
+        {
+            var parts = kvp.Key.Split(',');
+            var vector = new Vector3Int(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+            result[vector] = kvp.Value;
+        }
+        return result;
+    }
+}
+
+
+
