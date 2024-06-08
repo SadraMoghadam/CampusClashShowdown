@@ -37,6 +37,10 @@ public class MovableObject : NetworkBehaviour
         {
             SetDestroyingArea(false);
         }
+        else
+        {
+            SetDestroyingArea(true);
+        }
         _followTransform = GetComponent<FollowTransform>();
         _animator = GetComponent<Animator>();
         _objectCurrentPosition.Value = initPosition;
@@ -113,13 +117,21 @@ public class MovableObject : NetworkBehaviour
         if (_objectCurrentPosition.Value != 0)
         {
             SetDestroyingArea(true);
+            SetDestroyingAreaClientRpc(true);
         }
         else
         {
             SetDestroyingArea(false);
+            SetDestroyingAreaClientRpc(false);
         }
         TriggerAnimation(direction);
         return true;
+    }
+    
+    [ClientRpc]
+    private void SetDestroyingAreaClientRpc(bool flag)
+    {
+        SetDestroyingArea(flag);
     }
 
     private void SetDestroyingArea(bool flag)

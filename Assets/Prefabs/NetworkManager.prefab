@@ -93,7 +93,7 @@ MonoBehaviour:
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 127.0.0.1
-    Port: 4994
+    Port: 5622
     ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
