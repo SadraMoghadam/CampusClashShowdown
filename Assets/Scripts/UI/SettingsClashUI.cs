@@ -40,12 +40,12 @@ public class SettingsClashUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.AudioManager.ChangeMusicVolume(.3f);
+        // GameManager.Instance.AudioManager.ChangeMusicVolume(.3f);
     }
 
     private void Hide()
     {
-        GameManager.Instance.AudioManager.ChangeMusicVolume(1);
+        // GameManager.Instance.AudioManager.ChangeMusicVolume(1);
         gameObject.SetActive(false);
     }
 }

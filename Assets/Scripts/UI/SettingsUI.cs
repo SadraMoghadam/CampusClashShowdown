@@ -32,12 +32,12 @@ public class SettingsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.AudioManager.ChangeMusicVolume(.6f);
+        // GameManager.Instance.AudioManager.ChangeMusicVolume(.6f);
     }
     
     private void Hide()
     {
-        GameManager.Instance.AudioManager.ChangeMusicVolume(1);
+        // GameManager.Instance.AudioManager.ChangeMusicVolume(1);
         gameObject.SetActive(false);
     }
 }

@@ -50,6 +50,18 @@ public class GameManager : MonoBehaviour
         
         // dont destroy the gameObject, that GameManager is attached to, after scene change 
         DontDestroyOnLoad(this.gameObject);
+        SetSoundVolume();
+    }
+
+    private void SetSoundVolume()
+    {
+        float masterVolume = PlayerPrefsManager.GetFloat(PlayerPrefsKeys.MasterVolume, 1);
+        float musicVolume = PlayerPrefsManager.GetFloat(PlayerPrefsKeys.MusicVolume, 1);
+        float sfxVolume = PlayerPrefsManager.GetFloat(PlayerPrefsKeys.SfxVolume, 1);
+        
+        AudioManager.ChangeMasterVolume(masterVolume);
+        AudioManager.ChangeMusicVolume(musicVolume);
+        AudioManager.ChangeEffectsVolume(sfxVolume);
     }
 
     /// <summary>

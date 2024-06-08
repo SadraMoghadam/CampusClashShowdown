@@ -65,11 +65,13 @@ public class AudioManager : MonoBehaviour
 
     public void ChangeMasterVolume(float coefficient)
     {
+        PlayerPrefsManager.SetFloat(PlayerPrefsKeys.MasterVolume, coefficient);
         AudioListener.volume = coefficient;
     }
 
     public void ChangeMusicVolume(float coefficient)
     {
+        PlayerPrefsManager.SetFloat(PlayerPrefsKeys.MusicVolume, coefficient);
         for (int i = 0; i < 2; i++)
         {
             if(sounds[i].source == null)
@@ -80,6 +82,7 @@ public class AudioManager : MonoBehaviour
 
     public void ChangeEffectsVolume(float coefficient)
     {
+        PlayerPrefsManager.SetFloat(PlayerPrefsKeys.SfxVolume, coefficient);
         for (int i = 2; i < sounds.Length; i++)
         {
             sounds[i].volume = coefficient;

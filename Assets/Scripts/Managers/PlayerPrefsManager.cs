@@ -17,7 +17,9 @@ public enum PlayerPrefsKeys
     BuildingData,
     Stars,
     Resource,
-    
+    MasterVolume,
+    MusicVolume,
+    SfxVolume,
 }
 
 /// <summary>

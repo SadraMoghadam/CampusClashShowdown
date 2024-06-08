@@ -18,20 +18,32 @@ public class AudioSettings : MonoBehaviour
         masterVolumeSlider.onValueChanged.AddListener(ChangeMasterVolume);
         musicVolumeSlider.onValueChanged.AddListener(ChangeMusicVolume);
         effectsVolumeSlider.onValueChanged.AddListener(ChangeEffectsVolume);
+        float masterVolume = PlayerPrefsManager.GetFloat(PlayerPrefsKeys.MasterVolume, 1);
+        float musicVolume = PlayerPrefsManager.GetFloat(PlayerPrefsKeys.MusicVolume, 1);
+        float sfxVolume = PlayerPrefsManager.GetFloat(PlayerPrefsKeys.SfxVolume, 1);
+        masterVolumeSlider.value = masterVolume;
+        musicVolumeSlider.value = musicVolume;
+        effectsVolumeSlider.value = sfxVolume;
     }
 
     private void ChangeMasterVolume(float value)
     {
-        _audioManager.ChangeMasterVolume(value / ((masterVolumeSlider.maxValue - masterVolumeSlider.minValue)));
+        float coefficient = value / ((masterVolumeSlider.maxValue - masterVolumeSlider.minValue));
+        _audioManager.ChangeMasterVolume(coefficient);
+        PlayerPrefsManager.SetFloat(PlayerPrefsKeys.MasterVolume, coefficient);
     }
 
     private void ChangeMusicVolume(float value)
     {
-        _audioManager.ChangeMusicVolume(value / ((musicVolumeSlider.maxValue - musicVolumeSlider.minValue)));
+        float coefficient = value / ((musicVolumeSlider.maxValue - musicVolumeSlider.minValue));
+        _audioManager.ChangeMusicVolume(coefficient);
+        PlayerPrefsManager.SetFloat(PlayerPrefsKeys.MusicVolume, coefficient);
     }
 
     private void ChangeEffectsVolume(float value)
     {
-        _audioManager.ChangeEffectsVolume(value / ((effectsVolumeSlider.maxValue - effectsVolumeSlider.minValue)));
+        float coefficient = value / ((effectsVolumeSlider.maxValue - effectsVolumeSlider.minValue));
+        _audioManager.ChangeEffectsVolume(coefficient);
+        PlayerPrefsManager.SetFloat(PlayerPrefsKeys.SfxVolume, coefficient);
     }
 }

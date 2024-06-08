@@ -52,7 +52,7 @@ public class UIAvatarCustomization : MonoBehaviour
         
         acceptButton.onClick.AddListener(() =>
         {
-            GameManager.Instance.AudioManager.ChangeMusicVolume(1);
+            // GameManager.Instance.AudioManager.ChangeMusicVolume(1);
             playerCustomization.SaveBodyPartData();
             SetPlayerName(playerName.text);
             CampusController.Instance.ChangeMode(false);
@@ -68,7 +68,7 @@ public class UIAvatarCustomization : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.AudioManager.ChangeMusicVolume(.6f);
+        // GameManager.Instance.AudioManager.ChangeMusicVolume(.6f);
     }
 
     private async void SetPlayerName(string name)
