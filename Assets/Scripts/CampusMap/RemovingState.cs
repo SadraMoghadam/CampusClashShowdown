@@ -41,7 +41,7 @@ public class RemovingState : IBuildingState
             }
             buildingData.RemoveObjectAt(gridPosition);
 
-            // Rimuove l'oggetto dalla scena usando la posizione della griglia
+            
             objectPlacer.RemoveObjectAt(gridPosition);
 
             campusUI.updateResources(100, gameObjectIndex, false);
