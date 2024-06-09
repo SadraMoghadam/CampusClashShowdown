@@ -1,31 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlacementSystem : MonoBehaviour
 {
-
     [SerializeField] CampusUI campusUI;
-
     [SerializeField] InputManager inputManager;
-
-    [SerializeField]
-    private ObjectsDatabaseSo database;
-
-    [SerializeField]
-    private GameObject gridVisualization;
-
+    [SerializeField] private ObjectsDatabaseSo database;
+    [SerializeField] private GameObject gridVisualization;
     [SerializeField] Grid grid;
-
     private GridData buildingsData;
-
     [SerializeField] private PreviewSystem preview;
-
     [SerializeField] private ObjectPlacer objectPlacer;
-
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
-
     IBuildingState buildingState;
 
     private void Update()
@@ -37,30 +22,26 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
-
-        if(lastDetectedPosition != gridPosition)
+        if (lastDetectedPosition != gridPosition)
         {
             buildingState.UpdateState(gridPosition);
-            
-            
-            lastDetectedPosition = gridPosition; 
+            lastDetectedPosition = gridPosition;
         }
-
-        
     }
 
     private void Start()
     {
         StopPlacement();
         buildingsData = PlayerPrefsManager.LoadBuildings();
-        Debug.Log(buildingsData);
+        int prec = -1;
         foreach (var i in buildingsData.getPlacedObjects())
         {
-            objectPlacer.PlaceObject(database, i.Value.ID, database.objectsData[i.Value.ID].Prefab, grid, i.Key);
+            if (prec != i.Value.ID)
+            {
+                objectPlacer.PlaceObject(database, i.Value.ID, database.objectsData[i.Value.ID].Prefab, grid, i.Key);
+            }
+            prec = i.Value.ID;
         }
-
-
-
     }
 
     public void StartPlacement(int ID)
@@ -71,7 +52,7 @@ public class PlacementSystem : MonoBehaviour
             gridVisualization.SetActive(true);
         }
 
-        buildingState = new PlacementState(ID, grid, preview, database, buildingsData, objectPlacer);
+        buildingState = new PlacementState(ID, grid, preview, database, PlayerPrefsManager.LoadBuildings(), objectPlacer);
         campusUI.updateResources(100, ID, true);
 
         inputManager.OnClicked += PlaceStructure;
@@ -82,16 +63,15 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         gridVisualization.SetActive(true);
-        buildingState = new RemovingState(database, grid, preview, buildingsData, objectPlacer, campusUI);
-        
-        inputManager.OnClicked += PlaceStructure;
+        buildingState = new RemovingState(database, grid, preview, PlayerPrefsManager.LoadBuildings(), objectPlacer, campusUI);
+
+        inputManager.OnClicked += RemoveStructure;
         inputManager.OnExit += StopPlacement;
-       
-    } 
+    }
 
     private void PlaceStructure()
     {
-        if(inputManager.IsPointerOverUI())
+        if (inputManager.IsPointerOverUI())
         {
             return;
         }
@@ -99,24 +79,37 @@ public class PlacementSystem : MonoBehaviour
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
         buildingState.OnAction(gridPosition);
-        
-        StopPlacement();
+        buildingsData = PlayerPrefsManager.LoadBuildings();
 
+        StopPlacement();
     }
 
-    
+    private void RemoveStructure()
+    {
+        if (inputManager.IsPointerOverUI())
+        {
+            return;
+        }
+        Vector3 mousePosition = inputManager.GetSelectedMapPosition();
+        Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+
+        buildingState.OnAction(gridPosition);
+        buildingsData = PlayerPrefsManager.LoadBuildings();
+
+        StopPlacement();
+    }
 
     private void StopPlacement()
     {
         if (buildingState == null)
             return;
+        buildingsData = PlayerPrefsManager.LoadBuildings();
         gridVisualization.SetActive(false);
         buildingState.EndState();
         inputManager.OnClicked -= PlaceStructure;
+        inputManager.OnClicked -= RemoveStructure; // Assicurati di rimuovere anche questo handler
         inputManager.OnExit -= StopPlacement;
         lastDetectedPosition = Vector3Int.zero;
         buildingState = null;
-
-
     }
 }
