@@ -39,7 +39,7 @@ public class PowerUpController : NetworkBehaviour
     {
         if (ClashArenaController.Instance.IsGamePlaying())
         {
-            GenerateRandomSpawnTimeAndResetTimerServerRpc();
+            GenerateRandomSpawnTimeAndResetTimerServerRpc(true);
             _startSpawning = true;
         }
     }
@@ -60,6 +60,7 @@ public class PowerUpController : NetworkBehaviour
             _timer += Time.deltaTime;
             if (_timer >= _timeToSpawnPrefab)
             {
+                _timer = 0;
                 SpawnPowerUpServerRpc();
                 GenerateRandomSpawnTimeAndResetTimerServerRpc();
             }   
@@ -71,7 +72,6 @@ public class PowerUpController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnPowerUpServerRpc()
     {
-        _timer = 0;
         int prefabIndex = Random.Range(0, powerUpsPrefab.Count);
         Transform powerUpTransform = Instantiate(powerUpsPrefab[prefabIndex], _powerUpSpawnLocation.position, Quaternion.identity);
         NetworkObject powerUp = powerUpTransform.GetComponent<NetworkObject>();
@@ -80,13 +80,12 @@ public class PowerUpController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void GenerateRandomSpawnTimeAndResetTimerServerRpc()
+    private void GenerateRandomSpawnTimeAndResetTimerServerRpc(bool firstTime = false)
     {
-        _timer = 0;
         _timeToSpawnPrefab = Random.Range(minTimeToSpawnPrefab, maxTimeToSpawnPrefab);
         Debug.Log(_timeToSpawnPrefab);
         
-        if (_powerUpSpawnLocationsTemp.Count == 0)
+        if (_powerUpSpawnLocationsTemp.Count == 0 || firstTime)
         {
             return; // Return early to avoid accessing an out-of-range index
         }

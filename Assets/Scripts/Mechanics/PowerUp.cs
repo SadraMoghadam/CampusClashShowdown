@@ -74,12 +74,14 @@ public class PowerUp : NetworkBehaviour
         {
             case PowerUpType.Speed:
                 _playerController.speed = _defaultPlayerSpeed * coefficient;
+                _playerController.runSpeed = (_defaultPlayerSpeed + 1) * coefficient;
                 break;
             case PowerUpType.Strength:
                 _playerController.strength = _defaultPlayerStrength * coefficient;
                 break;
             default:
                 _playerController.speed = _defaultPlayerSpeed;
+                _playerController.runSpeed = _defaultPlayerSpeed + 1;
                 _playerController.strength = _defaultPlayerStrength;
                 break;
         }

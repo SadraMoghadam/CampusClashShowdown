@@ -759,6 +759,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3667325803
       objectReference: {fileID: 0}
+    - target: {fileID: 5140870680381554613, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5277413644683126903, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 47190599
@@ -778,6 +782,10 @@ PrefabInstance:
     - target: {fileID: 6080043442971953137, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1317682779
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034166118783009329, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7758971702984485559, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: m_Name
@@ -3616,6 +3624,10 @@ PrefabInstance:
     - target: {fileID: 2342400749703614215, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: m_Name
       value: Controllers
+      objectReference: {fileID: 0}
+    - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
+      propertyPath: powerUpSpawnLocations.Array.size
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: powerUpSpawnLocations.Array.data[0]
