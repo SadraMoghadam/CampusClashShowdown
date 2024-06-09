@@ -10,7 +10,7 @@ public class PreBuildPlayerPrefsReset : IPreprocessBuildWithReport
     public void OnPreprocessBuild(BuildReport report)
     {
         Debug.Log("Resetting PlayerPrefs before build...");
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
+        // PlayerPrefs.DeleteAll();
+        // PlayerPrefs.Save();
     }
 }

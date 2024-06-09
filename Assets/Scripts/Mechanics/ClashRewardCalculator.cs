@@ -111,7 +111,7 @@ public class ClashRewardCalculator : NetworkBehaviour
     
     public int GetTotalByRewardType(RewardType type)
     {
-        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClient.ClientId);
         
         Team team = playerData.teamId == 1 ? Team.Team1 : Team.Team2;
         int total = 0;
@@ -149,7 +149,7 @@ public class ClashRewardCalculator : NetworkBehaviour
     
     public int CalculateRewards()
     {
-        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClient.ClientId);
         
         Team team = playerData.teamId == 1 ? Team.Team1 : Team.Team2;
         int totalReward = _totalBoxesDelivered[team] * _boxDeliveryRewardCoefficient +

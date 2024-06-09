@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1504849443
-  InScenePlacedSourceGlobalObjectIdHash: 397332346
+  GlobalObjectIdHash: 490840121
+  InScenePlacedSourceGlobalObjectIdHash: 1504849443
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -73,12 +73,30 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  boxPrefab: {fileID: 0}
-  resourceDeliveryPathPoints: []
-  resourceBoxPrefab: {fileID: 0}
-  keyBindingUis: []
+  boxPrefab: {fileID: 3597765975269904719, guid: 3137af21f094cef438b1bae941999fb2, type: 3}
+  resourceDeliveryPathPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  resourceBoxPrefab: {fileID: 3022491450595669099, guid: dcb18db9342a6c143ac4672c2f2d8fcd, type: 3}
+  keyBindingUis:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   keyBindingHelperUi: {fileID: 0}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 6238994118873003210, guid: 1929da2676a6d66489b338f640941990, type: 3}
   endGameCamera: {fileID: 0}
 --- !u!114 &4312554151245633157
 MonoBehaviour:
@@ -96,6 +114,8 @@ MonoBehaviour:
   - {fileID: 6903910135239292272, guid: ad772bdf60de1d642947667d32274b82, type: 3}
   - {fileID: 6903910135239292272, guid: f34518af51d0a9c4b9365fe0e792e270, type: 3}
   powerUpSpawnLocations:
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

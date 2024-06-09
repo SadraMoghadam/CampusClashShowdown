@@ -2588,6 +2588,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6108859354203139834, guid: 072ec8e7c57efc849ac7e24c3279bf1a, type: 3}
   m_PrefabInstance: {fileID: 1592529376}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1645185103 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6595367061727411184, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+  m_PrefabInstance: {fileID: 771136634}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1645185104 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 559860526894702646, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
+  m_PrefabInstance: {fileID: 771136634}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1656411746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2217592206679074785, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
@@ -3623,30 +3633,22 @@ PrefabInstance:
       propertyPath: powerUpSpawnLocations.Array.data[3]
       value: 
       objectReference: {fileID: 771136639}
-    - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: boxPrefab
+    - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
+      propertyPath: powerUpSpawnLocations.Array.data[4]
       value: 
-      objectReference: {fileID: 3597765975269904719, guid: 3137af21f094cef438b1bae941999fb2, type: 3}
-    - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: playerPrefab
+      objectReference: {fileID: 1645185104}
+    - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
+      propertyPath: powerUpSpawnLocations.Array.data[5]
       value: 
-      objectReference: {fileID: 6238994118873003210, guid: 1929da2676a6d66489b338f640941990, type: 3}
+      objectReference: {fileID: 1645185103}
     - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: endGameCamera
       value: 
       objectReference: {fileID: 875425977}
     - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceBoxPrefab
-      value: 
-      objectReference: {fileID: 3022491450595669099, guid: dcb18db9342a6c143ac4672c2f2d8fcd, type: 3}
-    - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: keyBindingHelperUi
       value: 
       objectReference: {fileID: 8245467939566988326}
-    - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: keyBindingUis.Array.size
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: keyBindingUis.Array.data[0]
       value: 
@@ -3695,10 +3697,6 @@ PrefabInstance:
       propertyPath: spawnLocations.Array.data[3]
       value: 
       objectReference: {fileID: 771136635}
-    - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.size
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 4895099891010168028, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: resourceDeliveryPathPoints.Array.data[0]
       value: 
@@ -3779,53 +3777,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[0]
-      value: 
-      objectReference: {fileID: 229509327}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[1]
-      value: 
-      objectReference: {fileID: 2047393249}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[2]
-      value: 
-      objectReference: {fileID: 177616767}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[3]
-      value: 
-      objectReference: {fileID: 1656411746}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[4]
-      value: 
-      objectReference: {fileID: 1518874033}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[5]
-      value: 
-      objectReference: {fileID: 956947221}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[6]
-      value: 
-      objectReference: {fileID: 177616766}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[7]
-      value: 
-      objectReference: {fileID: 209880332}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[8]
-      value: 
-      objectReference: {fileID: 177616765}
-    - target: {fileID: 6578976899347251740, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: resourceDeliveryPathPoints.Array.data[9]
-      value: 
-      objectReference: {fileID: 1440590587}
     - target: {fileID: 8160144433527003255, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 490840121
-      objectReference: {fileID: 0}
-    - target: {fileID: 8160144433527003255, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 1504849443
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

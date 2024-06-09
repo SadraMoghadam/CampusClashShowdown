@@ -16,9 +16,11 @@ public class PowerUpController : NetworkBehaviour
     private Transform _powerUpSpawnLocation;
     private bool _isNetworkSpawned = false;
     private int _numOfPowerUps = 0;
+    private bool _startSpawning = false;
     
     private void Awake() {
         _powerUpSpawnLocationsTemp = new List<Transform>(powerUpSpawnLocations);
+        _startSpawning = false;
     }
     
     
@@ -38,6 +40,7 @@ public class PowerUpController : NetworkBehaviour
         if (ClashArenaController.Instance.IsGamePlaying())
         {
             GenerateRandomSpawnTimeAndResetTimerServerRpc();
+            _startSpawning = true;
         }
     }
 
@@ -51,13 +54,15 @@ public class PowerUpController : NetworkBehaviour
         {
             return;
         }
-        _timer += Time.deltaTime;
-        if (_timer >= _timeToSpawnPrefab)
+
+        if (_startSpawning)
         {
-            SpawnPowerUpServerRpc();
-            GenerateRandomSpawnTimeAndResetTimerServerRpc();
-            _timer = 0;
-            _numOfPowerUps++;
+            _timer += Time.deltaTime;
+            if (_timer >= _timeToSpawnPrefab)
+            {
+                SpawnPowerUpServerRpc();
+                GenerateRandomSpawnTimeAndResetTimerServerRpc();
+            }   
         }
     }
     
@@ -66,15 +71,18 @@ public class PowerUpController : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnPowerUpServerRpc()
     {
+        _timer = 0;
         int prefabIndex = Random.Range(0, powerUpsPrefab.Count);
         Transform powerUpTransform = Instantiate(powerUpsPrefab[prefabIndex], _powerUpSpawnLocation.position, Quaternion.identity);
         NetworkObject powerUp = powerUpTransform.GetComponent<NetworkObject>();
         powerUp.Spawn(true);
+        _numOfPowerUps++;
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void GenerateRandomSpawnTimeAndResetTimerServerRpc()
     {
+        _timer = 0;
         _timeToSpawnPrefab = Random.Range(minTimeToSpawnPrefab, maxTimeToSpawnPrefab);
         Debug.Log(_timeToSpawnPrefab);
         
