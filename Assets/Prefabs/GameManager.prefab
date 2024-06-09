@@ -93,13 +93,13 @@ MonoBehaviour:
   - name: 2
     clip: {fileID: 8300000, guid: 8313a83dc4fe07443b61f9ba9679dad5, type: 3}
     volume: 1
-    pitch: 1
+    pitch: 1.5
     loop: 0
     source: {fileID: 0}
   - name: 3
     clip: {fileID: 8300000, guid: fa6ca9261aef3de439c102f7cf1d0527, type: 3}
     volume: 1
-    pitch: 1
+    pitch: 1.5
     loop: 0
     source: {fileID: 0}
   - name: 4
@@ -122,7 +122,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: 7
     clip: {fileID: 8300000, guid: 665c7146b70398e44bb48ceb2a0a5674, type: 3}
-    volume: 1
+    volume: 1.4
     pitch: 1
     loop: 0
     source: {fileID: 0}
@@ -148,6 +148,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: c2774880c9061114c829c6cbd2fdb81a, type: 3}
     volume: 1
     pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 12
+    clip: {fileID: 8300000, guid: 59a71459c298f284fac8de7a0a6ba792, type: 3}
+    volume: 1
+    pitch: 1.1
     loop: 0
     source: {fileID: 0}
 --- !u!114 &791923504301237982

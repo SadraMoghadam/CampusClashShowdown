@@ -1084,7 +1084,7 @@ MonoBehaviour:
   leaderBoardPanel: {fileID: 0}
   settingsPanel: {fileID: 0}
   playerName: {fileID: 7880390715299303622}
-  resourceValue: {fileID: 0}
+  resourceValue: {fileID: 1784410250538551206}
   starValue: {fileID: 6872802808824797242}
 --- !u!1 &2327726865415057191
 GameObject:
