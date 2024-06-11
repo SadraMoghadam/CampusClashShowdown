@@ -40,13 +40,21 @@ public class PowerUp : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _playerController = other.GetComponent<PlayerController>();
-        SetUI();
-        SetDefaultPlayerAttributes();
-        GetComponent<BoxCollider>().enabled = false;
-        GetComponent<MeshRenderer>().enabled = false;
-        StartCoroutine(PowerUpCR());
+        try
+        {
 
+            _playerController = other.GetComponent<PlayerController>();
+            SetUI();
+            SetDefaultPlayerAttributes();
+            GetComponent<BoxCollider>().enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
+            StartCoroutine(PowerUpCR());
+
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 
     private IEnumerator PowerUpCR()
@@ -64,8 +72,15 @@ public class PowerUp : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void DestroyPowerUpServerRpc() 
     {
-        GetComponent<NetworkObject>().Despawn();
-        Destroy(gameObject);
+        try
+        {
+            GetComponent<NetworkObject>().Despawn();
+            Destroy(gameObject);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("didnt destroyed");
+        }
     }
 
     private void SetPowerValue(float coefficient)

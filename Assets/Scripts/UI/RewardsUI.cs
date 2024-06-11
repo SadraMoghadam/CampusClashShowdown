@@ -27,13 +27,13 @@ public class RewardsUI : MonoBehaviour
         CalculateRewards();
     }
 
-    private void CalculateRewards()
+    private async void CalculateRewards()
     {
         boxesDeliveredText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BoxDelivery).ToString();
         boxesDestroyedText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BoxDestruction).ToString();
         boxesPlacedText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BoxConveyorPlacement).ToString();
         beltMovementText.text = "X " + ClashRewardCalculator.Instance.GetTotalByRewardType(RewardType.BeltMovement).ToString(); 
-        int totalReward = ClashRewardCalculator.Instance.CalculateRewards();
+        int totalReward = await ClashRewardCalculator.Instance.CalculateRewards();
         totalResourcesText.text = "+ " + totalReward;
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
@@ -82,7 +83,6 @@ public class LeaderboardManager : MonoBehaviour
     {
         try
         {
-            // var playerId = AuthenticationService.Instance.PlayerId;
             AddPlayerScoreOptions options = new AddPlayerScoreOptions() {};
             var scoreResponse = await LeaderboardsService.Instance.AddPlayerScoreAsync(LeaderboardId, resourceCount);
             
@@ -91,6 +91,38 @@ public class LeaderboardManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"Error submitting score: {e.Message}");
+        }
+    }
+    
+    public async Task<double> GetPlayerScore()
+    {
+        try
+        {
+            Debug.Log("Attempting to fetch player score...");
+            var scoreResponse = await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
+
+            if (scoreResponse != null)
+            {
+                Debug.Log($"Player score: {scoreResponse.Score}");
+                return scoreResponse.Score;
+            }
+            else
+            {
+                Debug.Log("No score found for the player on the leaderboard.");
+                return 0f;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Unexpected error fetching score: {e.Message}\n{e.StackTrace}");
+            if (e.Message.Contains("Leaderboard entry could not be found"))
+            {
+                return 0f;
+            }
+            else
+            {
+                return -1f;
+            }
         }
     }
 

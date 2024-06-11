@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -147,7 +148,7 @@ public class ClashRewardCalculator : NetworkBehaviour
         return totalReward;
     }
     
-    public int CalculateRewards()
+    public async Task<int> CalculateRewards()
     {
         PlayerData playerData = MultiplayerController.Instance.GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClient.ClientId);
         
@@ -158,6 +159,10 @@ public class ClashRewardCalculator : NetworkBehaviour
                           _totalBeltsMoved[team] * _beltMovementRewardCoefficient;
         int currentResources = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 0);
         PlayerPrefsManager.SetInt(PlayerPrefsKeys.Resource, currentResources + totalReward);
+        
+        double currentLeaderboardScore = await GameManager.Instance.LeaderboardManager.GetPlayerScore();
+        if((int)currentLeaderboardScore != -1)
+            GameManager.Instance.LeaderboardManager.AddOrUpdateScore((int)currentLeaderboardScore + totalReward);
         return totalReward;
     }
 }

@@ -37,36 +37,42 @@ public class PowerUpController : NetworkBehaviour
     
     private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e)
     {
-        if (ClashArenaController.Instance.IsGamePlaying())
+        if (IsServer)
         {
-            GenerateRandomSpawnTimeAndResetTimerServerRpc(true);
-            _startSpawning = true;
+            if (ClashArenaController.Instance.IsGamePlaying())
+            {
+                GenerateRandomSpawnTimeAndResetTimerServerRpc(true);
+                _startSpawning = true;
+            }
         }
     }
 
     private void Update()
     {
-        if (!_isNetworkSpawned)
+        if (IsServer)
         {
-            return;
-        }
-        if (_powerUpSpawnLocationsTemp.Count <= 0 || maxNumOfPowerUps == _numOfPowerUps)
-        {
-            return;
-        }
-
-        if (_startSpawning)
-        {
-            _timer += Time.deltaTime;
-            if (_timer >= _timeToSpawnPrefab)
+            if (!_isNetworkSpawned)
             {
-                _timer = 0;
-                SpawnPowerUpServerRpc();
-                GenerateRandomSpawnTimeAndResetTimerServerRpc();
-            }   
+                return;
+            }
+
+            if (_powerUpSpawnLocationsTemp.Count <= 0 || maxNumOfPowerUps == _numOfPowerUps)
+            {
+                return;
+            }
+
+            if (_startSpawning)
+            {
+                _timer += Time.deltaTime;
+                if (_timer >= _timeToSpawnPrefab)
+                {
+                    _timer = 0;
+                    SpawnPowerUpServerRpc();
+                    GenerateRandomSpawnTimeAndResetTimerServerRpc();
+                }
+            }
         }
     }
-    
     
 
     [ServerRpc(RequireOwnership = false)]
@@ -85,9 +91,9 @@ public class PowerUpController : NetworkBehaviour
         _timeToSpawnPrefab = Random.Range(minTimeToSpawnPrefab, maxTimeToSpawnPrefab);
         Debug.Log(_timeToSpawnPrefab);
         
-        if (_powerUpSpawnLocationsTemp.Count == 0 || firstTime)
+        if (_powerUpSpawnLocationsTemp.Count == 0)
         {
-            return; // Return early to avoid accessing an out-of-range index
+            return; 
         }
         
         int powerUpSpawnLocationIndex = Random.Range(0, _powerUpSpawnLocationsTemp.Count);
