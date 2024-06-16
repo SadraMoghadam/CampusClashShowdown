@@ -311,7 +311,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Recieve Rewards
+  m_text: 'Receive Rewards
 
 '
   m_isRightToLeft: 0
