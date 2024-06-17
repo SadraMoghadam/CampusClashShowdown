@@ -531,7 +531,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -862,10 +862,58 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6725268538131634137, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6725268538131634137, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6725268538131634137, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 380
+      objectReference: {fileID: 0}
+    - target: {fileID: 6801699918023558752, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6801699918023558752, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6801699918023558752, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 263
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453981259193163360, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453981259193163360, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7453981259193163360, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 380
+      objectReference: {fileID: 0}
     - target: {fileID: 8462920806749071959, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
       propertyPath: lobbyCreateUI
       value: 
       objectReference: {fileID: 1991446442}
+    - target: {fileID: 8542025722122306985, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8542025722122306985, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8542025722122306985, guid: 4e961ab9dfd251044ac8c408840f6313, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 195
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
