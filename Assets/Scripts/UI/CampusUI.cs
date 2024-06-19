@@ -12,6 +12,9 @@ public class CampusUI : MonoBehaviour
     [SerializeField] private Button avatarButton;
     [SerializeField] private Button leaderboardButton;
     [SerializeField] private Button settingsButton;
+    [SerializeField] private Button openPanelButton;
+    [SerializeField] private Button closePanelButton;
+    [SerializeField] private Animator panelAnimator;
     
     [SerializeField] private LeaderboardUI leaderBoardPanel;
     [SerializeField] private SettingsUI settingsPanel;
@@ -42,9 +45,16 @@ public class CampusUI : MonoBehaviour
         {
             settingsPanel.gameObject.SetActive(true);
         });
-
         
+        openPanelButton.onClick.AddListener(() =>
+        {
+            panelAnimator.SetTrigger("Open");
+        });
 
+        closePanelButton.onClick.AddListener(() =>
+        {
+            panelAnimator.SetTrigger("Close");
+        });
 
         //PlayerPrefsManager.SetString(PlayerPrefsKeys.Resource, "200" );
 
