@@ -531,6 +531,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     private void DropDownAndDestroy()
     {
+        
+        ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
         if(!IsLocalPlayer)
             return;
         _isObjectPickedUp = false;
