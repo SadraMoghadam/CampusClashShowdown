@@ -650,7 +650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1012593716250003402, guid: 53ca01119c62dc64cb624f77efaff3a5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000091552734
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 1845458002255831545, guid: 53ca01119c62dc64cb624f77efaff3a5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2626,6 +2626,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LobbyUI
       objectReference: {fileID: 0}
+    - target: {fileID: 3800312546053179266, guid: 7719cb1001355834ab7cf2bac7385fe1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3818887113880706423, guid: 7719cb1001355834ab7cf2bac7385fe1, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -2853,7 +2857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2839607619398038342, guid: b5c0fadf17d473a4faf11edb827a60d2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -11.204895
+      value: -11.205078
       objectReference: {fileID: 0}
     - target: {fileID: 3589033292064393551, guid: b5c0fadf17d473a4faf11edb827a60d2, type: 3}
       propertyPath: settingsClashUI
@@ -2863,10 +2867,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClashSceneUI
       objectReference: {fileID: 0}
-    - target: {fileID: 5322571956551718651, guid: b5c0fadf17d473a4faf11edb827a60d2, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8496958001962362374, guid: b5c0fadf17d473a4faf11edb827a60d2, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -2889,6 +2889,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8602572851156328644, guid: b5c0fadf17d473a4faf11edb827a60d2, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157490823024852452, guid: b5c0fadf17d473a4faf11edb827a60d2, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

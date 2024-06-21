@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 490840121
+  GlobalObjectIdHash: 1504849443
   InScenePlacedSourceGlobalObjectIdHash: 1504849443
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -147,5 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyBoxInHand: {fileID: 7155688038882147838, guid: beb20338ff27c534e835f711a6178664, type: 3}
-  SpeedPowerUp: {fileID: 5586266076411426139, guid: caa691f295f14c24b96dedb24e80bfd3, type: 3}
-  StrengthPowerUp: {fileID: 1952463203614900734, guid: 6483c352adeef6e46a327f48605ef008, type: 3}
+  destroyBoxOnConveyor: {fileID: 3512134129305496630, guid: 6f8126d6d5d4a44469fd77f6ccaa7e3e, type: 3}
+  placeBoxOnConveyor: {fileID: 3525505170186186995, guid: a7cf3095f9ad6a4469e77654cc60945d, type: 3}
+  speedPowerUp: {fileID: 5586266076411426139, guid: caa691f295f14c24b96dedb24e80bfd3, type: 3}
+  strengthPowerUp: {fileID: 1952463203614900734, guid: 6483c352adeef6e46a327f48605ef008, type: 3}

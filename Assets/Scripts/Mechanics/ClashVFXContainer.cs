@@ -5,7 +5,8 @@ using UnityEngine;
 public enum ClashVFXType
 {
     DestroyBoxInHand,
-    destroyBoxOnConveyor,
+    DestroyBoxOnConveyor,
+    PlaceBoxOnConveyor,
     SpeedPowerUp,
     StrengthPowerUp,
 }
@@ -14,8 +15,9 @@ public class ClashVFXContainer : MonoBehaviour
 {
     [SerializeField] private GameObject destroyBoxInHand;
     [SerializeField] private GameObject destroyBoxOnConveyor;
-    [SerializeField] private GameObject SpeedPowerUp;
-    [SerializeField] private GameObject StrengthPowerUp;
+    [SerializeField] private GameObject placeBoxOnConveyor;
+    [SerializeField] private GameObject speedPowerUp;
+    [SerializeField] private GameObject strengthPowerUp;
 
     private static ClashVFXContainer instance;
 
@@ -45,11 +47,13 @@ public class ClashVFXContainer : MonoBehaviour
             case ClashVFXType.DestroyBoxInHand:
                 return instance.destroyBoxInHand;
             case ClashVFXType.SpeedPowerUp:
-                return instance.SpeedPowerUp;
+                return instance.speedPowerUp;
             case ClashVFXType.StrengthPowerUp:
-                return instance.StrengthPowerUp;
-            case ClashVFXType.destroyBoxOnConveyor:
+                return instance.strengthPowerUp;
+            case ClashVFXType.DestroyBoxOnConveyor:
                 return instance.destroyBoxOnConveyor;
+            case ClashVFXType.PlaceBoxOnConveyor:
+                return instance.placeBoxOnConveyor;
             default:
                 return null;
         }
@@ -94,10 +98,42 @@ public class ClashVFXContainer : MonoBehaviour
 
         instance.StartCoroutine(DestroyAfterSeconds(vfxInstance, destroyAfterSeconds));
     }
+    
+    public static void InstantiateVFX(ClashVFXType type, Vector3 position, float destroyAfterSeconds, Color color)
+    {
+        GameObject vfxPrefab = GetVFXObject(type);
+        if (vfxPrefab == null)
+        {
+            Debug.LogError($"VFX prefab for type {type} is not found.");
+            return;
+        }
+
+        GameObject vfxInstance = Instantiate(vfxPrefab, position, Quaternion.identity);
+        if (vfxInstance == null)
+        {
+            Debug.LogError("Failed to instantiate VFX prefab.");
+            return;
+        }
+
+        ChangeParticlesColor(vfxInstance, color);
+
+        instance.StartCoroutine(DestroyAfterSeconds(vfxInstance, destroyAfterSeconds));
+    }
+    
 
     private static IEnumerator DestroyAfterSeconds(GameObject vfxInstance, float seconds)
     {
         yield return new WaitForSeconds(seconds);
         Destroy(vfxInstance);
+    }
+
+    private static void ChangeParticlesColor(GameObject vfxInstance, Color color)
+    {
+        ParticleSystem[] particleSystems = vfxInstance.GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem ps in particleSystems)
+        {
+            var mainModule = ps.main;
+            mainModule.startColor = color;
+        }
     }
 }
