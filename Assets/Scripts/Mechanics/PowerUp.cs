@@ -14,7 +14,8 @@ public class PowerUp : NetworkBehaviour
 {
     [SerializeField] private PowerUpType powerUpType;
     [SerializeField] private float powerUpTime;
-    [SerializeField] private float powerUpMultiplierCoefficient; 
+    [SerializeField] private float powerUpMultiplierCoefficient;
+    [SerializeField] private GameObject vfx; 
     private PlayerController _playerController;
     private float _defaultPlayerSpeed;
     private float _defaultPlayerStrength;
@@ -49,6 +50,7 @@ public class PowerUp : NetworkBehaviour
             SetDefaultPlayerAttributes();
             GetComponent<BoxCollider>().enabled = false;
             GetComponent<MeshRenderer>().enabled = false;
+            vfx.SetActive(false);
             StartCoroutine(PowerUpCR());
 
         }

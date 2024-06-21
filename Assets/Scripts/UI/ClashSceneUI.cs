@@ -12,6 +12,8 @@ public class ClashSceneUI : MonoBehaviour
     [SerializeField] private Slider conveyorStopCooldown;
     [SerializeField] private Slider speedPowerUp;
     [SerializeField] private Slider strengthPowerUp;
+    [SerializeField] private Slider staminaSlider;
+    [SerializeField] public CanvasGroup staminaCanvasGroup;
     [SerializeField] private Image team1Background;
     [SerializeField] private Image team2Background;
     [SerializeField] private Image timerImage;
@@ -28,6 +30,7 @@ public class ClashSceneUI : MonoBehaviour
     private Coroutine _conveyorStopCooldownCR;
     private Coroutine _speedPowerUpCR;
     private Coroutine _strengthPowerUpCR;
+    private float maxStamina = 100;
     [HideInInspector] public bool isAbleToPress;
 
     private void Awake()
@@ -48,6 +51,8 @@ public class ClashSceneUI : MonoBehaviour
         {
             settingsClashUI.gameObject.SetActive(true);
         });
+        
+        staminaCanvasGroup.alpha = 0;
     }
 
     private void Update() {
@@ -59,12 +64,37 @@ public class ClashSceneUI : MonoBehaviour
     {
         if (team == Team.Team1)
         {
+            team1Background.gameObject.GetComponent<Animator>().Play("TeamScore");
             team1Score.text = score.ToString();
         }
         else if (team == Team.Team2)
         {
+            team2Background.gameObject.GetComponent<Animator>().Play("TeamScore");
             team2Score.text = score.ToString();
         }
+    }
+    
+    
+    public void SetStaminaSliderValue(float value)
+    {
+        staminaSlider.maxValue = maxStamina;
+        staminaSlider.value = value;
+    }
+    
+    public IEnumerator FadeStaminaBar(float targetAlpha)
+    {
+        float fadeDuration = 0.5f;
+        float startAlpha = staminaCanvasGroup.alpha;
+        float time = 0;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+            staminaCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, time / fadeDuration);
+            yield return null;
+        }
+
+        staminaCanvasGroup.alpha = targetAlpha;
     }
 
     public void SetConveyorStopCooldownSliderValue(float fillTime)

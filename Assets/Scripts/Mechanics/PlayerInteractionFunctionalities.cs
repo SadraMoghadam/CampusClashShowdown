@@ -518,7 +518,7 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     
     private void DropDown()
     {
-        ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
+        // ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
         ClashVFXContainer.InstantiateVFX(ClashVFXType.PlaceBoxOnConveyor, ClashArenaController.Instance.resourceDeliveryPathPoints[0].position, 4.0f, _playerController.GetTeamColor());
         
         if(!IsLocalPlayer)

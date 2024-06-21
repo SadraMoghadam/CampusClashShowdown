@@ -32,6 +32,11 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
     private bool _canMove;
     private float _currentEmissionRate = 0;
+    private float stamina = 100;
+    private float maxStamina = 100;
+    private float staminaRegenRate = 20;
+    private float staminaDepletionRate = 30;
+    private bool isRunning = false;
 
 
 
@@ -46,6 +51,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         playerVisual.SetPlayerMesh(MultiplayerController.Instance.GetPlayerHeadMesh(playerData.headMeshId),
             MultiplayerController.Instance.GetPlayerBodyMesh(playerData.bodyMeshId));
         ClashArenaController.Instance.OnStateChanged += ClashArenaController_OnStateChanged;
+        ClashSceneUI.Instance.SetStaminaSliderValue(stamina);
     }
 
     private void ClashArenaController_OnStateChanged(object sender, System.EventArgs e)
@@ -102,13 +108,35 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         GatherInput();
         Look();
         
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && stamina > 0)
         {
             _gameManager.AudioManager.Instantplay(SoundName.Sprint, transform.position);
+            isRunning = true;
+            StartCoroutine(ClashSceneUI.Instance.FadeStaminaBar(1));
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) || stamina <= 0)
+        {
+            isRunning = false;
         }
         
+        RegenerateStamina();
         RotatePlayerArrowTowardsCamera();
+        ClashSceneUI.Instance.SetStaminaSliderValue(stamina);
+        if (!isRunning && stamina >= maxStamina && ClashSceneUI.Instance.staminaCanvasGroup.alpha > 0)
+        {
+            StartCoroutine(ClashSceneUI.Instance.FadeStaminaBar(0));
+        }
     }
+    
+    private void RegenerateStamina()
+    {
+        if (!isRunning && stamina < maxStamina)
+        {
+            stamina += staminaRegenRate * Time.deltaTime;
+            stamina = Mathf.Clamp(stamina, 0, maxStamina);
+        }
+    }
+    
     private void RotatePlayerArrowTowardsCamera()
     {
         Quaternion desiredWorldRotation = Quaternion.Euler(new Vector3(0, 135, 270));
@@ -143,7 +171,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
             _animator.SetFloat(Speed, 0);
         }
         // Walk
-        else if (!Input.GetKey(KeyCode.LeftShift))
+        else if (!isRunning)
         {
             _animator.SetFloat(Speed, 0.5f);
         }
@@ -163,16 +191,16 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void Move()
     {
-        var emission = footprintVfx.emission;
-
         float desiredEmissionRate = 0;
         if (_input != Vector3.zero)
         {
             float actualSpeed = speed;
             
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (isRunning && stamina > 0)
             {
                 actualSpeed = runSpeed;
+                stamina -= staminaDepletionRate * Time.deltaTime;
+                stamina = Mathf.Clamp(stamina, 0, maxStamina);
             }
             desiredEmissionRate = 15;
             _rb.MovePosition(transform.position + transform.forward * (_input.normalized.magnitude * actualSpeed * Time.deltaTime));

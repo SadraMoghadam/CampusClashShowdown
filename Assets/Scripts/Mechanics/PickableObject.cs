@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PickableObject : NetworkBehaviour
 {
+    [SerializeField] private GameObject boxVfx;
     private FollowTransform _followTransform;
     private NetworkObject _networkObject;
     private IParent<PickableObject> _objectParent;
@@ -44,6 +45,7 @@ public class PickableObject : NetworkBehaviour
             return;
         }
         objectParent.SetChild(this);
+        ClashVFXContainer.ChangeParticlesColor(boxVfx, objectParent.GetTeamColor());
         _followTransform.SetTargetTransform(objectParent.GetChildFollowTransform());
     }
     

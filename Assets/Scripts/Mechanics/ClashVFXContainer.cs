@@ -115,6 +115,11 @@ public class ClashVFXContainer : MonoBehaviour
             return;
         }
 
+        if (type == ClashVFXType.PlaceBoxOnConveyor)
+        {
+            vfxInstance.transform.localEulerAngles = new Vector3(-90, 0, 0);
+        }
+
         ChangeParticlesColor(vfxInstance, color);
 
         instance.StartCoroutine(DestroyAfterSeconds(vfxInstance, destroyAfterSeconds));
@@ -127,7 +132,7 @@ public class ClashVFXContainer : MonoBehaviour
         Destroy(vfxInstance);
     }
 
-    private static void ChangeParticlesColor(GameObject vfxInstance, Color color)
+    public static void ChangeParticlesColor(GameObject vfxInstance, Color color)
     {
         ParticleSystem[] particleSystems = vfxInstance.GetComponentsInChildren<ParticleSystem>();
         foreach (ParticleSystem ps in particleSystems)
