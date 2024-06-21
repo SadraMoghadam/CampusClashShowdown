@@ -1170,7 +1170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5263978098257995817, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4279415105
+      value: 71347686
       objectReference: {fileID: 0}
     - target: {fileID: 5303376426984598779, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: playerIndex
@@ -1250,9 +1250,17 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1968253413506427176, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1978689737715041617, guid: afa54037ffe627545886e2741abb365d, type: 3}
       propertyPath: m_Name
       value: CFXR4 Firework HDR Shoot Single (Random Color) (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978689737715041617, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1978689737715041618, guid: afa54037ffe627545886e2741abb365d, type: 3}
       propertyPath: looping
@@ -1314,6 +1322,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4594683968853401407, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6710126785436781074, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9034376611552921419, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1354,7 +1374,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5263978098257995817, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 818448923
+      value: 3780570632
       objectReference: {fileID: 0}
     - target: {fileID: 5303376426984598779, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: playerIndex
@@ -1452,7 +1472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5263978098257995817, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4007869447
+      value: 1348062087
       objectReference: {fileID: 0}
     - target: {fileID: 5821890491719271985, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: m_SortingLayer
@@ -1550,7 +1570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5263978098257995817, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2776583743
+      value: 1714259376
       objectReference: {fileID: 0}
     - target: {fileID: 5303376426984598779, guid: 2af219f56ff83924b853559465b85e57, type: 3}
       propertyPath: playerIndex
@@ -1630,9 +1650,17 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1968253413506427176, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1978689737715041617, guid: afa54037ffe627545886e2741abb365d, type: 3}
       propertyPath: m_Name
       value: CFXR4 Firework HDR Shoot Single (Random Color)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978689737715041617, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1978689737715041618, guid: afa54037ffe627545886e2741abb365d, type: 3}
       propertyPath: looping
@@ -1693,6 +1721,18 @@ PrefabInstance:
     - target: {fileID: 1978689737715041621, guid: afa54037ffe627545886e2741abb365d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4594683968853401407, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6710126785436781074, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9034376611552921419, guid: afa54037ffe627545886e2741abb365d, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

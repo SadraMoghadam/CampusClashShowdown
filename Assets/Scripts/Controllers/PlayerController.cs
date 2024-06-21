@@ -18,6 +18,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     [SerializeField] private GameObject playerArrow;
     [SerializeField] private GameObject playerTeamIndicator;
     [SerializeField] private PlayerVisual playerVisual;
+    [SerializeField] private ParticleSystem footprintVfx;
     private Vector3 _input;
     private Rigidbody _rb;
     private Animator _animator;
@@ -30,6 +31,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     private int _teamId;
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
     private bool _canMove;
+    private float _currentEmissionRate = 0;
 
 
 
@@ -104,7 +106,19 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         {
             _gameManager.AudioManager.Instantplay(SoundName.Sprint, transform.position);
         }
+        
+        RotatePlayerArrowTowardsCamera();
     }
+    private void RotatePlayerArrowTowardsCamera()
+    {
+        Quaternion desiredWorldRotation = Quaternion.Euler(new Vector3(0, 135, 270));
+    
+        Quaternion parentRotationInverse = Quaternion.Inverse(playerArrow.transform.parent.rotation);
+        Quaternion localRotation = parentRotationInverse * desiredWorldRotation;
+    
+        playerArrow.transform.localRotation = localRotation;
+    }
+    
 
     private void FixedUpdate() {
         Move();
@@ -149,15 +163,40 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
 
     private void Move()
     {
-        if (_input == Vector3.zero) return;
-        float actualSpeed = speed;
-        // run
-        if (Input.GetKey(KeyCode.LeftShift))
+        var emission = footprintVfx.emission;
+
+        float desiredEmissionRate = 0;
+        if (_input != Vector3.zero)
         {
-            actualSpeed = runSpeed;  
+            float actualSpeed = speed;
+            
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                actualSpeed = runSpeed;
+            }
+            desiredEmissionRate = 15;
+            _rb.MovePosition(transform.position + transform.forward * (_input.normalized.magnitude * actualSpeed * Time.deltaTime));
         }
 
-        _rb.MovePosition(transform.position + transform.forward * (_input.normalized.magnitude * actualSpeed * Time.deltaTime));
+        if (_currentEmissionRate != desiredEmissionRate)
+        {
+            _currentEmissionRate = desiredEmissionRate;
+            SetEmissionRateServerRpc(_currentEmissionRate);
+        }
+    }
+    
+    
+    [ServerRpc(RequireOwnership = false)]
+    private void SetEmissionRateServerRpc(float rate)
+    {
+        SetEmissionRateClientRpc(rate);
+    }
+
+    [ClientRpc]
+    private void SetEmissionRateClientRpc(float rate)
+    {
+        var emission = footprintVfx.emission;
+        emission.rateOverTime = rate;
     }
 
     private void SetTeam()

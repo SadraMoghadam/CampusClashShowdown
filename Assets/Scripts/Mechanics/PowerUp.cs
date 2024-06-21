@@ -45,6 +45,7 @@ public class PowerUp : NetworkBehaviour
 
             _playerController = other.GetComponent<PlayerController>();
             SetUI();
+            SetVFX();
             SetDefaultPlayerAttributes();
             GetComponent<BoxCollider>().enabled = false;
             GetComponent<MeshRenderer>().enabled = false;
@@ -98,6 +99,21 @@ public class PowerUp : NetworkBehaviour
                 _playerController.speed = _defaultPlayerSpeed;
                 _playerController.runSpeed = _defaultPlayerSpeed + 1;
                 _playerController.strength = _defaultPlayerStrength;
+                break;
+        }
+    }
+    
+    private void SetVFX()
+    {
+        switch (powerUpType)
+        {
+            case PowerUpType.Speed:
+                ClashVFXContainer.InstantiateVFX(ClashVFXType.SpeedPowerUp, Vector3.zero, _playerController.gameObject.transform, powerUpTime);
+                break;
+            case PowerUpType.Strength:
+                ClashVFXContainer.InstantiateVFX(ClashVFXType.StrengthPowerUp, Vector3.zero, _playerController.gameObject.transform, powerUpTime);
+                break;
+            default:
                 break;
         }
     }

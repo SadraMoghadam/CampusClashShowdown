@@ -4,12 +4,18 @@ using UnityEngine;
 
 public enum ClashVFXType
 {
-    DestroyBoxInHand
+    DestroyBoxInHand,
+    destroyBoxOnConveyor,
+    SpeedPowerUp,
+    StrengthPowerUp,
 }
 
 public class ClashVFXContainer : MonoBehaviour
 {
     [SerializeField] private GameObject destroyBoxInHand;
+    [SerializeField] private GameObject destroyBoxOnConveyor;
+    [SerializeField] private GameObject SpeedPowerUp;
+    [SerializeField] private GameObject StrengthPowerUp;
 
     private static ClashVFXContainer instance;
 
@@ -38,6 +44,12 @@ public class ClashVFXContainer : MonoBehaviour
         {
             case ClashVFXType.DestroyBoxInHand:
                 return instance.destroyBoxInHand;
+            case ClashVFXType.SpeedPowerUp:
+                return instance.SpeedPowerUp;
+            case ClashVFXType.StrengthPowerUp:
+                return instance.StrengthPowerUp;
+            case ClashVFXType.destroyBoxOnConveyor:
+                return instance.destroyBoxOnConveyor;
             default:
                 return null;
         }
@@ -52,7 +64,8 @@ public class ClashVFXContainer : MonoBehaviour
             return;
         }
 
-        GameObject vfxInstance = Instantiate(vfxPrefab, position, Quaternion.identity, parent);
+        GameObject vfxInstance = Instantiate(vfxPrefab, parent);
+        vfxInstance.transform.localPosition = position;
         if (vfxInstance == null)
         {
             Debug.LogError("Failed to instantiate VFX prefab.");

@@ -134,6 +134,7 @@ public class ObjectDelivery : NetworkBehaviour
         _rb.useGravity = true;
         _rb.freezeRotation = false;
         yield return new WaitForSeconds(1);
+        ClashVFXContainer.InstantiateVFX(ClashVFXType.destroyBoxOnConveyor, transform.position, 4.0f);
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1);
         networkObject.Despawn();
