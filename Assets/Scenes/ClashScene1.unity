@@ -286,10 +286,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3841514879
       objectReference: {fileID: 0}
-    - target: {fileID: 3548054633406284507, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
-      propertyPath: initPosition
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3943406597961358493, guid: 9cd0399d55fc6d84a86e65df47f96c92, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3667325803
@@ -2265,14 +2261,6 @@ PrefabInstance:
     - target: {fileID: 2342400749703614215, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: m_Name
       value: Controllers
-      objectReference: {fileID: 0}
-    - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: maxTimeToSpawnPrefab
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
-      propertyPath: minTimeToSpawnPrefab
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4312554151245633157, guid: 3cc9ee00b7b8aba41ba7ebe41d2c6009, type: 3}
       propertyPath: powerUpSpawnLocations.Array.data[0]

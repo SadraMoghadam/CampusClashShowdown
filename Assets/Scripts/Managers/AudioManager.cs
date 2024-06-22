@@ -23,6 +23,9 @@ public enum SoundName
     GatesMovement,
     Button1,
     Button2,
+    Firework,
+    BuildingPlacement,
+    BuildingRemove,
 }
 
 /// <summary>

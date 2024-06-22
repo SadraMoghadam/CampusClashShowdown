@@ -1226,6 +1226,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CFXR3 Ambient Glows Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1199236575693362720, guid: 40951af9e12793d4888a6b7da536e8e3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1199236575693362721, guid: 40951af9e12793d4888a6b7da536e8e3, type: 3}
       propertyPath: ShapeModule.m_Scale.x
       value: 6
@@ -1319,6 +1323,10 @@ PrefabInstance:
     - target: {fileID: 1199236575693362720, guid: 40951af9e12793d4888a6b7da536e8e3, type: 3}
       propertyPath: m_Name
       value: CFXR3 Ambient Glows Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 1199236575693362720, guid: 40951af9e12793d4888a6b7da536e8e3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1199236575693362721, guid: 40951af9e12793d4888a6b7da536e8e3, type: 3}
       propertyPath: ShapeModule.m_Scale.x

@@ -156,6 +156,36 @@ MonoBehaviour:
     pitch: 1.1
     loop: 0
     source: {fileID: 0}
+  - name: 13
+    clip: {fileID: 8300000, guid: 8f6769dec19b5aa4680a2bbe1b9e15f0, type: 3}
+    volume: 0
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 14
+    clip: {fileID: 8300000, guid: b41daf4db05c76f4bb2f2c3138f04278, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 15
+    clip: {fileID: 8300000, guid: 2384ac05cdb3f9b4e9fa332c4c7dc640, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 16
+    clip: {fileID: 8300000, guid: 73db919641c83904fb7e7e2ede52fd9a, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: 17
+    clip: {fileID: 8300000, guid: 3c8826052a7555d458910874ff14c58a, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!114 &791923504301237982
 MonoBehaviour:
   m_ObjectHideFlags: 0

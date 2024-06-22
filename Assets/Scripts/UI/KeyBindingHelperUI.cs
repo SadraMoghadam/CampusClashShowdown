@@ -16,8 +16,8 @@ public class KeyBindingHelperUI : MonoBehaviour
         { KeyBindingType.PickableArea, "Press F to Pick a Box" },
         { KeyBindingType.BlockButtonArea, "Press F to Interact" },
         { KeyBindingType.ConveyorButtonArea, "Press F to Interact" },
-        { KeyBindingType.PushAndPullArea, "Press J to Push\n" +
-                                          "Press K to Pull" },
+        { KeyBindingType.PushAndPullArea, "Hold J to Push\n" +
+                                          "Hold K to Pull" },
         { KeyBindingType.DropBox, "Press F to Drop the Box" },
     };
 

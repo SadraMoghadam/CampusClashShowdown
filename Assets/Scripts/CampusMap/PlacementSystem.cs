@@ -71,6 +71,7 @@ public class PlacementSystem : MonoBehaviour
 
     private void PlaceStructure()
     {
+        GameManager.Instance.AudioManager.Instantplay(SoundName.BuildingPlacement, Vector3.zero);
         if (inputManager.IsPointerOverUI())
         {
             return;
@@ -86,6 +87,7 @@ public class PlacementSystem : MonoBehaviour
 
     private void RemoveStructure()
     {
+        GameManager.Instance.AudioManager.Instantplay(SoundName.BuildingRemove, Vector3.zero);
         if (inputManager.IsPointerOverUI())
         {
             return;

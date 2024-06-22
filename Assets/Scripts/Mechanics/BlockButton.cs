@@ -58,9 +58,10 @@ public class BlockButton : NetworkBehaviour
         yield return new WaitForSeconds(.05f);
         GameManager.Instance.AudioManager.Instantplay(SoundName.GatesMovement, transform.position);
         PlayAnimationServerRpc(_blockPickableArea);
-        yield return new WaitForSeconds(.9f);
-        isAbleToPress = true;
+        yield return new WaitForSeconds(.4f);
         BlockArea(_blockPickableArea);
+        yield return new WaitForSeconds(.5f);
+        isAbleToPress = true;
     }
     
     [ServerRpc(RequireOwnership = false)]

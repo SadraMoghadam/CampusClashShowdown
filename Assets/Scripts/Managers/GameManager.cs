@@ -100,24 +100,55 @@ public class GameManager : MonoBehaviour
         asyncLoad.allowSceneActivation = true;
     }
     
-    public static async void LoadSceneNetwork(Scene targetScene)
+    public static async Task LoadSceneNetwork(Scene targetScene)
     {
-        // var scene = SceneManager.LoadSceneAsync(sceneName.ToString());
-        
-        var scene = NetworkManager.Singleton.SceneManager.LoadScene(Scene.LoadingScene.ToString(), LoadSceneMode.Single);
-        if (scene == SceneEventProgressStatus.Started)
+        try
         {
-            await Task.Delay(100);
-            var slider = FindObjectOfType<Slider>();
-            slider.value = 0;
-            do
+            Debug.LogWarning("LoadSceneNetwork: Starting");
+            var sceneEventProgress = NetworkManager.Singleton.SceneManager.LoadScene(Scene.LoadingScene.ToString(), LoadSceneMode.Single);
+    
+            Debug.LogWarning("1.");
+            if (sceneEventProgress == SceneEventProgressStatus.Started)
             {
+                Debug.LogWarning("2.");
                 await Task.Delay(100);
-                slider.value += 0.1f;
-            } while (slider.value <= 0.9f);
-            slider.value += 0.1f; 
-            await Task.Delay(300);
-            NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);    
+    
+                Debug.LogWarning("3");
+                var slider = FindObjectOfType<Slider>();
+                if (slider != null)
+                {
+                    slider.value = 0;
+                    do
+                    {
+                        await Task.Delay(100);
+                        slider.value += 0.1f;
+                    } while (slider.value <= 0.9f);
+                    slider.value += 0.1f; 
+                    await Task.Delay(300);
+                }
+                else
+                {
+                    Debug.LogWarning("Slider not found in the loading scene.");
+                }
+    
+                var targetSceneEventProgress = NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
+                if (targetSceneEventProgress != SceneEventProgressStatus.Started)
+                {
+                    Debug.LogError($"Failed to load the target scene: {targetScene}");
+                    NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
+                }
+            }
+            else
+            {
+                Debug.LogError("Failed to load the loading scene. Directly loading the target scene.");
+                NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
+            }
+            Debug.LogWarning("LoadSceneNetwork: Finished");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Exception during scene load: {ex.Message}. Directly loading the target scene.");
+            NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
         }
     }
     

@@ -96,7 +96,7 @@ public class NetworkLobby : MonoBehaviour
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, "udp"));
 
             MultiplayerController.Instance.StartHost();
-            GameManager.LoadSceneNetwork(GameManager.Scene.CharactersLobbyScene);
+            await GameManager.LoadSceneNetwork(GameManager.Scene.CharactersLobbyScene);
         }
         catch (LobbyServiceException e)
         {

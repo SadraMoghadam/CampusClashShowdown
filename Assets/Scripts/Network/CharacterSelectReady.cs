@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectReady : NetworkBehaviour {
 
@@ -43,10 +44,22 @@ public class CharacterSelectReady : NetworkBehaviour {
         }
 
         if (allClientsReady) {
+            NetworkManager.Singleton.SceneManager.LoadScene("ClashScene1", LoadSceneMode.Single);
             NetworkLobby.Instance.DeleteLobby();
-            GameManager.LoadSceneNetwork(GameManager.Scene.ClashScene1);
+            // HandleSceneLoading();
         }
     }
+    
+    private async void HandleSceneLoading() {
+        try {
+            Debug.LogWarning("Starting HandleSceneLoading");
+            await GameManager.LoadSceneNetwork(GameManager.Scene.ClashScene1);
+            Debug.LogWarning("Finished HandleSceneLoading");
+        } catch (Exception ex) {
+            Debug.LogError($"Exception in HandleSceneLoading: {ex.Message}");
+        }
+    }
+    
 
     [ClientRpc]
     private void SetPlayerReadyClientRpc(ulong clientId) {
