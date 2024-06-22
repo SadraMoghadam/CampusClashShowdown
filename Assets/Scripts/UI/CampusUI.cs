@@ -26,6 +26,7 @@ public class CampusUI : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.AddButtonsSound();
         clashButton.onClick.AddListener(() =>
         {
             GameManager.LoadScene(GameManager.Scene.NetworkLobbyScene);

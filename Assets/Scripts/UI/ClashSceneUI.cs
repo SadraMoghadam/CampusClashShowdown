@@ -35,6 +35,7 @@ public class ClashSceneUI : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.AddButtonsSound();
         if (_instance == null)
         {
             _instance = this;

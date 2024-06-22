@@ -16,6 +16,7 @@ public class CharacterLobbyUI : MonoBehaviour
 
 
     private void Awake() {
+        GameManager.Instance.AddButtonsSound();
         mainMenuButton.onClick.AddListener(() => {
             NetworkLobby.Instance.LeaveLobby();
             NetworkManager.Singleton.Shutdown();

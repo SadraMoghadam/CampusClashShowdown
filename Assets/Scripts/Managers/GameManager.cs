@@ -63,6 +63,16 @@ public class GameManager : MonoBehaviour
         AudioManager.ChangeMusicVolume(musicVolume);
         AudioManager.ChangeEffectsVolume(sfxVolume);
     }
+    
+    
+    public void AddButtonsSound()
+    {
+        Button[] buttons = FindObjectsOfType<Button>(true);
+        foreach (Button button in buttons)
+        {
+            button.onClick.AddListener(() => AudioManager.Instantplay(SoundName.Button2, Vector3.zero));
+        }
+    }
 
     /// <summary>
     /// For each scene change we can call this function
@@ -110,7 +120,6 @@ public class GameManager : MonoBehaviour
             NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);    
         }
     }
-    
     
     public static void LoadNetwork(Scene targetScene) {
         NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);

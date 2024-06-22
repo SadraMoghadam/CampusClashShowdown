@@ -21,7 +21,8 @@ public enum SoundName
     PowerUpFinished,
     GameOver,
     GatesMovement,
-    Button,
+    Button1,
+    Button2,
 }
 
 /// <summary>

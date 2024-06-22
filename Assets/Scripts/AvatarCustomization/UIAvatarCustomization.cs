@@ -30,6 +30,8 @@ public class UIAvatarCustomization : MonoBehaviour
         {
             Debug.Log("pressed Button");
             playerCustomization.ChangeBodyPart(BodyPartType.Body, true);
+            
+            
         });  
         
         bodyMinusButton.onClick.AddListener(() =>
