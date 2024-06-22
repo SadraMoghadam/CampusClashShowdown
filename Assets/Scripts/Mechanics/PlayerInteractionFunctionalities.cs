@@ -519,8 +519,8 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
     private void DropDown()
     {
         // ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
-        ClashVFXContainer.InstantiateVFX(ClashVFXType.PlaceBoxOnConveyor, ClashArenaController.Instance.resourceDeliveryPathPoints[0].position, 4.0f, _playerController.GetTeamColor());
-        
+        // ClashVFXContainer.InstantiateVFX(ClashVFXType.PlaceBoxOnConveyor, ClashArenaController.Instance.resourceDeliveryPathPoints[0].position, 4.0f, _playerController.GetTeamColor());
+        InstantiateVFXServerRpc(0);
         if(!IsLocalPlayer)
             return;
         _isObjectPickedUp = false;
@@ -530,12 +530,12 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
         ObjectDelivery.SpawnResourceBoxOnDeliveryPath(_playerController);
     }
-    
-    
+
     private void DropDownAndDestroy()
     {
         
-        ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
+        // ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
+        InstantiateVFXServerRpc(1);
         if(!IsLocalPlayer)
             return;
         _isObjectPickedUp = false;
@@ -545,6 +545,25 @@ public class PlayerInteractionFunctionalities : NetworkBehaviour
         SetLayerWeightServerRpc(_pickingLayer, _holdingPickLayerWeight);
     }
     
+        
+    [ServerRpc(RequireOwnership = false)]
+    private void InstantiateVFXServerRpc(int id)
+    {
+        InstantiateVFXClientRpc(id);
+    }
+
+    [ClientRpc]
+    private void InstantiateVFXClientRpc(int id)
+    {
+        if (id == 0)
+        {
+            ClashVFXContainer.InstantiateVFX(ClashVFXType.PlaceBoxOnConveyor, ClashArenaController.Instance.resourceDeliveryPathPoints[0].position, 4.0f, _playerController.GetTeamColor());   
+        }
+        else if (id == 1)
+        {
+            ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxInHand, _playerController.GetChild().transform.position, 4.0f);
+        }
+    }
 
     private void Press()
     {

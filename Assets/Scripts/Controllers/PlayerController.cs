@@ -139,7 +139,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
     
     private void RotatePlayerArrowTowardsCamera()
     {
-        Quaternion desiredWorldRotation = Quaternion.Euler(new Vector3(0, 135, 270));
+        Quaternion desiredWorldRotation = Quaternion.Euler(new Vector3(0, -45, 270));
     
         Quaternion parentRotationInverse = Quaternion.Inverse(playerArrow.transform.parent.rotation);
         Quaternion localRotation = parentRotationInverse * desiredWorldRotation;
@@ -245,7 +245,8 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
             _teamName = _gameManager.team2.name;
             _teamCharacteristics = _gameManager.team2;
         }
-        playerTeamIndicator.GetComponent<Renderer>().material.color = _teamColor; // Set the color of boxes with respect to their team
+        playerTeamIndicator.GetComponent<Renderer>().material.color = _teamColor; 
+        playerArrow.GetComponent<Renderer>().material.color = _teamColor; 
     }
 
 
