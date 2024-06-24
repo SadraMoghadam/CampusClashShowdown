@@ -33,16 +33,18 @@ public class PlacementSystem : MonoBehaviour
     {
         StopPlacement();
         buildingsData = PlayerPrefsManager.LoadBuildings();
-        int prec = -1;
+        Vector3Int prec = new Vector3Int();
         foreach (var i in buildingsData.getPlacedObjects())
         {
-            if (prec != i.Value.ID)
+            if (i.Key != new Vector3Int(prec.x + 1, prec.y, prec.z))
             {
                 objectPlacer.PlaceObject(database, i.Value.ID, database.objectsData[i.Value.ID].Prefab, grid, i.Key);
             }
-            prec = i.Value.ID;
+            prec = i.Key;
         }
     }
+
+
 
     public void StartPlacement(int ID)
     {
