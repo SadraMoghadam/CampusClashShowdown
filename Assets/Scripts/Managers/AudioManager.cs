@@ -26,6 +26,7 @@ public enum SoundName
     Firework,
     BuildingPlacement,
     BuildingRemove,
+    BoxExplosion,
 }
 
 /// <summary>

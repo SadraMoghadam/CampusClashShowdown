@@ -44,9 +44,9 @@ public class CharacterSelectReady : NetworkBehaviour {
         }
 
         if (allClientsReady) {
-            NetworkManager.Singleton.SceneManager.LoadScene("ClashScene1", LoadSceneMode.Single);
+            // NetworkManager.Singleton.SceneManager.LoadScene("ClashScene1", LoadSceneMode.Single);
             NetworkLobby.Instance.DeleteLobby();
-            // HandleSceneLoading();
+            HandleSceneLoading();
         }
     }
     

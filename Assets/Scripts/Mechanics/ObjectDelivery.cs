@@ -21,7 +21,9 @@ public class ObjectDelivery : NetworkBehaviour
 
     private TeamCharacteristicsScriptableObject _teamCharacteristics;
 
-    private NetworkVariable<int> _teamId = new NetworkVariable<int>(0); 
+    private NetworkVariable<int> _teamId = new NetworkVariable<int>(0);
+
+    private bool _firstTimeDestruction = true;
     // private Vector3 _currentPosition; 
     // private Vector3 _previousPosition; 
 
@@ -135,6 +137,11 @@ public class ObjectDelivery : NetworkBehaviour
         _rb.freezeRotation = false;
         yield return new WaitForSeconds(1);
         ClashVFXContainer.InstantiateVFX(ClashVFXType.DestroyBoxOnConveyor, transform.position, 4.0f);
+        if (_firstTimeDestruction)
+        {
+            _firstTimeDestruction = false;
+            GameManager.Instance.AudioManager.Instantplay(SoundName.BoxExplosion, transform.position);
+        }
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1);
         networkObject.Despawn();

@@ -41,6 +41,7 @@ public class ClashArenaController : NetworkBehaviour
     private bool isLocalGamePaused = false;
     private Dictionary<ulong, bool> playerReadyDictionary;
     private bool autoTestGamePausedState;
+    // private bool _firstGameOver = false;
     
     
     public enum ObjectType
@@ -89,6 +90,12 @@ public class ClashArenaController : NetworkBehaviour
     }
     
     private void Update() {
+        // if (state.Value == State.GameOver && _firstGameOver)
+        // {
+        //     GameManager.Instance.AudioManager.Stop(SoundName.ClashTheme);
+        //     GameManager.Instance.AudioManager.Instantplay(SoundName.GameOver, transform.position);
+        //     _firstGameOver = false;
+        // }
         if (!IsServer) 
         {
             return;
@@ -99,17 +106,18 @@ public class ClashArenaController : NetworkBehaviour
                 break;
             case State.CountdownToStart:
                 countdownToStartTimer.Value -= Time.deltaTime;
-                if (countdownToStartTimer.Value < 0f) {
+                if (countdownToStartTimer.Value < 0f) 
+                {
                     state.Value = State.GamePlaying;
                     gamePlayingTimer.Value = gamePlayingTimerMax;
                 }
                 break;
             case State.GamePlaying:
                 gamePlayingTimer.Value -= Time.deltaTime;
-                if (gamePlayingTimer.Value < 0f) {
+                if (gamePlayingTimer.Value < 0f)
+                {
                     state.Value = State.GameOver;
-                    GameManager.Instance.AudioManager.Stop(SoundName.ClashTheme);
-                    GameManager.Instance.AudioManager.Instantplay(SoundName.GameOver, transform.position);
+                    SetGameOverSoundClientRpc();
                     endGameCamera.gameObject.SetActive(true);
                 }
                 break;
@@ -146,6 +154,13 @@ public class ClashArenaController : NetworkBehaviour
         if (allClientsReady) {
             state.Value = State.CountdownToStart;
         }
+    }
+
+    [ClientRpc]
+    private void SetGameOverSoundClientRpc()
+    {
+        GameManager.Instance.AudioManager.Stop(SoundName.ClashTheme);
+        GameManager.Instance.AudioManager.Instantplay(SoundName.GameOver, transform.position);
     }
 
     
