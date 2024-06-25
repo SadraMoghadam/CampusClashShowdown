@@ -65,7 +65,7 @@ public class CampusUI : MonoBehaviour
 
     public void updateResources(int cost, int index, bool building)
     {
-        int resources = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 200);
+        int resources = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, GameManager.InitialResources);
         if (building)
         {
             if (resources - cost >= 0)

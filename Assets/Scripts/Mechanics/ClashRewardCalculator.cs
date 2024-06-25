@@ -21,7 +21,7 @@ public class ClashRewardCalculator : NetworkBehaviour
     private Dictionary<Team, int> _totalBeltsMoved;
     private Dictionary<Team, int> _totalBoxesPlacedOnConveyor;
 
-    private int _boxDeliveryRewardCoefficient = 100;
+    private int _boxDeliveryRewardCoefficient = 200;
     private int _boxDestructionRewardCoefficient = 50;
     private int _beltMovementRewardCoefficient = 5;
     private int _boxConveyorPlacementRewardCoefficient = 10;

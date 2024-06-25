@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RemovingState : IBuildingState
@@ -39,12 +40,13 @@ public class RemovingState : IBuildingState
                 Debug.Log($"No valid object found at {gridPosition} to remove");
                 return;
             }
-            buildingData.RemoveObjectAt(gridPosition);
-
             
+            PlacementData data = buildingData.RemoveObjectAt(gridPosition);
             objectPlacer.RemoveObjectAt(gridPosition);
+            
+            campusUI.updateResources(database.objectsData[data.ID].Price, gameObjectIndex, false);
 
-            campusUI.updateResources(100, gameObjectIndex, false);
+            // campusUI.updateResources(100, gameObjectIndex, false);
             PlayerPrefsManager.SaveBuildings(buildingData);
 
             Debug.Log($"Object at {gridPosition} removed successfully");

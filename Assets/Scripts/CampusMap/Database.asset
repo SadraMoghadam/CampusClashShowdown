@@ -13,23 +13,28 @@ MonoBehaviour:
   m_Name: Database
   m_EditorClassIdentifier: 
   objectsData:
-  - <Name>k__BackingField: skyscraperC
+  - <Name>k__BackingField: largeBuildingA
     <ID>k__BackingField: 0
-    <Size>k__BackingField: {x: 1, y: 1}
-    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: e1027757d4f8fb64ca8bb67063a9b808, type: 3}
+    <Size>k__BackingField: {x: 2, y: 1}
+    <Prefab>k__BackingField: {fileID: 2052336819297791323, guid: b0d63af15cb1dfe409388ab065c88de9, type: 3}
+    <Price>k__BackingField: 2000
   - <Name>k__BackingField: skyscraperE
     <ID>k__BackingField: 1
     <Size>k__BackingField: {x: 1, y: 1}
     <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 411cd05685625e34396022f20b0e7c9c, type: 3}
-  - <Name>k__BackingField: largeBuildingA
+    <Price>k__BackingField: 1500
+  - <Name>k__BackingField: skyscraperC
     <ID>k__BackingField: 2
-    <Size>k__BackingField: {x: 2, y: 1}
-    <Prefab>k__BackingField: {fileID: 2052336819297791323, guid: b0d63af15cb1dfe409388ab065c88de9, type: 3}
-  - <Name>k__BackingField: small_buildingF
-    <ID>k__BackingField: 3
     <Size>k__BackingField: {x: 1, y: 1}
-    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 8ccf71395c6bd234aa057708905f3025, type: 3}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: e1027757d4f8fb64ca8bb67063a9b808, type: 3}
+    <Price>k__BackingField: 1100
   - <Name>k__BackingField: small_buildingE
-    <ID>k__BackingField: 4
+    <ID>k__BackingField: 3
     <Size>k__BackingField: {x: 2, y: 1}
     <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 794bbcb97a048be418c4a2f2ad7d3934, type: 3}
+    <Price>k__BackingField: 900
+  - <Name>k__BackingField: small_buildingF
+    <ID>k__BackingField: 4
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 919132149155446097, guid: 8ccf71395c6bd234aa057708905f3025, type: 3}
+    <Price>k__BackingField: 750

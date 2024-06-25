@@ -84,14 +84,17 @@ public class GridData
 
     }
 
-    internal void RemoveObjectAt(Vector3Int gridPosition)
+    internal PlacementData RemoveObjectAt(Vector3Int gridPosition)
     {
         Debug.Log(gridPosition);
+        PlacementData placementData = placedObjects[gridPosition];
         foreach (var pos in placedObjects[gridPosition].occupiedPositions)
         {
+                        
             placedObjects.Remove(pos);
         }
-        
+
+        return placementData;
     }
 
     public bool CanPlaceObjectAt(Vector3Int gridPosition, Vector2Int objectSize, Boolean building)

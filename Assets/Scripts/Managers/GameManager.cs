@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance => _instance;
     private static GameManager _instance;
     private static Scene _targetScene;
+    public static int InitialResources = 2400;
     
     private void Awake()
     {

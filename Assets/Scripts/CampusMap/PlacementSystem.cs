@@ -48,13 +48,13 @@ public class PlacementSystem : MonoBehaviour
     public void StartPlacement(int ID)
     {
         StopPlacement();
-        if (PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 200) - 100 >= 0)
+        if (PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, GameManager.InitialResources) - database.objectsData[ID].Price >= 0)
         {
             gridVisualization.SetActive(true);
         }
 
         buildingState = new PlacementState(ID, grid, preview, database, PlayerPrefsManager.LoadBuildings(), objectPlacer);
-        campusUI.updateResources(100, ID, true);
+        campusUI.updateResources(database.objectsData[ID].Price, ID, true);
 
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
