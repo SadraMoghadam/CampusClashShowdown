@@ -24,7 +24,7 @@ public class PlacementState : IBuildingState
         this.objectPlacer = objectPlacer;
 
         selectedObjectIndex = database.objectsData.FindIndex(data => data.ID == ID);
-        if (selectedObjectIndex > -1 && (PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, GameManager.InitialResources)) - 100 >= 0)
+        if (selectedObjectIndex > -1 && (PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, GameManager.InitialResources)) - database.objectsData[selectedObjectIndex].Price >= 0)
         {
 
             previewSystem.StartShowingPlacementPreview(database.objectsData[selectedObjectIndex].Prefab, database.objectsData[selectedObjectIndex].Size);

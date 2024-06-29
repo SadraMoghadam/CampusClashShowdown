@@ -14,6 +14,7 @@ public class ObjectDelivery : NetworkBehaviour
     private Rigidbody _rb;
     private bool _isInObjectDestroyingArea = false;
     private bool _isObjectDelivered;
+    private bool _isObjectDestroyed;
     private MultiplayerController _multiplayerController;
     private List<Transform> _pathPoints;
     private float _timer = 0;
@@ -32,6 +33,7 @@ public class ObjectDelivery : NetworkBehaviour
         _multiplayerController = MultiplayerController.Instance;
         _pathPoints = ClashArenaController.Instance.resourceDeliveryPathPoints;
         _isObjectDelivered = false;
+        _isObjectDestroyed = false;
         _isStopped = new NetworkVariable<bool>(_multiplayerController.GetIsConveyorBeltStopped());
         // if (!networkObject.IsSpawned)
         // {
@@ -124,9 +126,14 @@ public class ObjectDelivery : NetworkBehaviour
     [ClientRpc]
     private void DestroyObjectClientRpc() 
     {
-        StartCoroutine(DestroyObjectProcess());
-        Team team = _teamId.Value == 1 ? Team.Team2 : Team.Team1;
-        ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BoxDestruction);
+        if (!_isObjectDestroyed)
+        {
+         
+            Team team = _teamId.Value == 1 ? Team.Team2 : Team.Team1;
+            ClashRewardCalculator.Instance.AddRewardByRewardType(team, RewardType.BoxDestruction);
+            StartCoroutine(DestroyObjectProcess());
+            _isObjectDestroyed = true;
+        }
     }
 
     private IEnumerator DestroyObjectProcess()

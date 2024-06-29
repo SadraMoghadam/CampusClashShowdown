@@ -52,6 +52,10 @@ public class PlacementSystem : MonoBehaviour
         {
             gridVisualization.SetActive(true);
         }
+        else
+        {
+            return;
+        }
 
         buildingState = new PlacementState(ID, grid, preview, database, PlayerPrefsManager.LoadBuildings(), objectPlacer);
         campusUI.updateResources(database.objectsData[ID].Price, ID, true);

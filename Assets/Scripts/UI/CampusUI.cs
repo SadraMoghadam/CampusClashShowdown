@@ -88,7 +88,7 @@ public class CampusUI : MonoBehaviour
     private void OnEnable()
     {
         playerName.text = PlayerPrefsManager.GetString(PlayerPrefsKeys.PlayerName, "PlayerName");
-        resourceValue.text = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, 200).ToString();
+        resourceValue.text = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Resource, GameManager.InitialResources).ToString();
         starValue.text = PlayerPrefsManager.GetInt(PlayerPrefsKeys.Stars, 200).ToString();
 
 
