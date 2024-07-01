@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +18,10 @@ public class CampusController : MonoBehaviour
     public Camera avatarCustomizationCamera;
     public Canvas mainCanvas;
     public Canvas avatarCustomizationCanvas;
+    
+    [NonSerialized] public DialogueController DialogueController;
+    [NonSerialized] public DialogueDataReader DialogueDataReader;
+    [NonSerialized] public MainCharactersController MainCharactersController;
     private GameManager _gameManager;
     
     private static CampusController _instance;
@@ -30,6 +35,9 @@ public class CampusController : MonoBehaviour
         }
         Time.timeScale = 1;
         _gameManager = GameManager.Instance;
+        DialogueController = GetComponent<DialogueController>();
+        DialogueDataReader = GetComponent<DialogueDataReader>();
+        MainCharactersController = GetComponent<MainCharactersController>();
     }
 
     private async void Start()
@@ -43,6 +51,7 @@ public class CampusController : MonoBehaviour
         }
         await InitializeUnityServices();
         await SignInAnonymously();
+        DialogueController.Show(1);
         // _gameManager.AudioManager.play(SoundName.CampusArea);
         // DialogueController.Show(1);
     }
