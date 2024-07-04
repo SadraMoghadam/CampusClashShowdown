@@ -11,6 +11,8 @@ public enum PlayerPrefsKeys
 {
     PlayerName,
     GameStarted,
+    FirstBuildingPlaced,
+    FirstClashDone,
     Level,
     GameTimer,
     PlayerCustomization,

@@ -1,0 +1,14 @@
+id,Dialogue,NextDialogueID,Character,Triggers
+1,"Hello, I'm Dr. Mangiagalli. This is the area where the best campus in the world will be built.",2,Mangiagalli,First time in campus scene 1/2
+2,You can place the first building. I gave you some resources you can use to buy it!,0,Mangiagalli,First time in campus scene 2/2
+3,Don't listen to him. I guarantee the security of the campus. He tries to distract us from our goal.,13,Mangiagalli,After placing the first building
+4,Our campus will set a new standard for academic excellence. Watch as we redefine education!,0,Mangiagalli,Randomly appearing if possible
+5,We are about to celebrate our founding anniversary. How can we make this historic occasion special?,0,Mangiagalli,Randomly appearing if possible
+6,"Did you know that since the 13th century, construction materials were transported to Milan using an artificial canal system called the ""Navigli""?",7,Golgi,Randomly appearing if possible
+7,"The Navigli are very shallow water canals, which is why they were navigated by flat-bottomed boats called ""Chiatte"".",8,Mangiagalli,Randomly appearing if possible
+8,Maybe I should hire some pirates to sabotage the construction of the campus!,3,Golgi,Randomly appearing if possible
+9,My campus will attract the best international minds. No one can compete with the Pavia hub!,0,Golgi,Randomly appearing if possible
+10,Legend has it that the Martesana canal was frequented by pirates who used its waterways to evade capture,11,Mangiagalli,Randomly appearing if possible
+11, their loot was concealed in the nooks along the banks of the Navigli canals.,0,Golgi,Randomly appearing if possible
+12,You have obtained new resources! Remember to use them to construct new buildings and enhance your campus!,0,Mangiagalli,After the first clash
+13,Let's gather more resources in the Clash Arena! Show everyone who's the best!,0,Mangiagalli,

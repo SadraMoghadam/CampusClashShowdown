@@ -77,16 +77,16 @@ public class DialogueController : MonoBehaviour
         Transform dialoguePanelChildrenContainer = dialoguePanel.transform.GetChild(1);
         
         StartCoroutine(Utilities.FadeInAndOutCR(dialoguePanelBackground.gameObject, fadeIn, duration, 0));
-        StartCoroutine(Utilities.FadeInAndOutCR(dialoguePanelChildrenContainer.gameObject, fadeIn, duration, .5f));
+        StartCoroutine(Utilities.FadeInAndOutCR(dialoguePanelChildrenContainer.gameObject, fadeIn, duration));
         List<Transform> allChildren = GetAllChildren(dialoguePanelChildrenContainer);
         for (int i = 0; i < allChildren.Count; i++)
         {
-            if (fadeIn == true && (i == 7))
-            {
-                StartCoroutine(Utilities.FadeInAndOutCR(
-                    allChildren[i].gameObject, fadeIn, duration, .5f));
-                continue;  
-            } 
+            // if (fadeIn == true && (i == 7))
+            // {
+            //     StartCoroutine(Utilities.FadeInAndOutCR(
+            //         allChildren[i].gameObject, fadeIn, duration, .5f));
+            //     continue;  
+            // } 
             StartCoroutine(Utilities.FadeInAndOutCR(
                 allChildren[i].gameObject, fadeIn, duration));
         }

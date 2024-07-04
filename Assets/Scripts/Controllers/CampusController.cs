@@ -51,7 +51,6 @@ public class CampusController : MonoBehaviour
         }
         await InitializeUnityServices();
         await SignInAnonymously();
-        DialogueController.Show(1);
         // _gameManager.AudioManager.play(SoundName.CampusArea);
         // DialogueController.Show(1);
     }
@@ -87,6 +86,12 @@ public class CampusController : MonoBehaviour
             avatarCustomizationCamera.gameObject.SetActive(false);
             mainCanvas.gameObject.SetActive(true);
             avatarCustomizationCanvas.gameObject.SetActive(false);
+        }
+        
+        bool isGameStarted = PlayerPrefsManager.GetBool(PlayerPrefsKeys.GameStarted, false);
+        if (!isGameStarted && !toAvatarCustomizationMode)
+        {
+            DialogueController.Show(1);
         }
     }
 
