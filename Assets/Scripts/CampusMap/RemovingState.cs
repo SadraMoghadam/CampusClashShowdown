@@ -66,6 +66,11 @@ public class RemovingState : IBuildingState
         previewSystem.UpdatePosition(grid.GetCellCenterWorld(gridPosition) - new Vector3(-0.1f, 0.4f, 0.1f), validity);
     }
 
+    public bool CanPlace(Vector3Int gridPosition)
+    {
+        return true;
+    }
+
     private bool CheckIfSelectionIsValid(Vector3Int gridPosition, bool building)
     {
         return !buildingData.CanPlaceObjectAt(gridPosition, Vector2Int.one, building);

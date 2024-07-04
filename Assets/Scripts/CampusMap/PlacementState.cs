@@ -73,6 +73,20 @@ public class PlacementState : IBuildingState
         return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectedObjectIndex].Size, building);
     }
 
+    public bool CanPlace(Vector3Int gridPosition)
+    {
+        bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex, true);
+        bool resourcesQty = CheckResources(selectedObjectIndex);
+        if (placementValidity == false || resourcesQty == false)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public void UpdateState(Vector3Int gridPosition)
     {
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex, true);

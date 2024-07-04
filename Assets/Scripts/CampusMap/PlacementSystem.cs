@@ -12,6 +12,7 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField] private ObjectPlacer objectPlacer;
     private Vector3Int lastDetectedPosition = Vector3Int.zero;
     IBuildingState buildingState;
+    private int _currentID;
 
     private void Update()
     {
@@ -58,8 +59,8 @@ public class PlacementSystem : MonoBehaviour
         }
 
         buildingState = new PlacementState(ID, grid, preview, database, PlayerPrefsManager.LoadBuildings(), objectPlacer);
-        campusUI.updateResources(database.objectsData[ID].Price, ID, true);
 
+        _currentID = ID;
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
@@ -84,8 +85,18 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mousePosition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mousePosition);
 
+        if (buildingState.CanPlace(gridPosition))
+        {
+            campusUI.updateResources(database.objectsData[_currentID].Price, _currentID, true);   
+        }
         buildingState.OnAction(gridPosition);
         buildingsData = PlayerPrefsManager.LoadBuildings();
+
+        if (!PlayerPrefsManager.GetBool(PlayerPrefsKeys.FirstBuildingPlaced, false))
+        {
+            CampusController.Instance.DialogueController.Show(6);
+            PlayerPrefsManager.SetBool(PlayerPrefsKeys.FirstBuildingPlaced, true);
+        }
 
         StopPlacement();
     }
