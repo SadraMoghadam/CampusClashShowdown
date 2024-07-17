@@ -157,7 +157,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         return holdingPoint;
     }
 
-    private void GatherInput() {
+        private void GatherInput() {
         _input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         SetAnimations();
     }
@@ -195,7 +195,7 @@ public class PlayerController : NetworkBehaviour, IParent<PickableObject>
         if (_input != Vector3.zero)
         {
             float actualSpeed = speed;
-            
+                 
             if (isRunning && stamina > 0)
             {
                 actualSpeed = runSpeed;
